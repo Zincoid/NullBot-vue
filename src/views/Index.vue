@@ -489,7 +489,6 @@ export default {
     Histogram,
     Edit,
     DocumentAdd,
-    Upload,
     Picture,
     Comment,
     Document,
@@ -986,7 +985,7 @@ export default {
   },
 
   watch: {
-    // 监听op变化，当op=4时重新查询统计数据
+    // 监听op变化 当op=4时重新查询统计数据
     op(newVal) {
       if (newVal === 4) {
         this.getStatistic()
