@@ -49,7 +49,7 @@ const initChart = () => {
   const option = {
     title: {
       text: props.title || '',
-      left: '45px',
+      left: '33px',
       textStyle: {
         fontSize: 12,
         fontWeight: 'light',
@@ -57,8 +57,8 @@ const initChart = () => {
       }
     },
     grid: {
-      left: '30px',
-      right: '30px',
+      left: '10px',
+      right: '17px',
       bottom: '10%',
       top: props.title ? '25%' : '10%',
       containLabel: true

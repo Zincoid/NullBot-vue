@@ -149,7 +149,7 @@
           </el-header>
 
           <!-- 右侧主区域 -->
-          <el-main style="height: 100%; overflow-y: auto; padding: 20px;">
+          <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
             <!-- 文件管理 -->
             <div v-show="op === 1">
               <el-table ref="tableData" :data="tableData" style="width: 100%" height="calc(100vh - 250px)">
@@ -260,8 +260,69 @@
             </div>
 
             <!-- 数据统计 -->
-            <div v-show="op === 4" style="margin-right: 20px;">
-
+            <div v-if="op === 4" style="margin-right: 20px;">
+              <el-row>
+                <el-col :xs="12" :sm="6" :md="4">
+                  <div class="statistic-card">
+                    <el-statistic :value="totalVisits">
+                      <template #title>
+                        <div style="display: inline-flex; align-items: center">
+                          总调用次数
+                          <el-tooltip
+                              effect="dark"
+                              content="自 2025/12/23 起的指令使用总次数"
+                              placement="top"
+                          >
+                            <el-icon style="margin-left: 4px" :size="12">
+                              <Warning />
+                            </el-icon>
+                          </el-tooltip>
+                        </div>
+                      </template>
+                    </el-statistic>
+                    <!--                    <div class="statistic-footer">-->
+                    <!--                      <div class="footer-item">-->
+                    <!--                        <span>than yesterday</span>-->
+                    <!--                        <span class="green">24%<el-icon><CaretTop /></el-icon></span>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
+                  </div>
+                </el-col>
+                <LineChart
+                    :title="'每日访问量 (近30日)'"
+                    :y_name="'调用次数'"
+                    :data="visitsData"
+                    :xAxis="visitsXAxis"
+                    :height="'400px'"
+                    :width="'80%'"
+                />
+              </el-row>
+              <el-scrollbar height="calc(100vh - 600px)">
+                <BarChart
+                    :title="'指令访问量 (Top20)'"
+                    :y_name="'调用次数'"
+                    :data="topCommandsData"
+                    :xAxis="topCommandsAxis"
+                    :height="'235px'"
+                    :width="'97.5%'"
+                />
+                <BarChart
+                    :title="'用户访问量 (Top20)'"
+                    :y_name="'调用次数'"
+                    :data="topUsersData"
+                    :xAxis="topUsersAxis"
+                    :height="'235px'"
+                    :width="'97.5%'"
+                />
+                <BarChart
+                    :title="'群聊访问量 (Top20)'"
+                    :y_name="'调用次数'"
+                    :data="topGroupsData"
+                    :xAxis="topGroupsAxis"
+                    :height="'235px'"
+                    :width="'97.5%'"
+                />
+              </el-scrollbar>
             </div>
 
             <!-- 个人中心 -->
@@ -286,7 +347,7 @@
             </div>
           </el-main>
 
-          <!-- 右侧分页区域 -->
+          <!-- 下部分页区域 -->
           <el-footer height="60px" style="padding: 10px 20px;">
             <div v-show="op === 1" style="text-align: right;">
               <el-pagination
@@ -345,19 +406,22 @@
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" width="250" align="center">
+          <el-table-column fixed="right" label="操作" width="340" align="center">
             <template v-slot="scope">
-              <el-button type="text" @click="download(scope.row)" size="small" v-if="scope.row.isDir === 0">
-                <el-icon size="17"><Download /></el-icon>下载
-              </el-button>
               <el-button type="text" @click="handlePreview(scope.row)" size="small" v-if="isPreviewable(scope.row)">
                 <el-icon size="17"><Picture /></el-icon>预览
               </el-button>
+              <el-button type="text" @click="download(scope.row)" size="small" v-if="scope.row.isDir === 0">
+                <el-icon size="17"><Download /></el-icon>下载
+              </el-button>
+              <el-button type="text" @click="handleRename(scope.row)" size="small">
+                <el-icon size="17"><Edit /></el-icon>重命名
+              </el-button>
               <el-popconfirm title="确认删除?" @confirm="deleteFile(scope.row)">
                 <template #reference>
-                  <el-button type="text" size="small"><el-icon size="17">
-                    <Delete />
-                  </el-icon>删除</el-button>
+                  <el-button type="text" size="small">
+                    <el-icon size="17"><Delete /></el-icon>删除
+                  </el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -413,17 +477,21 @@ import {
   Files, Folder, FolderAdd,
   FolderOpened, Histogram,
   HomeFilled, MostlyCloudy, Picture,
-  Promotion, RefreshLeft, Search, SwitchButton, Upload, UploadFilled,
-  User
+  Promotion, RefreshLeft, Search, SwitchButton, UploadFilled,
+  User, Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
+import LineChart from "@/components/LineChart.vue";
+import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    Warning,
+    BarChart,
+    LineChart,
     Histogram,
     Edit,
     DocumentAdd,
-    Upload,
     Picture,
     Comment,
     Document,
@@ -477,7 +545,17 @@ export default {
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
       previewType: '', // 'image' 或 'video'
-      previewTitle: '' // 预览对话框标题
+      previewTitle: '', // 预览对话框标题
+
+      totalVisits: 0,
+      visitsData: [],
+      visitsXAxis: [],
+      topGroupsData:[],
+      topGroupsAxis: [],
+      topUsersData: [],
+      topUsersAxis: [],
+      topCommandsData: [],
+      topCommandsAxis: []
     }
   },
 
@@ -536,6 +614,29 @@ export default {
 
       // 4. 打开对话框
       this.previewVisible = true;
+    },
+
+    getStatistic() {
+      this.$axios.get('/statistic', {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.totalVisits = res.data.data.totalVisits
+          this.visitsXAxis = res.data.data.visitsXAxis
+          this.visitsData = res.data.data.visitsData
+          this.topGroupsAxis = res.data.data.topGroupsAxis
+          this.topGroupsData = res.data.data.topGroupsData
+          this.topUsersAxis = res.data.data.topUsersAxis
+          this.topUsersData = res.data.data.topUsersData
+          this.topCommandsAxis = res.data.data.topCommandsAxis
+          this.topCommandsData = res.data.data.topCommandsData
+          console.log(this.visitsXAxis)
+        } else if (res.data.code === 400) {
+          this.$message.error(res.data.message)
+        }
+      })
     },
 
     getInfo() {
@@ -637,7 +738,7 @@ export default {
             this.searchFile(this.searchKey, this.curDir)
           }
         }
-      }).catch(res => {
+      }).catch(() => {
         this.$message.error("删除失败!")
       })
     },
@@ -858,7 +959,7 @@ export default {
           this.$message.success(res.data.message)
           this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
         }
-      }).catch(res => {
+      }).catch(() => {
         this.$message.error("删除失败!")
       })
     }
@@ -884,6 +985,15 @@ export default {
     if (this.timer) {
       clearInterval(this.timer)
     }
+  },
+
+  watch: {
+    // 监听op变化 当op=4时重新查询统计数据
+    op(newVal) {
+      if (newVal === 4) {
+        this.getStatistic()
+      }
+    }
   }
 }
 </script>
@@ -907,5 +1017,52 @@ export default {
 .upload {
   position: relative;
   display: inline-block;
+}
+
+/* el-statistic相关样式 */
+:global(h2#card-usage ~ .example .example-showcase) {
+  background-color: var(--el-fill-color) !important;
+}
+
+.el-statistic {
+  --el-statistic-content-font-size: 28px;
+}
+
+.statistic-card {
+  height: 295px;
+  margin-left: 50px;
+  margin-top: 15px;
+  padding: 25px;
+  border-radius: 8px;
+  background-color: var(--el-bg-color-overlay);
+}
+
+.statistic-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
+  margin-top: 16px;
+}
+
+.statistic-footer .footer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statistic-footer .footer-item span:last-child {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.green {
+  color: var(--el-color-success);
+}
+.red {
+  color: var(--el-color-error);
 }
 </style>

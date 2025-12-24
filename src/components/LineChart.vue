@@ -49,7 +49,7 @@ const initChart = () => {
   const option = {
     title: {
       text: props.title || '',
-      left: '45px',
+      left: '52px',
       textStyle: {
         fontSize: 14,
         fontWeight: 'bold',

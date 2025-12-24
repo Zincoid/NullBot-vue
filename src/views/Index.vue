@@ -149,7 +149,7 @@
             </el-header>
 
           <!-- 右侧主区域 -->
-          <el-main style="height: 100%; width: 100%; overflow-y: auto; padding: 20px;">
+          <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
             <!-- 文件管理 -->
             <div v-show="op === 1">
               <el-table ref="tableData" :data="tableData" style="width: 100%" height="calc(100vh - 250px)">
@@ -260,9 +260,8 @@
             </div>
 
             <!-- 数据统计 -->
-            <div v-if="op === 4" style="margin-right: 20px;">
-              <el-row>
-                <el-col :xs="12" :sm="6" :md="4">
+            <div v-if="op === 4" style="margin-right: 10px;">
+              <el-header height="400px" style="padding: 0 0; margin-top: 0; display: flex; justify-content: left; align-items: center;">
                   <div class="statistic-card">
                     <el-statistic :value="totalVisits">
                       <template #title>
@@ -287,16 +286,15 @@
 <!--                      </div>-->
 <!--                    </div>-->
                   </div>
-                </el-col>
                 <LineChart
                     :title="'每日访问量 (近30日)'"
                     :y_name="'调用次数'"
                     :data="visitsData"
                     :xAxis="visitsXAxis"
                     :height="'400px'"
-                    :width="'80%'"
+                    :width="'90%'"
                 />
-              </el-row>
+              </el-header>
               <el-scrollbar height="calc(100vh - 600px)">
                 <BarChart
                     :title="'指令访问量 (Top20)'"
@@ -304,7 +302,7 @@
                     :data="topCommandsData"
                     :xAxis="topCommandsAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
                 <BarChart
                     :title="'用户访问量 (Top20)'"
@@ -312,7 +310,7 @@
                     :data="topUsersData"
                     :xAxis="topUsersAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
                 <BarChart
                     :title="'群聊访问量 (Top20)'"
@@ -320,7 +318,7 @@
                     :data="topGroupsData"
                     :xAxis="topGroupsAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
               </el-scrollbar>
             </div>
@@ -406,19 +404,22 @@
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" width="250" align="center">
+          <el-table-column fixed="right" label="操作" width="340" align="center">
             <template v-slot="scope">
-              <el-button type="text" @click="download(scope.row)" size="small" v-if="scope.row.isDir === 0">
-                <el-icon size="17"><Download /></el-icon>下载
-              </el-button>
               <el-button type="text" @click="handlePreview(scope.row)" size="small" v-if="isPreviewable(scope.row)">
                 <el-icon size="17"><Picture /></el-icon>预览
               </el-button>
+              <el-button type="text" @click="download(scope.row)" size="small" v-if="scope.row.isDir === 0">
+                <el-icon size="17"><Download /></el-icon>下载
+              </el-button>
+              <el-button type="text" @click="handleRename(scope.row)" size="small">
+                <el-icon size="17"><Edit /></el-icon>重命名
+              </el-button>
               <el-popconfirm title="确认删除?" @confirm="deleteFile(scope.row)">
                 <template #reference>
-                  <el-button type="text" size="small"><el-icon size="17">
-                    <Delete />
-                  </el-icon>删除</el-button>
+                  <el-button type="text" size="small">
+                    <el-icon size="17"><Delete /></el-icon>删除
+                  </el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -474,7 +475,7 @@ import {
   Files, Folder, FolderAdd,
   FolderOpened, Histogram,
   HomeFilled, MostlyCloudy, Picture,
-  Promotion, RefreshLeft, Search, SwitchButton, Upload, UploadFilled,
+  Promotion, RefreshLeft, Search, SwitchButton, UploadFilled,
   User, Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
@@ -735,7 +736,7 @@ export default {
             this.searchFile(this.searchKey, this.curDir)
           }
         }
-      }).catch(res => {
+      }).catch(() => {
         this.$message.error("删除失败!")
       })
     },
@@ -956,7 +957,7 @@ export default {
           this.$message.success(res.data.message)
           this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
         }
-      }).catch(res => {
+      }).catch(() => {
         this.$message.error("删除失败!")
       })
     }
@@ -1027,8 +1028,10 @@ export default {
 
 .statistic-card {
   height: 295px;
-  margin-left: 50px;
-  margin-top: 15px;
+  width: 10%;
+  margin-left: 36px;
+  margin-top: 0;
+  margin-bottom: 25px;
   padding: 25px;
   border-radius: 8px;
   background-color: var(--el-bg-color-overlay);
