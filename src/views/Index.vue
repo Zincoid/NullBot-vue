@@ -269,7 +269,7 @@
                           总调用次数
                           <el-tooltip
                               effect="dark"
-                              content="自 2025/12/23 起的指令使用总次数"
+                              content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)"
                               placement="top"
                           >
                             <el-icon style="margin-left: 4px" :size="12">

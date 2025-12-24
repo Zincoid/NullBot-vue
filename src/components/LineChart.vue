@@ -132,8 +132,9 @@ const initChart = () => {
       }
     ],
     tooltip: {
-      backgroundColor: '#3f3f3f',
-      borderColor: '#3f3f3f',
+      backgroundColor: '#121212',
+      // backgroundColor: '#3f3f3f',
+      // borderColor: '#3f3f3f',
       borderRadius: 10,
       trigger: 'axis',
       axisPointer: {
