@@ -47,6 +47,11 @@
           <!-- 右侧用户信息 -->
           <el-sub-menu style="margin-left: auto;">
             <el-menu-item>
+              <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
+                <el-icon size="15"><Switch /></el-icon>数据同步
+              </el-button>
+            </el-menu-item>
+            <el-menu-item>
               <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
                 <el-icon size="15"><SwitchButton /></el-icon>退出登录
               </el-button>
@@ -475,7 +480,7 @@ import {
   Files, Folder, FolderAdd,
   FolderOpened, Histogram,
   HomeFilled, MostlyCloudy, Picture,
-  Promotion, RefreshLeft, Search, SwitchButton, UploadFilled,
+  Promotion, RefreshLeft, Search, Switch, SwitchButton, UploadFilled,
   User, Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
@@ -484,6 +489,7 @@ import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    Switch,
     Warning,
     BarChart,
     LineChart,
@@ -764,6 +770,8 @@ export default {
           })
           if (res.data.code === 200) {
             this.$message.success(`${fileObj.name} 上传成功`)
+          } else {
+            this.$message.error(`${fileObj.name} ${res.data.message}`)
           }
         } catch (err) {
           console.error("上传失败:", err)
@@ -929,6 +937,12 @@ export default {
       this.$router.push('/login')
     },
 
+    sync() {
+      this.getStatistic()
+      this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+      this.getPage(this.pageInfo.current, this.pageInfo.size)
+    },
+
     getSayingPage(currentPage, pageSize) {
       this.$axios({
         url: '/saying/' + currentPage + '/' + pageSize,
@@ -986,10 +1000,14 @@ export default {
   },
 
   watch: {
-    // 监听op变化 当op=4时重新查询统计数据
+    // 监听op变化
     op(newVal) {
       if (newVal === 4) {
         this.getStatistic()
+      } else if (newVal === 3){
+        this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+      } else if (newVal === 1){
+        this.getPage(this.pageInfo.current, this.pageInfo.size)
       }
     }
   }
