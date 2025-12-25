@@ -20,12 +20,12 @@
           <!-- 中部功能相关 -->
           <div class="header-center" style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
             <!-- op=1时显示搜索功能 -->
-            <div v-show="op === 1" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <div v-show="op === 1" class="search-container" style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
               <el-input
                   placeholder="在此目录中搜索"
                   v-model="searchKey"
                   clearable
-                  style="width: 600px;"
+                  style="flex: 1; min-width: 20px;"
               >
               </el-input>
 
@@ -120,7 +120,7 @@
               </div>
 
               <!-- 文件操作按钮 -->
-              <div style="display: flex; align-items: center;">
+              <div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto;">
                 <el-upload
                     multiple
                     ref="upload"
@@ -129,7 +129,7 @@
                     :file-list="uploadFileList"
                     :on-change="handleChange"
                     :auto-upload="false"
-                    style="display: inline-flex;"
+                    style="display: inline-flex; padding-left: 5px"
                 >
                   <template #trigger>
                     <el-button type="primary" plain :disabled="uploading">
@@ -142,7 +142,7 @@
                   <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{uploading ? "处理中..." : "上传"}}
                 </el-button>
 
-                <el-button-group style="margin-left: 10px">
+                <el-button-group style="margin-left: 10px; display: inline-flex;">
                   <el-button round plain @click="backDir">
                     <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
                   </el-button>
@@ -1082,5 +1082,11 @@ export default {
 }
 .red {
   color: var(--el-color-error);
+}
+
+/* 自定义滚动条样式 */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox 细滚动条 */
+  scrollbar-color: #333333 #121212; /* Firefox 滑块颜色和轨道颜色 */
 }
 </style>
