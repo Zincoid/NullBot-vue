@@ -47,6 +47,11 @@
           <!-- 右侧用户信息 -->
           <el-sub-menu style="margin-left: auto;">
             <el-menu-item>
+              <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
+                <el-icon size="15"><Switch /></el-icon>数据同步
+              </el-button>
+            </el-menu-item>
+            <el-menu-item>
               <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
                 <el-icon size="15"><SwitchButton /></el-icon>退出登录
               </el-button>
@@ -260,43 +265,41 @@
             </div>
 
             <!-- 数据统计 -->
-            <div v-if="op === 4" style="margin-right: 20px;">
-              <el-row>
-                <el-col :xs="12" :sm="6" :md="4">
-                  <div class="statistic-card">
-                    <el-statistic :value="totalVisits">
-                      <template #title>
-                        <div style="display: inline-flex; align-items: center">
-                          总调用次数
-                          <el-tooltip
-                              effect="dark"
-                              content="自 2025/12/23 起的指令使用总次数"
-                              placement="top"
-                          >
-                            <el-icon style="margin-left: 4px" :size="12">
-                              <Warning />
-                            </el-icon>
-                          </el-tooltip>
-                        </div>
-                      </template>
-                    </el-statistic>
-                    <!--                    <div class="statistic-footer">-->
-                    <!--                      <div class="footer-item">-->
-                    <!--                        <span>than yesterday</span>-->
-                    <!--                        <span class="green">24%<el-icon><CaretTop /></el-icon></span>-->
-                    <!--                      </div>-->
-                    <!--                    </div>-->
-                  </div>
-                </el-col>
+            <div v-if="op === 4" style="margin-right: 40px; margin-top: 10px;">
+              <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center;">
+                <div class="statistic-card">
+                  <el-statistic :value="totalVisits">
+                    <template #title>
+                      <div style="display: inline-flex; align-items: center">
+                        总调用次数
+                        <el-tooltip
+                            effect="dark"
+                            content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)"
+                            placement="top"
+                        >
+                          <el-icon style="margin-left: 4px" :size="12">
+                            <Warning />
+                          </el-icon>
+                        </el-tooltip>
+                      </div>
+                    </template>
+                  </el-statistic>
+                  <!--                    <div class="statistic-footer">-->
+                  <!--                      <div class="footer-item">-->
+                  <!--                        <span>than yesterday</span>-->
+                  <!--                        <span class="green">24%<el-icon><CaretTop /></el-icon></span>-->
+                  <!--                      </div>-->
+                  <!--                    </div>-->
+                </div>
                 <LineChart
                     :title="'每日访问量 (近30日)'"
                     :y_name="'调用次数'"
                     :data="visitsData"
                     :xAxis="visitsXAxis"
                     :height="'400px'"
-                    :width="'80%'"
+                    :width="'90%'"
                 />
-              </el-row>
+              </el-header>
               <el-scrollbar height="calc(100vh - 600px)">
                 <BarChart
                     :title="'指令访问量 (Top20)'"
@@ -304,7 +307,7 @@
                     :data="topCommandsData"
                     :xAxis="topCommandsAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
                 <BarChart
                     :title="'用户访问量 (Top20)'"
@@ -312,7 +315,7 @@
                     :data="topUsersData"
                     :xAxis="topUsersAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
                 <BarChart
                     :title="'群聊访问量 (Top20)'"
@@ -320,7 +323,7 @@
                     :data="topGroupsData"
                     :xAxis="topGroupsAxis"
                     :height="'235px'"
-                    :width="'97.5%'"
+                    :width="'100%'"
                 />
               </el-scrollbar>
             </div>
@@ -477,7 +480,7 @@ import {
   Files, Folder, FolderAdd,
   FolderOpened, Histogram,
   HomeFilled, MostlyCloudy, Picture,
-  Promotion, RefreshLeft, Search, SwitchButton, UploadFilled,
+  Promotion, RefreshLeft, Search, Switch, SwitchButton, UploadFilled,
   User, Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
@@ -486,6 +489,7 @@ import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    Switch,
     Warning,
     BarChart,
     LineChart,
@@ -766,6 +770,8 @@ export default {
           })
           if (res.data.code === 200) {
             this.$message.success(`${fileObj.name} 上传成功`)
+          } else {
+            this.$message.error(`${fileObj.name} ${res.data.message}`)
           }
         } catch (err) {
           console.error("上传失败:", err)
@@ -931,6 +937,12 @@ export default {
       this.$router.push('/login')
     },
 
+    sync() {
+      this.getStatistic()
+      this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+      this.getPage(this.pageInfo.current, this.pageInfo.size)
+    },
+
     getSayingPage(currentPage, pageSize) {
       this.$axios({
         url: '/saying/' + currentPage + '/' + pageSize,
@@ -988,10 +1000,14 @@ export default {
   },
 
   watch: {
-    // 监听op变化 当op=4时重新查询统计数据
+    // 监听op变化
     op(newVal) {
       if (newVal === 4) {
         this.getStatistic()
+      } else if (newVal === 3){
+        this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+      } else if (newVal === 1){
+        this.getPage(this.pageInfo.current, this.pageInfo.size)
       }
     }
   }
@@ -1030,8 +1046,10 @@ export default {
 
 .statistic-card {
   height: 295px;
-  margin-left: 50px;
-  margin-top: 15px;
+  width: 10%;
+  margin-left: 36px;
+  margin-top: 0;
+  margin-bottom: 25px;
   padding: 25px;
   border-radius: 8px;
   background-color: var(--el-bg-color-overlay);
