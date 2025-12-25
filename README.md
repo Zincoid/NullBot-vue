@@ -24,7 +24,7 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-### 部署用到的指令 
+## 部署用到的指令 
 tar -czvf dist.tar.gz dist  
 rm -rf /usr/share/nginx/dist
 sudo tar -xzvf /root/Nginx/dist.tar.gz -C /usr/share/nginx 
@@ -32,7 +32,7 @@ sudo vim /etc/nginx/nginx.conf
 sudo systemctl stop nginx  
 sudo systemctl start nginx
 
-### Nginx API 反向代理配置 - 处理 /api 前缀转发到 /nullbot
+## Nginx API 反向代理配置 - 处理 /api 前缀转发到 /nullbot
 
     location /api/ {
         # 方案1: 直接转发，后端接收 /api/xxx 请求
