@@ -24,6 +24,9 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
+## 信息
+本地测试端口 7000
+
 ## 部署用到的指令 
 tar -czvf dist.tar.gz dist  
 rm -rf /usr/share/nginx/dist
