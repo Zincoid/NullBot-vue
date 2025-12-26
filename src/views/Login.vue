@@ -19,6 +19,7 @@
       <el-input
           placeholder="请输入账号"
           v-model="LoginForm.id"
+          oninput="value=value.replace(/\D/g,'')"
           style="width: 100%"
       ></el-input>
     </el-form-item>
