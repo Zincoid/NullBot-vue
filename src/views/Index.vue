@@ -66,7 +66,7 @@
 
       <el-container>
         <!-- 左侧导航区域 -->
-        <el-aside width="200px">
+        <el-aside style="width: 10%; min-width: 150px;">
           <el-menu
               ref="menu"
               default-active="1"
@@ -120,7 +120,8 @@
               </div>
 
               <!-- 文件操作按钮 -->
-              <div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto;">
+<!--              <div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
+              <div style="display: flex; align-items: center;">
                 <el-upload
                     multiple
                     ref="upload"
@@ -775,7 +776,7 @@ export default {
           }
         } catch (err) {
           console.error("上传失败:", err)
-          this.$message.error( `${fileObj.name} 上传失败`)
+          this.$message.error( `${fileObj.name} 上传失败 ${err}`)
         }
         this.uploadFilesTotal++
       }
@@ -1084,7 +1085,7 @@ export default {
   color: var(--el-color-error);
 }
 
-/* 自定义滚动条样式 */
+/* 自定义滚动条样式 (暂弃) */
 .custom-scrollbar {
   scrollbar-width: thin; /* Firefox 细滚动条 */
   scrollbar-color: #333333 #121212; /* Firefox 滑块颜色和轨道颜色 */
