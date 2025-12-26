@@ -70,7 +70,7 @@ export default {
           .then(res => {
             console.log(res.data)
             if (res.data.code === 200){
-              this.$message.success("登录成功!")
+              this.$message.success(res.data.message)
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
             }else if (res.data.code === 400){
@@ -84,7 +84,7 @@ export default {
           .then(res => {
             console.log(res.data)
             if (res.data.code === 200){
-              this.$message.success("游客登录成功!")
+              this.$message.success(res.data.message)
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
             }else if (res.data.code === 400){
