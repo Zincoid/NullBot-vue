@@ -52,8 +52,12 @@ sudo nginx -s reload
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         
+        client_max_body_size 512M;  # 根据需要调整，如500M、1G等
+        client_body_buffer_size 128k;
+        client_body_timeout 600s;
+
         # 可选：超时设置
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
+        # proxy_connect_timeout 60s;
+        # proxy_send_timeout 60s;
+        # proxy_read_timeout 60s;
     }
