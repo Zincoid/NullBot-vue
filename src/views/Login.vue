@@ -36,9 +36,15 @@
         <el-button
             type="primary"
             plain
-            @click="submitForm()"
-            style="width: 100%;"
-        >登录</el-button>
+            @click="guest()"
+            style="width: 50%;"
+        >访客登录</el-button>
+        <el-button
+            type="success"
+            plain
+            @click="login()"
+            style="width: 50%;"
+        >管理登录</el-button>
       </div>
     </el-form-item>
     </el-form>
@@ -48,6 +54,7 @@
 <script>
 export default {
   name: "Login",
+
   data() {
     return {
       LoginForm: {
@@ -58,12 +65,26 @@ export default {
   },
 
   methods: {
-    submitForm() {
+    login() {
       this.$axios.post('/login', this.LoginForm)
           .then(res => {
             console.log(res.data)
             if (res.data.code === 200){
               this.$message.success("登录成功!")
+              localStorage.setItem("token", res.data.data.token)
+              this.$router.push('/index')
+            }else if (res.data.code === 400){
+              this.$message.warning(res.data.message)
+            }
+          })
+    },
+
+    guest() {
+      this.$axios.post('/guest')
+          .then(res => {
+            console.log(res.data)
+            if (res.data.code === 200){
+              this.$message.success("游客登录成功!")
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
             }else if (res.data.code === 400){

@@ -689,7 +689,7 @@ export default {
 
     getPage(currentPage, pageSize) {
       this.$axios({
-        url: '/file/' + currentPage + '/' + pageSize,
+        url: '/file/list/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -730,7 +730,7 @@ export default {
     },
 
     deleteFile(file) {
-      this.$axios.delete('/file/' + file.id, {
+      this.$axios.delete('/file/delete/' + file.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -738,10 +738,11 @@ export default {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
           this.getPage(this.pageInfo.current, this.pageInfo.size)
-
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
           }
+        } else {
+          this.$message.error(`${file.fileName} - ${res.data.message}`)
         }
       }).catch(() => {
         this.$message.error("删除失败!")
@@ -772,13 +773,13 @@ export default {
             maxContentLength: Infinity,
           })
           if (res.data.code === 200) {
-            this.$message.success(`${fileObj.name} 上传成功`)
+            this.$message.success(`${fileObj.name} - 上传成功`)
           } else {
-            this.$message.error(`${fileObj.name} ${res.data.message}`)
+            this.$message.error(`${fileObj.name} - ${res.data.message}`)
           }
         } catch (err) {
           console.error("上传失败:", err)
-          this.$message.error( `${fileObj.name} 上传失败 ${err}`)
+          this.$message.error( `${fileObj.name} - Exception: ${err}`)
         }
         this.uploadFilesTotal++
       }
@@ -924,7 +925,7 @@ export default {
               this.searchFile();
             }
           } else {
-            this.$message.error(res.data.message || '重命名失败');
+            this.$message.error(`${file.fileName} - ${res.data.message}`);
           }
         }).catch(error => {
           console.error('重命名失败:', error);
@@ -948,7 +949,7 @@ export default {
 
     getSayingPage(currentPage, pageSize) {
       this.$axios({
-        url: '/saying/' + currentPage + '/' + pageSize,
+        url: '/saying/list/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -965,7 +966,7 @@ export default {
     },
 
     deleteSaying(saying) {
-      this.$axios.delete('/saying/' + saying.id, {
+      this.$axios.delete('/saying/delete/' + saying.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -973,6 +974,8 @@ export default {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
           this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+        } else {
+          this.$message.error(`${res.data.message}`)
         }
       }).catch(() => {
         this.$message.error("删除失败!")

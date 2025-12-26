@@ -689,7 +689,7 @@ export default {
 
     getPage(currentPage, pageSize) {
       this.$axios({
-        url: '/file/' + currentPage + '/' + pageSize,
+        url: '/file/list/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -730,7 +730,7 @@ export default {
     },
 
     deleteFile(file) {
-      this.$axios.delete('/file/' + file.id, {
+      this.$axios.delete('/file/delete/' + file.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -765,9 +765,11 @@ export default {
           // 等待当前文件上传完成
           const res = await this.$axios.post("/file/upload", formData, {
             headers: {
-              "Content-Type": "multipart/form-data;charset=utf-8",
+              // "Content-Type": "multipart/form-data;charset=utf-8",
               token: localStorage.getItem("token")
             },
+            timeout: 300000, // 5分钟超时
+            maxContentLength: Infinity,
           })
           if (res.data.code === 200) {
             this.$message.success(`${fileObj.name} 上传成功`)
@@ -946,7 +948,7 @@ export default {
 
     getSayingPage(currentPage, pageSize) {
       this.$axios({
-        url: '/saying/' + currentPage + '/' + pageSize,
+        url: '/saying/list/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -963,7 +965,7 @@ export default {
     },
 
     deleteSaying(saying) {
-      this.$axios.delete('/saying/' + saying.id, {
+      this.$axios.delete('/saying/delete/' + saying.id, {
         headers: {
           token: localStorage.getItem("token")
         }
