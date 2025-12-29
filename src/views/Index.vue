@@ -21,6 +21,7 @@
           <div class="header-center" style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
             <!-- op=1时 显示搜索功能 -->
             <div v-show="op === 1" class="search-container" style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
+              <el-icon size="20"><Files /></el-icon>
               <el-input
                   placeholder="在此目录中搜索"
                   v-model="searchKey"
@@ -40,7 +41,7 @@
             </h3>
             <!-- op=3时 显示语录管理 -->
             <h3 v-show="op === 3" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Comment /></el-icon>语录管理
+              <el-icon><ChatDotSquare /></el-icon>语录管理
             </h3>
 
             <!-- op=4时 显示数据统计 -->
