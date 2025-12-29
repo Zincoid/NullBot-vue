@@ -313,31 +313,31 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="限权" min-width="100">
+                <el-table-column label="限权" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.access }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="等级" min-width="100">
+                <el-table-column label="等级" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.level }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="现金" min-width="100">
+                <el-table-column label="现金" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.cash }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="抽数" min-width="100">
+                <el-table-column label="抽数" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.drawTimes }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="仓库容量" min-width="100">
+                <el-table-column label="仓库容量" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.capacity }}
                   </template>
@@ -374,7 +374,7 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="限权" min-width="100">
+                <el-table-column label="限权" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.access }}
                   </template>
