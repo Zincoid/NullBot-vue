@@ -19,7 +19,7 @@
 
           <!-- 中部功能相关 -->
           <div class="header-center" style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
-            <!-- op=1时显示搜索功能 -->
+            <!-- op=1时 显示搜索功能 -->
             <div v-show="op === 1" class="search-container" style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
               <el-input
                   placeholder="在此目录中搜索"
@@ -33,14 +33,29 @@
                 <el-icon size="15"><Search /></el-icon>&nbsp;搜索
               </el-button>
             </div>
-            <!-- op=2时显示问候 -->
+            <!-- op=2时 显示问候 -->
             <h3 v-show="op === 2" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
               <span>Ciallo～(∠・ω< ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
 
             </h3>
-            <!-- op=3时显示语录管理 -->
+            <!-- op=3时 显示语录管理 -->
             <h3 v-show="op === 3" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Comment /></el-icon>语录集
+              <el-icon><Comment /></el-icon>语录管理
+            </h3>
+
+            <!-- op=4时 显示数据统计 -->
+            <h3 v-show="op === 4" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon><Histogram /></el-icon>数据统计
+            </h3>
+
+            <!-- op=5时 显示用户管理 -->
+            <h3 v-show="op === 5" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon><Cellphone /></el-icon>用户管理
+            </h3>
+
+            <!-- op=6时 显示群组管理 -->
+            <h3 v-show="op === 6" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon><OfficeBuilding /></el-icon>群组管理
             </h3>
           </div>
 
@@ -92,6 +107,20 @@
               <span><el-icon><ChatDotSquare /></el-icon>语录管理</span>
             </el-menu-item>
             <el-menu-item
+                index="5"
+                @click="shiftMenu(5)"
+                style="display: flex; justify-content: center; align-items: center;"
+            >
+              <span><el-icon><Cellphone /></el-icon>用户管理</span>
+            </el-menu-item>
+            <el-menu-item
+                index="6"
+                @click="shiftMenu(6)"
+                style="display: flex; justify-content: center; align-items: center;"
+            >
+              <span><el-icon><OfficeBuilding /></el-icon>群组管理</span>
+            </el-menu-item>
+            <el-menu-item
                 index="4"
                 @click="shiftMenu(4)"
                 style="display: flex; justify-content: center; align-items: center;"
@@ -103,7 +132,7 @@
                 @click="shiftMenu(2)"
                 style="display: flex; justify-content: center; align-items: center;"
             >
-              <span><el-icon><User /></el-icon>个人中心</span>
+              <span><el-icon><UserFilled /></el-icon>个人中心</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -265,6 +294,104 @@
               </el-table>
             </div>
 
+            <!-- 用户管理 -->
+            <div v-show="op === 5">
+              <el-table ref="userTableData" :data="userTableData" style="width: 100%" height="calc(100vh - 210px)">
+                <el-table-column type="index" label="序号" min-width="80"
+                                 :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
+                </el-table-column>
+
+                <el-table-column label="用户ID" min-width="120">
+                  <template v-slot="scope">
+                    {{ scope.row.id }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="昵称" min-width="200">
+                  <template v-slot="scope">
+                    {{ scope.row.name }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="限权" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.access }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="等级" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.level }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="现金" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.cash }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="抽数" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.drawTimes }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="仓库容量" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.capacity }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="110" align="center">
+                  <template v-slot="scope">
+                    <div style="display: flex; gap: 2px; justify-content: center;">
+                      <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置">
+                        <el-icon size="14"><Setting /></el-icon>
+                      </el-button>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
+            <!-- 群组管理 -->
+            <div v-show="op === 6">
+              <el-table ref="groupTableData" :data="groupTableData" style="width: 100%" height="calc(100vh - 210px)">
+                <el-table-column type="index" label="序号" min-width="80"
+                                 :index="(groupPageInfo.current - 1) * groupPageInfo.size + 1">
+                </el-table-column>
+
+                <el-table-column label="群组ID" min-width="120">
+                  <template v-slot="scope">
+                    {{ scope.row.id }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="群名" min-width="300">
+                  <template v-slot="scope">
+                    {{ scope.row.name }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="限权" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.access }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="110" align="center">
+                  <template v-slot="scope">
+                    <div style="display: flex; gap: 2px; justify-content: center;">
+                      <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置">
+                        <el-icon size="14"><Setting /></el-icon>
+                      </el-button>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
             <!-- 数据统计 -->
             <div v-if="op === 4" style="margin-right: 40px; margin-top: 10px;">
               <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center;">
@@ -380,11 +507,39 @@
                   :pager-count="7">
               </el-pagination>
             </div>
+
+            <div v-show="op === 5" style="text-align: right;">
+              <el-pagination
+                  background
+                  @size-change="handleUserSizeChange"
+                  @current-change="handleUserCurrentChange"
+                  layout="sizes, prev, pager, next"
+                  :page-sizes="[10, 20, 30, 40]"
+                  :page-size="userPageInfo.size"
+                  :total="userPageInfo.total"
+                  :current-page="userPageInfo.current"
+                  :pager-count="7">
+              </el-pagination>
+            </div>
+
+            <div v-show="op === 6" style="text-align: right;">
+              <el-pagination
+                  background
+                  @size-change="handleGroupSizeChange"
+                  @current-change="handleGroupCurrentChange"
+                  layout="sizes, prev, pager, next"
+                  :page-sizes="[10, 20, 30, 40]"
+                  :page-size="groupPageInfo.size"
+                  :total="groupPageInfo.total"
+                  :current-page="groupPageInfo.current"
+                  :pager-count="7">
+              </el-pagination>
+            </div>
           </el-footer>
         </el-container>
       </el-container>
 
-      <!-- 独立搜索对话框 -->
+      <!-- 搜索对话框 -->
       <el-dialog title="搜索结果" v-model="searchTableVisible" width="55%">
         <el-table ref="searchData" :data="searchData" style="width: 100%" stripe>
           <el-table-column type="index" label="序号" width="80">
@@ -433,7 +588,7 @@
         </el-table>
       </el-dialog>
 
-      <!-- 独立图片/视频预览对话框 -->
+      <!-- 图片/视频预览对话框 -->
       <el-dialog v-model="previewVisible" :title="previewTitle" :destroy-on-close="true" width="70%" top="5vh" center>
         <div style="text-align: center; max-height: 70vh; overflow: auto;">
           <!-- 图片预览 -->
@@ -469,20 +624,97 @@
           <!-- 可以在这里扩展 -->
         </div>
       </el-dialog>
+
+      <!-- 用户编辑对话框 -->
+      <el-dialog v-model="userSettingVisible" title="用户设置" width="500px">
+        <el-form ref="userSettingFormRef" :model="userSettingForm" label-width="100px">
+          <el-form-item label="用户ID" prop="id">
+            <el-input v-model="userSettingForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="昵称" prop="name">
+            <el-input v-model="userSettingForm.name" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="权限" prop="access">
+            <el-select v-model="userSettingForm.access" style="width: 90%">
+              <el-option label="II级 (超级管理)" :value="2" />
+              <el-option label="I级 (管理)" :value="1" />
+              <el-option label="0级 (用户)" :value="0" />
+              <el-option label="-I级 (限制)" :value="-1" />
+              <el-option label="-II级 (禁用)" :value="-2" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="等级" prop="level">
+            <el-input v-model="userSettingForm.level" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="现金" prop="cash">
+            <el-input v-model="userSettingForm.cash" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="抽数" prop="drawTimes">
+            <el-input v-model="userSettingForm.drawTimes" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="仓库容量" prop="capacity">
+            <el-input v-model="userSettingForm.capacity" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="user-dialog-footer">
+            <el-button plain @click="userSettingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleUserSettingSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
+      <!-- 群组编辑对话框 -->
+      <el-dialog v-model="groupSettingVisible" title="群组设置" width="500px">
+        <el-form ref="groupSettingFormRef" :model="groupSettingForm" label-width="100px">
+            <el-form-item label="群组ID" prop="id">
+              <el-input v-model="groupSettingForm.id" :disabled="true" style="width: 90%"/>
+            </el-form-item>
+
+            <el-form-item label="群名" prop="name">
+              <el-input v-model="groupSettingForm.name" :disabled="true" style="width: 90%"/>
+            </el-form-item>
+
+            <el-form-item label="权限" prop="access">
+              <el-select v-model="groupSettingForm.access" style="width: 90%">
+                <el-option label="II级 (超级管理)" :value="2" />
+                <el-option label="I级 (管理)" :value="1" />
+                <el-option label="0级 (用户)" :value="0" />
+                <el-option label="-I级 (限制)" :value="-1" />
+                <el-option label="-II级 (禁用)" :value="-2" />
+              </el-select>
+            </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="group-dialog-footer">
+            <el-button plain @click="groupSettingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleGroupSettingSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </el-container>
   </div>
 </template>
 
 <script>
 import {
+  Cellphone,
   ChatDotSquare, Comment,
   Delete, Document, DocumentAdd,
   Download, Edit,
   Files, Folder, FolderAdd,
   FolderOpened, Histogram,
-  HomeFilled, MostlyCloudy, Picture,
-  Promotion, RefreshLeft, Search, Switch, SwitchButton, UploadFilled,
-  User, Warning
+  HomeFilled, Monitor, MostlyCloudy, OfficeBuilding, Operation, Picture,
+  Promotion, RefreshLeft, Search, Setting, Switch, SwitchButton, Tools, UploadFilled,
+  User, UserFilled, Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
 import LineChart from "@/components/LineChart.vue";
@@ -490,6 +722,13 @@ import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    UserFilled,
+    Setting,
+    Tools,
+    Cellphone,
+    Monitor,
+    OfficeBuilding,
+    Operation,
     Switch,
     Warning,
     BarChart,
@@ -530,6 +769,10 @@ export default {
         pages: 0
       },
 
+      searchTableVisible: false,
+      searchKey: '',
+      searchData: [],
+
       uploadDir: '',
       uploadFileList: [],
       uploadFilesTotal: 0,
@@ -543,13 +786,43 @@ export default {
         pages: 0
       },
 
-      searchTableVisible: false,
-      searchKey: '',
-      searchData: [],
+      userTableData: [],
+      userPageInfo: {
+        total: 0,
+        size: 0,
+        current: 0,
+        pages: 0
+      },
+
+      userSettingVisible: false,
+      userSettingForm: {
+        id: '',
+        name: '',
+        access: 0,
+        level: 0,
+        cash: 0,
+        capacity: 100,
+        drawTimes: 50
+      },
+
+      groupTableData: [],
+      groupPageInfo: {
+        total: 0,
+        size: 0,
+        current: 0,
+        pages: 0
+      },
+
+      groupSettingVisible: false,
+      groupSettingForm: {
+        id: '',
+        name: '',
+        access: 0
+      },
 
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
-      previewType: '', // 'image' 或 'video'
+      previewType: '', // 'image' 或 'video' 或 'audio'
       previewTitle: '', // 预览对话框标题
 
       totalVisits: 0,
@@ -673,6 +946,22 @@ export default {
 
     handleSayingSizeChange(pageSize) {
       this.getSayingPage(1, pageSize)
+    },
+
+    handleUserCurrentChange(currentPage) {
+      this.getUserPage(currentPage, this.userPageInfo.size)
+    },
+
+    handleUserSizeChange(pageSize) {
+      this.getUserPage(1, pageSize)
+    },
+
+    handleGroupCurrentChange(currentPage) {
+      this.getGroupPage(currentPage, this.groupPageInfo.size)
+    },
+
+    handleGroupSizeChange(pageSize) {
+      this.getGroupPage(1, pageSize)
     },
 
     shiftMenu(op) {
@@ -960,8 +1249,8 @@ export default {
         this.sayingPageInfo.size = res.data.data.sayingPage.pageSize
         this.sayingPageInfo.current = res.data.data.sayingPage.currentPage
         this.sayingPageInfo.pages = res.data.data.sayingPage.totalPage
-        console.log('sayingTableData:')
-        console.log(this.sayingTableData)
+        // console.log('sayingTableData:')
+        // console.log(this.sayingTableData)
       })
     },
 
@@ -975,10 +1264,98 @@ export default {
           this.$message.success(res.data.message)
           this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
         } else {
-          this.$message.error(`${res.data.message}`)
+          this.$message.error(res.data.message)
         }
       }).catch(() => {
         this.$message.error("删除失败!")
+      })
+    },
+
+    getUserPage(currentPage, pageSize) {
+      this.$axios({
+        url: '/user/list/' + currentPage + '/' + pageSize,
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.userTableData = JSON.parse(JSON.stringify(res.data.data.userPage.users))
+        this.userPageInfo.total = res.data.data.userPage.total
+        this.userPageInfo.size = res.data.data.userPage.pageSize
+        this.userPageInfo.current = res.data.data.userPage.currentPage
+        this.userPageInfo.pages = res.data.data.userPage.totalPage
+        // console.log('userTableData:')
+        // console.log(this.userTableData)
+      })
+    },
+
+    getGroupPage(currentPage, pageSize) {
+      this.$axios({
+        url: '/group/list/' + currentPage + '/' + pageSize,
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.groupTableData = JSON.parse(JSON.stringify(res.data.data.groupPage.groups))
+        this.groupPageInfo.total = res.data.data.groupPage.total
+        this.groupPageInfo.size = res.data.data.groupPage.pageSize
+        this.groupPageInfo.current = res.data.data.groupPage.currentPage
+        this.groupPageInfo.pages = res.data.data.groupPage.totalPage
+        // console.log('groupTableData:')
+        // console.log(this.groupTableData)
+      })
+    },
+
+    handleGroupSetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.groupSettingForm = JSON.parse(JSON.stringify(row))
+      this.groupSettingVisible = true
+    },
+
+    handleGroupSettingSubmit() {
+      this.$axios({
+        url: '/group/updateGroup',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.groupSettingForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+          this.groupSettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
+    handleUserSetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.userSettingForm = JSON.parse(JSON.stringify(row))
+      this.userSettingVisible = true
+    },
+
+    handleUserSettingSubmit() {
+      this.$axios({
+        url: '/user/updateUser',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.userSettingForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
+          this.userSettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
       })
     }
   },
@@ -992,6 +1369,8 @@ export default {
     this.getInfo()
     this.getPage(1, 20)
     this.getSayingPage(1, 20)
+    this.getUserPage(1, 20)
+    this.getGroupPage(1, 20)
   },
 
   mounted() {
@@ -1014,6 +1393,10 @@ export default {
         this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       } else if (newVal === 1){
         this.getPage(this.pageInfo.current, this.pageInfo.size)
+      } else if (newVal === 5){
+        this.getPage(this.userPageInfo.current, this.userPageInfo.size)
+      } else if (newVal === 6){
+        this.getPage(this.groupPageInfo.current, this.groupPageInfo.size)
       }
     }
   }
