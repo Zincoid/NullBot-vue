@@ -214,7 +214,7 @@
                 <el-form-item style="margin-left: -20px; margin-top: 18px">
                   <el-input
                       placeholder="请输入关键字..."
-                      :prefix-icon="Search"
+                      :prefix-icon="searchIcon"
                       v-model="itemSearchKey"
                       clearable
                       style="flex: 1; min-width: 400px;"
@@ -228,7 +228,7 @@
             <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
             <div style="display: flex; align-items: center;">
               <el-button-group style="margin-left: 10px; display: inline-flex;">
-                <el-button round plain @click="">
+                <el-button round plain @click="itemImportVisible = true">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
                 </el-button>
                 <el-button round plain @click="handleItemAdding()">
@@ -997,6 +997,21 @@
         </template>
       </el-dialog>
 
+      <el-dialog v-model="itemImportVisible" title="导入 - 物品CSV文件" width="500px">
+        <el-upload
+            class="upload-import-item"
+            drag
+            :headers="uploadHeaders"
+            :action="uploadAction"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
     </el-container>
   </div>
 </template>
@@ -1149,6 +1164,8 @@ export default {
         available: false,
       },
 
+      itemImportVisible: false,
+
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
       previewType: '', // 'image' 或 'video' 或 'audio'
@@ -1167,9 +1184,10 @@ export default {
   },
 
   computed: {
-    Search() {
+    searchIcon() {
       return Search
     },
+
     filteredItemTableData() {
       return this.itemTableData.filter(item => {
         // 类别过滤
@@ -1178,6 +1196,23 @@ export default {
         const keyMatch = this.itemSearchKey === null || item.name.includes(this.itemSearchKey);
         return categoryMatch && keyMatch;
       });
+    },
+
+    uploadHeaders() {
+      const token = localStorage.getItem('token') || ''
+      return {
+        token: `${token}`
+        // 或者根据后端要求使用其他格式：
+        // 'Authorization': token
+        // 'X-Auth-Token': token
+        // 'token': token
+      }
+    },
+
+    uploadAction() {
+      const baseURL = axios.defaults.baseURL || ''
+      let path = '/item/importCsv'
+      return `${baseURL}${path}`
     }
   },
 
