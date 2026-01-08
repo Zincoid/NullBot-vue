@@ -214,7 +214,7 @@
                 <el-form-item style="margin-left: -20px; margin-top: 18px">
                   <el-input
                       placeholder="请输入关键字..."
-                      :prefix-icon="Search"
+                      :prefix-icon="searchIcon"
                       v-model="itemSearchKey"
                       clearable
                       style="flex: 1; min-width: 400px;"
@@ -228,7 +228,7 @@
             <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
             <div style="display: flex; align-items: center;">
               <el-button-group style="margin-left: 10px; display: inline-flex;">
-                <el-button round plain @click="">
+                <el-button round plain @click="itemImportVisible = true">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
                 </el-button>
                 <el-button round plain @click="handleItemAdding()">
@@ -997,6 +997,23 @@
         </template>
       </el-dialog>
 
+      <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-item"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction"
+            :on-success="getItemList"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
     </el-container>
   </div>
 </template>
@@ -1149,6 +1166,8 @@ export default {
         available: false,
       },
 
+      itemImportVisible: false,
+
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
       previewType: '', // 'image' 或 'video' 或 'audio'
@@ -1167,9 +1186,10 @@ export default {
   },
 
   computed: {
-    Search() {
+    searchIcon() {
       return Search
     },
+
     filteredItemTableData() {
       return this.itemTableData.filter(item => {
         // 类别过滤
@@ -1178,10 +1198,59 @@ export default {
         const keyMatch = this.itemSearchKey === null || item.name.includes(this.itemSearchKey);
         return categoryMatch && keyMatch;
       });
+    },
+
+    uploadHeaders() {
+      const token = localStorage.getItem('token') || ''
+      return {
+        token: `${token}`
+        // 或者根据后端要求使用其他格式：
+        // 'Authorization': token
+        // 'X-Auth-Token': token
+        // 'token': token
+      }
+    },
+
+    uploadAction() {
+      const baseURL = axios.defaults.baseURL || ''
+      let path = '/item/importCsv'
+      return `${baseURL}${path}`
     }
   },
 
   methods: {
+    isCsv(file) {
+      // // 方法1：通过文件扩展名验证
+      // const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
+      // // 方法2：通过MIME类型验证（注意：不同浏览器可能返回不同的MIME类型）
+      // const allowedMimeTypes = [
+      //   'text/csv',
+      //   'application/vnd.ms-excel', // 一些旧版Excel
+      //   'application/csv',
+      //   'text/x-csv',
+      //   'text/comma-separated-values',
+      //   'text/plain' // 有些CSV文件可能被识别为text/plain
+      // ]
+      // const isCSVByMime = allowedMimeTypes.includes(file.type)
+      // // 方法3：结合扩展名和MIME类型
+      // if (!isCSVByExt) {
+      //   this.$message.error('只能上传 CSV 格式的文件！')
+      //   return false
+      // }
+      // // 如果扩展名通过但MIME类型不符合，给出警告但允许上传
+      // if (!isCSVByMime) {
+      //   console.warn(`文件 ${file.name} 的MIME类型为 ${file.type}，不是标准的CSV类型`)
+      // }
+      // return true
+
+      const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
+      if (!isCSVByExt) {
+        this.$message.error('仅支持 CSV 文件')
+        return false
+      }
+      return true
+    },
+
     // 时钟更新
     updateTime() {
       const now = new Date()
@@ -1836,7 +1905,20 @@ export default {
           'token': localStorage.getItem("token")
         },
         method: 'GET'
-      })
+      }).then(res => {
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Items_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
     }
   },
 

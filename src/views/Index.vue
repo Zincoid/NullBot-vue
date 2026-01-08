@@ -997,12 +997,14 @@
         </template>
       </el-dialog>
 
-      <el-dialog v-model="itemImportVisible" title="导入 - 物品CSV文件" width="500px">
+      <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
         <el-upload
             class="upload-import-item"
             drag
+            :before-upload="isCsv"
             :headers="uploadHeaders"
             :action="uploadAction"
+            :on-success="getItemList"
             multiple
         >
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -1217,6 +1219,38 @@ export default {
   },
 
   methods: {
+    isCsv(file) {
+      // // 方法1：通过文件扩展名验证
+      // const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
+      // // 方法2：通过MIME类型验证（注意：不同浏览器可能返回不同的MIME类型）
+      // const allowedMimeTypes = [
+      //   'text/csv',
+      //   'application/vnd.ms-excel', // 一些旧版Excel
+      //   'application/csv',
+      //   'text/x-csv',
+      //   'text/comma-separated-values',
+      //   'text/plain' // 有些CSV文件可能被识别为text/plain
+      // ]
+      // const isCSVByMime = allowedMimeTypes.includes(file.type)
+      // // 方法3：结合扩展名和MIME类型
+      // if (!isCSVByExt) {
+      //   this.$message.error('只能上传 CSV 格式的文件！')
+      //   return false
+      // }
+      // // 如果扩展名通过但MIME类型不符合，给出警告但允许上传
+      // if (!isCSVByMime) {
+      //   console.warn(`文件 ${file.name} 的MIME类型为 ${file.type}，不是标准的CSV类型`)
+      // }
+      // return true
+
+      const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
+      if (!isCSVByExt) {
+        this.$message.error('仅支持 CSV 文件')
+        return false
+      }
+      return true
+    },
+
     // 时钟更新
     updateTime() {
       const now = new Date()
