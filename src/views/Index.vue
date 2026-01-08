@@ -58,6 +58,11 @@
             <h3 v-show="op === 6" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
               <el-icon><OfficeBuilding /></el-icon>群组管理
             </h3>
+
+            <!-- op=7时 显示物品管理 -->
+            <h3 v-show="op === 7" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon><Box /></el-icon>物品管理
+            </h3>
           </div>
 
           <!-- 右侧用户信息 -->
@@ -122,6 +127,13 @@
               <span><el-icon><OfficeBuilding /></el-icon>群组管理</span>
             </el-menu-item>
             <el-menu-item
+                index="7"
+                @click="shiftMenu(7)"
+                style="display: flex; justify-content: center; align-items: center;"
+            >
+              <span><el-icon><Box /></el-icon>物品管理</span>
+            </el-menu-item>
+            <el-menu-item
                 index="4"
                 @click="shiftMenu(4)"
                 style="display: flex; justify-content: center; align-items: center;"
@@ -150,7 +162,7 @@
               </div>
 
               <!-- 文件操作按钮 -->
-<!--              <div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
+              <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
               <div style="display: flex; align-items: center;">
                 <el-upload
                     multiple
@@ -184,13 +196,58 @@
               </div>
             </el-header>
 
+          <!-- 物品管理头部 -->
+          <el-header v-show="op === 7" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+              <el-icon size="18px"><Filter /></el-icon>&nbsp;
+              <el-form :inline="true" style="display: inline-flex;">
+                <el-form-item label="过滤器" style="margin-top: 18px; min-width: 200px">
+                  <el-select placeholder="ALL" v-model="itemSearchCategory">
+                    <el-option label="ALL" :value="null" />
+                    <el-option label="COMMON" :value="'COMMON'" />
+                    <el-option label="SPECIAL" :value="'SPECIAL'" />
+                    <el-option label="BREAD" :value="'BREAD'" />
+                    <el-option label="LOOTING" :value="'LOOTING'" />
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item style="margin-left: -20px; margin-top: 18px">
+                  <el-input
+                      placeholder="请输入关键字..."
+                      :prefix-icon="Search"
+                      v-model="itemSearchKey"
+                      clearable
+                      style="flex: 1; min-width: 400px;"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <!-- 物品操作按钮 -->
+            <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
+            <div style="display: flex; align-items: center;">
+              <el-button-group style="margin-left: 10px; display: inline-flex;">
+                <el-button round plain @click="">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
+                </el-button>
+                <el-button round plain @click="handleItemAdding()">
+                  <el-icon size="15"><Plus /></el-icon>&nbsp;新增物品
+                </el-button>
+                <el-button round plain @click="exportItemCsv()">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出物品
+                </el-button>
+              </el-button-group>
+            </div>
+          </el-header>
+
           <!-- 右侧主区域 -->
           <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
             <!-- 文件管理 -->
             <div v-show="op === 1">
-              <el-table ref="tableData" :data="tableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="fileTableData" :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <el-table-column type="index" label="序号" min-width="80"
-                                 :index="(pageInfo.current - 1) * pageInfo.size + 1">
+                                 :index="(filePageInfo.current - 1) * filePageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="文件名" min-width="300" show-overflow-tooltip>
@@ -393,6 +450,92 @@
               </el-table>
             </div>
 
+            <!-- 物品管理 -->
+            <div v-show="op === 7">
+              <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <el-table-column type="index" label="序号" min-width="80"
+                                 :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
+                </el-table-column>
+
+                <el-table-column label="物品ID" min-width="100">
+                  <template v-slot="scope">
+                    {{ scope.row.id }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="名称" min-width="150">
+                  <template v-slot="scope">
+                    {{ scope.row.name }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="品质" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.rarity }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="类别" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.category }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="可获取" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.available ? 'YES' : 'NO' }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="价格" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.price }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="重量" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.weight }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="介绍" min-width="300" show-overflow-tooltip>
+                  <template v-slot="scope">
+                    {{ scope.row.description || 无介绍 }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="指令" min-width="200" show-overflow-tooltip>
+                  <template v-slot="scope">
+                    {{ scope.row.command || '无指令' }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="图路径" min-width="200" show-overflow-tooltip>
+                  <template v-slot="scope">
+                    {{ scope.row.imagePath || '无图片' }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column fixed="right" label="操作" width="200" align="center">
+                  <template v-slot="scope">
+                    <div style="display: flex; gap: 2px; justify-content: center;">
+                      <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置">
+                        <el-icon size="14"><Setting /></el-icon>
+                      </el-button>
+                      <el-popconfirm title="确认删除吗?" @confirm="deleteItem(scope.row)">
+                        <template #reference>
+                          <el-button type="danger" plain size="small" title="删除">
+                            <el-icon size="14"><Delete /></el-icon>
+                          </el-button>
+                        </template>
+                      </el-popconfirm>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+
             <!-- 数据统计 -->
             <div v-if="op === 4" style="margin-right: 40px; margin-top: 10px;">
               <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center;">
@@ -481,21 +624,24 @@
 
           <!-- 下部分页区域 -->
           <el-footer height="60px" style="padding: 10px 20px;">
-            <div v-show="op === 1" style="text-align: right;">
+            <div v-show="op === 1" style="display: flex; align-items: center; justify-content: space-between;">
+              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon>
+                共 {{ filePageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
+                  @size-change="handleFileSizeChange"
+                  @current-change="handleFileCurrentChange"
                   layout="sizes, prev, pager, next"
                   :page-sizes="[10, 20, 30, 40]"
-                  :page-size="pageInfo.size"
-                  :total="pageInfo.total"
-                  :current-page="pageInfo.current"
+                  :page-size="filePageInfo.size"
+                  :total="filePageInfo.total"
+                  :current-page="filePageInfo.current"
                   :pager-count="7">
               </el-pagination>
             </div>
 
-            <div v-show="op === 3" style="text-align: right;">
+            <div v-show="op === 3" style="display: flex; align-items: center; justify-content: space-between;">
+              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleSayingSizeChange"
@@ -509,7 +655,8 @@
               </el-pagination>
             </div>
 
-            <div v-show="op === 5" style="text-align: right;">
+            <div v-show="op === 5" style="display: flex; align-items: center; justify-content: space-between;">
+              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleUserSizeChange"
@@ -523,7 +670,8 @@
               </el-pagination>
             </div>
 
-            <div v-show="op === 6" style="text-align: right;">
+            <div v-show="op === 6" style="display: flex; align-items: center; justify-content: space-between;">
+              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleGroupSizeChange"
@@ -535,6 +683,21 @@
                   :current-page="groupPageInfo.current"
                   :pager-count="7">
               </el-pagination>
+            </div>
+
+            <div v-show="op === 7" style="display: flex; align-items: center; justify-content: space-between;">
+              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
+<!--              <el-pagination-->
+<!--                  background-->
+<!--                  @size-change="handleItemSizeChange"-->
+<!--                  @current-change="handleItemCurrentChange"-->
+<!--                  layout="sizes, prev, pager, next"-->
+<!--                  :page-sizes="[10, 20, 30, 40]"-->
+<!--                  :page-size="itemPageInfo.size"-->
+<!--                  :total="itemPageInfo.total"-->
+<!--                  :current-page="itemPageInfo.current"-->
+<!--                  :pager-count="7">-->
+<!--              </el-pagination>-->
             </div>
           </el-footer>
         </el-container>
@@ -628,17 +791,17 @@
 
       <!-- 用户编辑对话框 -->
       <el-dialog v-model="userSettingVisible" title="用户设置" width="500px">
-        <el-form ref="userSettingFormRef" :model="userSettingForm" label-width="100px">
+        <el-form ref="userSettingFormRef" :model="userForm" label-width="100px">
           <el-form-item label="用户ID" prop="id">
-            <el-input v-model="userSettingForm.id" :disabled="true" style="width: 90%"/>
+            <el-input v-model="userForm.id" :disabled="true" style="width: 90%"/>
           </el-form-item>
 
           <el-form-item label="昵称" prop="name">
-            <el-input v-model="userSettingForm.name" :disabled="true" style="width: 90%"/>
+            <el-input v-model="userForm.name" :disabled="true" style="width: 90%"/>
           </el-form-item>
 
           <el-form-item label="权限" prop="access">
-            <el-select v-model="userSettingForm.access" style="width: 90%">
+            <el-select v-model="userForm.access" style="width: 90%">
               <el-option label="II级 (超级管理)" :value="2" />
               <el-option label="I级 (管理)" :value="1" />
               <el-option label="0级 (用户)" :value="0" />
@@ -648,19 +811,19 @@
           </el-form-item>
 
           <el-form-item label="等级" prop="level">
-            <el-input v-model="userSettingForm.level" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.level" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
           </el-form-item>
 
           <el-form-item label="现金" prop="cash">
-            <el-input v-model="userSettingForm.cash" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.cash" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
           </el-form-item>
 
           <el-form-item label="抽数" prop="drawTimes">
-            <el-input v-model="userSettingForm.drawTimes" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.drawTimes" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
           </el-form-item>
 
           <el-form-item label="仓库容量" prop="capacity">
-            <el-input v-model="userSettingForm.capacity" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.capacity" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
           </el-form-item>
         </el-form>
 
@@ -674,17 +837,17 @@
 
       <!-- 群组编辑对话框 -->
       <el-dialog v-model="groupSettingVisible" title="群组设置" width="500px">
-        <el-form ref="groupSettingFormRef" :model="groupSettingForm" label-width="100px">
+        <el-form ref="groupSettingFormRef" :model="groupForm" label-width="100px">
             <el-form-item label="群组ID" prop="id">
-              <el-input v-model="groupSettingForm.id" :disabled="true" style="width: 90%"/>
+              <el-input v-model="groupForm.id" :disabled="true" style="width: 90%"/>
             </el-form-item>
 
             <el-form-item label="群名" prop="name">
-              <el-input v-model="groupSettingForm.name" :disabled="true" style="width: 90%"/>
+              <el-input v-model="groupForm.name" :disabled="true" style="width: 90%"/>
             </el-form-item>
 
             <el-form-item label="权限" prop="access">
-              <el-select v-model="groupSettingForm.access" style="width: 90%">
+              <el-select v-model="groupForm.access" style="width: 90%">
                 <el-option label="II级 (超级管理)" :value="2" />
                 <el-option label="I级 (管理)" :value="1" />
                 <el-option label="0级 (用户)" :value="0" />
@@ -701,19 +864,153 @@
           </div>
         </template>
       </el-dialog>
+
+      <!-- 物品编辑对话框 -->
+      <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
+        <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
+          <el-form-item label="名称" prop="name" :required="true">
+            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="品质" prop="rarity" :required="true">
+            <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
+              <el-option label="WHITE" :value="0" />
+              <el-option label="GREEN" :value="1" />
+              <el-option label="BLUE" :value="2" />
+              <el-option label="PURPLE" :value="3" />
+              <el-option label="GOLD" :value="4" />
+              <el-option label="RED" :value="5" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="可获得" prop="available" :required="true">
+            <el-switch
+                v-model="itemForm.available"
+                inline-prompt
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                active-text="Y"
+                inactive-text="N"
+            />
+          </el-form-item>
+
+          <el-form-item label="价格" prop="price" :required="true">
+            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="重量" prop="weight" :required="true">
+            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="介绍" prop="description">
+            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="指令" prop="command">
+            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="图路径" prop="imagePath">
+            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%"/>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="group-dialog-footer">
+            <el-button plain @click="itemSettingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleItemSettingSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
+      <!-- 物品新增对话框 -->
+      <el-dialog v-model="itemAddingVisible" title="新增物品" width="500px">
+        <el-form ref="itemAddingFormRef" :model="itemForm" label-width="100px">
+          <el-form-item label="名称" prop="name" :required="true">
+            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="品质" prop="rarity" :required="true">
+            <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
+              <el-option label="WHITE" :value="0" />
+              <el-option label="GREEN" :value="1" />
+              <el-option label="BLUE" :value="2" />
+              <el-option label="PURPLE" :value="3" />
+              <el-option label="GOLD" :value="4" />
+              <el-option label="RED" :value="5" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="可获得" prop="available" :required="true">
+            <el-switch
+                v-model="itemForm.available"
+                inline-prompt
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                active-text="Y"
+                inactive-text="N"
+            />
+          </el-form-item>
+
+          <el-form-item label="价格" prop="price" :required="true">
+            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="重量" prop="weight" :required="true">
+            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="介绍" prop="description">
+            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="指令" prop="command">
+            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="图路径" prop="imagePath">
+            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%"/>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="group-dialog-footer">
+            <el-button plain @click="itemAddingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleItemAddingSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
     </el-container>
   </div>
 </template>
 
 <script>
 import {
+  Box,
   Cellphone,
   ChatDotSquare, Comment,
-  Delete, Document, DocumentAdd,
+  Delete, Document, DocumentAdd, DocumentCopy,
   Download, Edit,
-  Files, Folder, FolderAdd,
+  Files, Filter, Folder, FolderAdd,
   FolderOpened, Histogram,
-  HomeFilled, Monitor, MostlyCloudy, OfficeBuilding, Operation, Picture,
+  HomeFilled, InfoFilled, Monitor, MostlyCloudy, OfficeBuilding, Operation, Picture, Plus,
   Promotion, RefreshLeft, Search, Setting, Switch, SwitchButton, Tools, UploadFilled,
   User, UserFilled, Warning
 } from "@element-plus/icons-vue";
@@ -723,6 +1020,11 @@ import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    Filter,
+    InfoFilled,
+    Plus,
+    DocumentCopy,
+    Box,
     UserFilled,
     Setting,
     Tools,
@@ -762,8 +1064,8 @@ export default {
       curDir: '/',
       op: 1,
 
-      tableData: [],
-      pageInfo: {
+      fileTableData: [],
+      filePageInfo: {
         total: 0,
         size: 0,
         current: 0,
@@ -796,7 +1098,7 @@ export default {
       },
 
       userSettingVisible: false,
-      userSettingForm: {
+      userForm: {
         id: '',
         name: '',
         access: 0,
@@ -815,10 +1117,36 @@ export default {
       },
 
       groupSettingVisible: false,
-      groupSettingForm: {
+      groupForm: {
         id: '',
         name: '',
         access: 0
+      },
+
+      itemTableData: [],
+      // itemPageInfo: {
+      //   total: 0,
+      //   size: 0,
+      //   current: 0,
+      //   pages: 0
+      // },
+
+      itemSearchCategory: null,
+      itemSearchKey: '',
+
+      itemSettingVisible: false,
+      itemAddingVisible: false,
+      itemForm: {
+        id: '',
+        name: '',
+        rarity: null,
+        category: null,
+        price: '',
+        weight: '',
+        description: '',
+        command: '',
+        imagePath: '',
+        available: false,
       },
 
       previewVisible: false, // 控制预览对话框显示
@@ -835,6 +1163,21 @@ export default {
       topUsersAxis: [],
       topCommandsData: [],
       topCommandsAxis: []
+    }
+  },
+
+  computed: {
+    Search() {
+      return Search
+    },
+    filteredItemTableData() {
+      return this.itemTableData.filter(item => {
+        // 类别过滤
+        const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory;
+        // 关键词过滤
+        const keyMatch = this.itemSearchKey === null || item.name.includes(this.itemSearchKey);
+        return categoryMatch && keyMatch;
+      });
     }
   },
 
@@ -933,11 +1276,11 @@ export default {
       })
     },
 
-    handleCurrentChange(currentPage) {
-      this.getPage(currentPage, this.pageInfo.size)
+    handleFileCurrentChange(currentPage) {
+      this.getPage(currentPage, this.filePageInfo.size)
     },
 
-    handleSizeChange(pageSize) {
+    handleFileSizeChange(pageSize) {
       this.getPage(1, pageSize)
     },
 
@@ -965,6 +1308,14 @@ export default {
       this.getGroupPage(1, pageSize)
     },
 
+    // handleItemCurrentChange(currentPage) {
+    //   this.getItemPage(currentPage, this.groupPageInfo.size)
+    // },
+    //
+    // handleItemSizeChange(pageSize) {
+    //   this.getItemPage(1, pageSize)
+    // },
+
     shiftMenu(op) {
       this.op = op
     },
@@ -988,15 +1339,15 @@ export default {
           curDir: this.curDir,
         }
       }).then(res => {
-        this.tableData = JSON.parse(JSON.stringify(res.data.data.filePage.files))
-        this.pageInfo.total = res.data.data.filePage.total
-        this.pageInfo.size = res.data.data.filePage.pageSize
-        this.pageInfo.current = res.data.data.filePage.currentPage
-        this.pageInfo.pages = res.data.data.filePage.totalPage
-        // console.log('pageInfo:')
-        // console.log(this.pageInfo)
-        // console.log('tableData:')
-        // console.log(this.tableData)
+        this.fileTableData = JSON.parse(JSON.stringify(res.data.data.filePage.files))
+        this.filePageInfo.total = res.data.data.filePage.total
+        this.filePageInfo.size = res.data.data.filePage.pageSize
+        this.filePageInfo.current = res.data.data.filePage.currentPage
+        this.filePageInfo.pages = res.data.data.filePage.totalPage
+        // console.log('filePageInfo:')
+        // console.log(this.filePageInfo)
+        // console.log('fileTableData:')
+        // console.log(this.fileTableData)
       })
     },
 
@@ -1027,7 +1378,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getPage(this.pageInfo.current, this.pageInfo.size)
+          this.getPage(this.filePageInfo.current, this.filePageInfo.size)
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
           }
@@ -1079,10 +1430,10 @@ export default {
       this.$refs.upload.clearFiles()
       // 刷新页面数据
       if(this.curDir === this.uploadDir){
-        if (this.pageInfo.pages === 0) {
-          this.getPage(1, this.pageInfo.size)
+        if (this.filePageInfo.pages === 0) {
+          this.getPage(1, this.filePageInfo.size)
         } else {
-          this.getPage(this.pageInfo.pages, this.pageInfo.size)
+          this.getPage(this.filePageInfo.pages, this.filePageInfo.size)
         }
       }
       this.uploading = false
@@ -1117,7 +1468,7 @@ export default {
       } else {
         this.curDir += "/" + dir.fileName
       }
-      this.getPage(1, this.pageInfo.size)
+      this.getPage(1, this.filePageInfo.size)
     },
 
     backDir() {
@@ -1131,7 +1482,7 @@ export default {
           this.curDir = this.curDir.substring(0, index)
         }
       }
-      this.getPage(1, this.pageInfo.size)
+      this.getPage(1, this.filePageInfo.size)
     },
 
     createDir() {
@@ -1160,7 +1511,7 @@ export default {
                 type: 'success',
                 message: value + '创建成功!'
               })
-              this.getPage(this.pageInfo.current, this.pageInfo.size)
+              this.getPage(this.filePageInfo.current, this.filePageInfo.size)
             } else {
               this.$message({
                 type: 'error',
@@ -1210,7 +1561,7 @@ export default {
 
             // 刷新当前视图
             if (this.op === 1) {
-              this.getPage(this.pageInfo.current, this.pageInfo.size);
+              this.getPage(this.filePageInfo.current, this.filePageInfo.size);
             } else if (this.searchTableVisible) {
               this.searchFile();
             }
@@ -1232,9 +1583,14 @@ export default {
     },
 
     sync() {
-      this.getStatistic()
+      this.getPage(this.filePageInfo.current, this.filePageInfo.size)
       this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
-      this.getPage(this.pageInfo.current, this.pageInfo.size)
+      this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
+      this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+      // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+      this.getItemList()
+      this.getStatistic()
+      this.getInfo()
     },
 
     getSayingPage(currentPage, pageSize) {
@@ -1310,18 +1666,18 @@ export default {
 
     handleGroupSetting(row) {
       // 深拷贝row对象，避免修改原数据
-      this.groupSettingForm = JSON.parse(JSON.stringify(row))
+      this.groupForm = JSON.parse(JSON.stringify(row))
       this.groupSettingVisible = true
     },
 
     handleGroupSettingSubmit() {
       this.$axios({
-        url: '/group/updateGroup',
+        url: '/group/update',
         headers: {
           'token': localStorage.getItem("token"),
           'Content-Type': 'application/json'
         },
-        data: this.groupSettingForm,
+        data: this.groupForm,
         method: 'PUT'
       }).then(res => {
         if (res.data.code === 200) {
@@ -1336,18 +1692,18 @@ export default {
 
     handleUserSetting(row) {
       // 深拷贝row对象，避免修改原数据
-      this.userSettingForm = JSON.parse(JSON.stringify(row))
+      this.userForm = JSON.parse(JSON.stringify(row))
       this.userSettingVisible = true
     },
 
     handleUserSettingSubmit() {
       this.$axios({
-        url: '/user/updateUser',
+        url: '/user/update',
         headers: {
           'token': localStorage.getItem("token"),
           'Content-Type': 'application/json'
         },
-        data: this.userSettingForm,
+        data: this.userForm,
         method: 'PUT'
       }).then(res => {
         if (res.data.code === 200) {
@@ -1357,6 +1713,129 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
+      })
+    },
+
+    // getItemPage(currentPage, pageSize) {
+    //   this.$axios({
+    //     url: '/item/list/' + currentPage + '/' + pageSize,
+    //     headers: {
+    //       'token': localStorage.getItem("token")
+    //     },
+    //     method: 'GET'
+    //   }).then(res => {
+    //     this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.items))
+    //     this.itemPageInfo.total = res.data.data.itemPage.total
+    //     this.itemPageInfo.size = res.data.data.itemPage.pageSize
+    //     this.itemPageInfo.current = res.data.data.itemPage.currentPage
+    //     this.itemPageInfo.pages = res.data.data.itemPage.totalPage
+    //     // console.log('itemTableData:')
+    //     // console.log(this.itemTableData)
+    //   })
+    // },
+
+    getItemList(currentPage, pageSize) {
+      this.$axios({
+        url: '/item/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.items))
+        // console.log('itemTableData:')
+        // console.log(this.itemTableData)
+      })
+    },
+
+    handleItemSetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.itemForm = JSON.parse(JSON.stringify(row))
+      this.itemSettingVisible = true
+    },
+
+    handleItemSettingSubmit() {
+      this.$axios({
+        url: '/item/update',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.itemForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+          this.getItemList()
+          this.itemSettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
+    handleItemAdding() {
+      this.itemForm = {
+        id: '',
+        name: '',
+        rarity: null,
+        category: null,
+        price: '',
+        weight: '',
+        description: '',
+        command: '',
+        imagePath: '',
+        available: false,
+      }
+      this.itemAddingVisible = true
+    },
+
+    handleItemAddingSubmit() {
+      this.$axios({
+        url: '/item/add',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.itemForm,
+        method: 'POST'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+          this.getItemList()
+          this.itemAddingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
+    deleteItem(item) {
+      this.$axios.delete('/item/delete/' + item.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getItemList()
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
+    exportItemCsv() {
+      this.$axios({
+        url: '/item/exportCsv',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
       })
     }
   },
@@ -1372,6 +1851,8 @@ export default {
     this.getSayingPage(1, 20)
     this.getUserPage(1, 20)
     this.getGroupPage(1, 20)
+    // this.getItemPage(1, 20)
+    this.getItemList()
   },
 
   mounted() {
@@ -1393,11 +1874,14 @@ export default {
       } else if (newVal === 3){
         this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       } else if (newVal === 1){
-        this.getPage(this.pageInfo.current, this.pageInfo.size)
+        this.getPage(this.filePageInfo.current, this.filePageInfo.size)
       } else if (newVal === 5){
-        this.getPage(this.userPageInfo.current, this.userPageInfo.size)
+        this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
       } else if (newVal === 6){
-        this.getPage(this.groupPageInfo.current, this.groupPageInfo.size)
+        this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+      } else if (newVal === 7){
+        // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+        this.getItemList()
       }
     }
   }

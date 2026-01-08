@@ -158,7 +158,7 @@
           <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
             <!-- 文件管理 -->
             <div v-show="op === 1">
-              <el-table ref="tableData" :data="tableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="fileTableData" :data="tableData" style="width: 100%" height="calc(100vh - 250px)">
                 <el-table-column type="index" label="序号" min-width="80"
                                  :index="(pageInfo.current - 1) * pageInfo.size + 1">
                 </el-table-column>
@@ -522,8 +522,8 @@ export default {
       curDir: '/',
       op: 1,
 
-      tableData: [],
-      pageInfo: {
+      fileTableData: [],
+      filePageInfo: {
         total: 0,
         size: 0,
         current: 0,
@@ -660,7 +660,7 @@ export default {
     },
 
     handleCurrentChange(currentPage) {
-      this.getPage(currentPage, this.pageInfo.size)
+      this.getPage(currentPage, this.filePageInfo.size)
     },
 
     handleSizeChange(pageSize) {
@@ -699,14 +699,14 @@ export default {
         }
       }).then(res => {
         this.tableData = JSON.parse(JSON.stringify(res.data.data.filePage.files))
-        this.pageInfo.total = res.data.data.filePage.total
-        this.pageInfo.size = res.data.data.filePage.pageSize
-        this.pageInfo.current = res.data.data.filePage.currentPage
-        this.pageInfo.pages = res.data.data.filePage.totalPage
-        // console.log('pageInfo:')
-        // console.log(this.pageInfo)
-        // console.log('tableData:')
-        // console.log(this.tableData)
+        this.filePageInfo.total = res.data.data.filePage.total
+        this.filePageInfo.size = res.data.data.filePage.pageSize
+        this.filePageInfo.current = res.data.data.filePage.currentPage
+        this.filePageInfo.pages = res.data.data.filePage.totalPage
+        // console.log('filePageInfo:')
+        // console.log(this.filePageInfo)
+        // console.log('fileTableData:')
+        // console.log(this.fileTableData)
       })
     },
 
@@ -737,7 +737,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getPage(this.pageInfo.current, this.pageInfo.size)
+          this.getPage(this.filePageInfo.current, this.filePageInfo.size)
 
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
@@ -788,10 +788,10 @@ export default {
       this.$refs.upload.clearFiles()
       // 刷新页面数据
       if(this.curDir === this.uploadDir){
-        if (this.pageInfo.pages === 0) {
-          this.getPage(1, this.pageInfo.size)
+        if (this.filePageInfo.pages === 0) {
+          this.getPage(1, this.filePageInfo.size)
         } else {
-          this.getPage(this.pageInfo.pages, this.pageInfo.size)
+          this.getPage(this.filePageInfo.pages, this.filePageInfo.size)
         }
       }
       this.uploading = false
@@ -826,7 +826,7 @@ export default {
       } else {
         this.curDir += "/" + dir.fileName
       }
-      this.getPage(1, this.pageInfo.size)
+      this.getPage(1, this.filePageInfo.size)
     },
 
     backDir() {
@@ -840,7 +840,7 @@ export default {
           this.curDir = this.curDir.substring(0, index)
         }
       }
-      this.getPage(1, this.pageInfo.size)
+      this.getPage(1, this.filePageInfo.size)
     },
 
     createDir() {
@@ -869,7 +869,7 @@ export default {
                 type: 'success',
                 message: value + '创建成功!'
               })
-              this.getPage(this.pageInfo.current, this.pageInfo.size)
+              this.getPage(this.filePageInfo.current, this.filePageInfo.size)
             } else {
               this.$message({
                 type: 'error',
@@ -919,7 +919,7 @@ export default {
 
             // 刷新当前视图
             if (this.op === 1) {
-              this.getPage(this.pageInfo.current, this.pageInfo.size);
+              this.getPage(this.filePageInfo.current, this.filePageInfo.size);
             } else if (this.searchTableVisible) {
               this.searchFile();
             }
@@ -943,7 +943,7 @@ export default {
     sync() {
       this.getStatistic()
       this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
-      this.getPage(this.pageInfo.current, this.pageInfo.size)
+      this.getPage(this.filePageInfo.current, this.filePageInfo.size)
     },
 
     getSayingPage(currentPage, pageSize) {
@@ -1010,7 +1010,7 @@ export default {
       } else if (newVal === 3){
         this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       } else if (newVal === 1){
-        this.getPage(this.pageInfo.current, this.pageInfo.size)
+        this.getPage(this.filePageInfo.current, this.filePageInfo.size)
       }
     }
   }
