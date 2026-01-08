@@ -1111,6 +1111,16 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <template #footer>
+          <div class="inventories-dialog-footer">
+            <el-form-item label="新增物品ID" prop="newItemId" :required="true" style="margin-bottom: 0; margin-right: 16px;">
+              <el-input v-model="newItemId" oninput="value=value.replace(/\D/g,'')"
+                        placeholder="请输入ID..." style="width: 100%"/>
+            </el-form-item>
+            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)">新增库存</el-button>
+          </div>
+        </template>
       </el-dialog>
 
       <!-- 用户库存编辑对话框 -->
@@ -1312,9 +1322,11 @@ export default {
 
       inventoriesVisible: false,
       inventoriesData: [],
+      inventoriesUserId: '',
       inventoriesTitle: '',
 
       inventorySettingVisible: false,
+      newItemId: '',
       inventoryForm: {
         id: '',
         ownerId: '',
@@ -2116,6 +2128,7 @@ export default {
     },
 
     handleInventories(row) {
+      this.inventoriesUserId = row.id
       this.inventoriesTitle = `库存 - ${row.name}`
       this.getInventoryList(row.id)
       this.inventoriesVisible = true
@@ -2129,7 +2142,7 @@ export default {
         },
         method: 'GET',
         params: {
-          userId: id,
+          userId: id
         }
       }).then(res => {
         this.inventoriesData = JSON.parse(JSON.stringify(res.data.data.inventories))
@@ -2156,6 +2169,7 @@ export default {
     handleInventorySetting(row) {
       // 深拷贝row对象，避免修改原数据
       this.inventoryForm = JSON.parse(JSON.stringify(row))
+      this.newItemId = ''
       this.inventorySettingVisible = true
     },
 
@@ -2177,7 +2191,29 @@ export default {
           this.$message.error(res.data.message)
         }
       })
-    }
+    },
+
+    addInventory(userId, itemid) {
+      this.$axios({
+        url: '/inventory/add',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        params: {
+          userId: userId,
+          itemId: itemid
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getInventoryList(userId)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
   },
 
   created() {
@@ -2302,5 +2338,20 @@ export default {
 .custom-scrollbar {
   scrollbar-width: thin; /* Firefox 细滚动条 */
   scrollbar-color: #333333 #121212; /* Firefox 滑块颜色和轨道颜色 */
+}
+
+
+/* 自定义库存对话框Footer样式 */
+.inventories-dialog-footer {
+  display: flex;
+  align-items: flex-end; /* 或 center 根据垂直对齐需求 */
+  justify-content: flex-start;
+  gap: 16px; /* 元素间距 */
+}
+
+/* 如果需要让表单项和按钮在底部对齐 */
+.inventories-dialog-footer ::v-deep .el-form-item {
+  margin-bottom: 0;
+  flex: 1; /* 让表单项占据剩余空间 */
 }
 </style>
