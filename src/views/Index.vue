@@ -226,7 +226,7 @@
                 <el-form-item style="margin-left: -20px; margin-top: 18px">
                   <el-input
                       placeholder="请输入关键字..."
-                      :prefix-icon="searchIcon"
+                      :prefix-icon="Search"
                       v-model="itemSearchKey"
                       clearable
                       style="flex: 1; min-width: 400px;"
@@ -1114,11 +1114,13 @@
 
         <template #footer>
           <div class="inventories-dialog-footer">
-            <el-form-item label="新增物品ID" prop="newItemId" :required="true" style="margin-bottom: 0; margin-right: 16px;">
-              <el-input v-model="newItemId" oninput="value=value.replace(/\D/g,'')"
-                        placeholder="请输入ID..." style="width: 100%"/>
+            <el-form-item prop="newItemId" style="margin-bottom: 0; margin-right: 16px;">
+              <el-input :prefix-icon="Box" v-model="newItemId" oninput="value=value.replace(/\D/g,'')"
+                        placeholder="请输入新增库存物品ID..." style="width: 100%"/>
             </el-form-item>
-            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)">新增库存</el-button>
+            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px">
+              <el-icon size="15px"><Plus /></el-icon>&nbsp;新增库存
+            </el-button>
           </div>
         </template>
       </el-dialog>
@@ -1356,7 +1358,11 @@ export default {
   },
 
   computed: {
-    searchIcon() {
+    Box() {
+      return Box
+    },
+
+    Search() {
       return Search
     },
 
@@ -2130,6 +2136,7 @@ export default {
     handleInventories(row) {
       this.inventoriesUserId = row.id
       this.inventoriesTitle = `库存 - ${row.name}`
+      this.newItemId = ''
       this.getInventoryList(row.id)
       this.inventoriesVisible = true
     },
@@ -2169,7 +2176,6 @@ export default {
     handleInventorySetting(row) {
       // 深拷贝row对象，避免修改原数据
       this.inventoryForm = JSON.parse(JSON.stringify(row))
-      this.newItemId = ''
       this.inventorySettingVisible = true
     },
 
