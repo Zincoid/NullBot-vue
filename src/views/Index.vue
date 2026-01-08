@@ -856,7 +856,7 @@
         </el-form>
 
         <template #footer>
-          <div class="user-dialog-footer">
+          <div class="user-setting-dialog-footer">
             <el-button plain @click="userSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleUserSettingSubmit">保存</el-button>
           </div>
@@ -886,7 +886,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="group-setting-dialog-footer">
             <el-button plain @click="groupSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleGroupSettingSubmit">保存</el-button>
           </div>
@@ -896,8 +896,21 @@
       <!-- 物品编辑对话框 -->
       <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
         <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
+          <el-form-item label="物品ID" prop="id">
+            <el-input v-model="itemForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
           <el-form-item label="名称" prop="name" :required="true">
             <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
           </el-form-item>
 
           <el-form-item label="品质" prop="rarity" :required="true">
@@ -908,15 +921,6 @@
               <el-option label="PURPLE" :value="3" />
               <el-option label="GOLD" :value="4" />
               <el-option label="RED" :value="5" />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="类别" prop="category" :required="true">
-            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
-              <el-option label="COMMON" :value="0" />
-              <el-option label="SPECIAL" :value="1" />
-              <el-option label="BREAD" :value="2" />
-              <el-option label="LOOTING" :value="3" />
             </el-select>
           </el-form-item>
 
@@ -952,7 +956,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="item-setting-dialog-footer">
             <el-button plain @click="itemSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleItemSettingSubmit">保存</el-button>
           </div>
@@ -966,6 +970,15 @@
             <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
           </el-form-item>
 
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="品质" prop="rarity" :required="true">
             <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
               <el-option label="WHITE" :value="0" />
@@ -974,15 +987,6 @@
               <el-option label="PURPLE" :value="3" />
               <el-option label="GOLD" :value="4" />
               <el-option label="RED" :value="5" />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="类别" prop="category" :required="true">
-            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
-              <el-option label="COMMON" :value="0" />
-              <el-option label="SPECIAL" :value="1" />
-              <el-option label="BREAD" :value="2" />
-              <el-option label="LOOTING" :value="3" />
             </el-select>
           </el-form-item>
 
@@ -1018,7 +1022,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="item-adding-dialog-footer">
             <el-button plain @click="itemAddingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleItemAddingSubmit">保存</el-button>
           </div>
@@ -1093,10 +1097,10 @@
           <el-table-column fixed="right" label="操作" width="200" align="center">
             <template v-slot="scope">
               <div style="display: flex; gap: 2px; justify-content: center;">
-                <el-button type="warning" plain @click="" size="small" title="设置">
+                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置">
                   <el-icon size="14"><Setting /></el-icon>
                 </el-button>
-                <el-popconfirm title="确认删除吗?" @confirm="">
+                <el-popconfirm title="确认删除吗?" @confirm="deleteInventory(scope.row)">
                   <template #reference>
                     <el-button type="danger" plain size="small" title="删除">
                       <el-icon size="14"><Delete /></el-icon>
@@ -1107,6 +1111,48 @@
             </template>
           </el-table-column>
         </el-table>
+      </el-dialog>
+
+      <!-- 用户库存编辑对话框 -->
+      <el-dialog v-model="inventorySettingVisible" title="库存设置" width="500px">
+        <el-form ref="inventorySettingFormRef" :model="inventoryForm" label-width="100px">
+          <el-form-item label="库存ID" prop="id">
+            <el-input v-model="inventoryForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="物品ID" prop="itemId">
+            <el-input v-model="inventoryForm.itemId" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="名称" prop="itemName">
+            <el-input v-model="inventoryForm.itemName" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category">
+            <el-select v-model="inventoryForm.category" :disabled="true" style="width: 90%">
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="品质" prop="rarity">
+            <el-select v-model="inventoryForm.rarity" :disabled="true" style="width: 90%">
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="价格" prop="price">
+            <el-input v-model="inventoryForm.price" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="数量" prop="amount" :required="true">
+            <el-input v-model="inventoryForm.amount" oninput="value=value.replace(/\D/g,'')" placeholder="请输入数量..." style="width: 90%"/>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="inventory-setting-dialog-footer">
+            <el-button plain @click="inventorySettingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleInventorySettingSubmit">保存</el-button>
+          </div>
+        </template>
       </el-dialog>
 
     </el-container>
@@ -1267,6 +1313,18 @@ export default {
       inventoriesVisible: false,
       inventoriesData: [],
       inventoriesTitle: '',
+
+      inventorySettingVisible: false,
+      inventoryForm: {
+        id: '',
+        ownerId: '',
+        itemId: '',
+        itemName: '',
+        category: null,
+        rarity: null,
+        price: '',
+        amount: ''
+      },
 
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
@@ -2075,6 +2133,49 @@ export default {
         }
       }).then(res => {
         this.inventoriesData = JSON.parse(JSON.stringify(res.data.data.inventories))
+      })
+    },
+
+    deleteInventory(inventory) {
+      this.$axios.delete('/inventory/delete/' + inventory.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getInventoryList(inventory.ownerId)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
+    handleInventorySetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.inventoryForm = JSON.parse(JSON.stringify(row))
+      this.inventorySettingVisible = true
+    },
+
+    handleInventorySettingSubmit() {
+      this.$axios({
+        url: '/inventory/update',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.inventoryForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getInventoryList(this.inventoryForm.ownerId)
+          this.inventorySettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
       })
     }
   },

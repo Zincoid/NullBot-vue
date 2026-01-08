@@ -202,12 +202,24 @@
               <el-icon size="18px"><Filter /></el-icon>&nbsp;
               <el-form :inline="true" style="display: inline-flex;">
                 <el-form-item label="过滤器" style="margin-top: 18px; min-width: 200px">
-                  <el-select placeholder="ALL" v-model="itemSearchCategory">
+                  <el-select placeholder="ALL TYPES" v-model="itemSearchCategory">
                     <el-option label="ALL" :value="null" />
                     <el-option label="COMMON" :value="'COMMON'" />
                     <el-option label="SPECIAL" :value="'SPECIAL'" />
                     <el-option label="BREAD" :value="'BREAD'" />
                     <el-option label="LOOTING" :value="'LOOTING'" />
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item style="margin-left: -20px; margin-top: 18px; min-width: 150px">
+                  <el-select placeholder="ALL RARITY" v-model="itemSearchRarity">
+                    <el-option label="ALL" :value="null" />
+                    <el-option label="WHITE" :value="'WHITE'" />
+                    <el-option label="GREEN" :value="'GREEN'" />
+                    <el-option label="BLUE" :value="'BLUE'" />
+                    <el-option label="PURPLE" :value="'PURPLE'" />
+                    <el-option label="GOLD" :value="'GOLD'" />
+                    <el-option label="RED" :value="'RED'" />
                   </el-select>
                 </el-form-item>
 
@@ -401,12 +413,22 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="110" align="center">
+                <el-table-column fixed="right" label="操作" width="300" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
+                      <el-button type="success" plain size="small" @click="handleInventories(scope.row)" title="库存">
+                        <el-icon size="14"><Box /></el-icon>
+                      </el-button>
                       <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
+                      <el-popconfirm title="确认删除吗?" @confirm="deleteUser(scope.row)">
+                        <template #reference>
+                          <el-button type="danger" plain size="small" title="删除">
+                            <el-icon size="14"><Delete /></el-icon>
+                          </el-button>
+                        </template>
+                      </el-popconfirm>
                     </div>
                   </template>
                 </el-table-column>
@@ -438,12 +460,19 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="110" align="center">
+                <el-table-column fixed="right" label="操作" width="200" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
                       <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
+                      <el-popconfirm title="确认删除吗?" @confirm="deleteGroup(scope.row)">
+                        <template #reference>
+                          <el-button type="danger" plain size="small" title="删除">
+                            <el-icon size="14"><Delete /></el-icon>
+                          </el-button>
+                        </template>
+                      </el-popconfirm>
                     </div>
                   </template>
                 </el-table-column>
@@ -453,8 +482,7 @@
             <!-- 物品管理 -->
             <div v-show="op === 7">
               <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
-                <el-table-column type="index" label="序号" min-width="80"
-                                 :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
+                <el-table-column type="index" label="序号" min-width="80">
                 </el-table-column>
 
                 <el-table-column label="物品ID" min-width="100">
@@ -469,15 +497,15 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="品质" min-width="100" align="center">
-                  <template v-slot="scope">
-                    {{ scope.row.rarity }}
-                  </template>
-                </el-table-column>
-
                 <el-table-column label="类别" min-width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.category }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="品质" min-width="100" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.rarity }}
                   </template>
                 </el-table-column>
 
@@ -625,7 +653,7 @@
           <!-- 下部分页区域 -->
           <el-footer height="60px" style="padding: 10px 20px;">
             <div v-show="op === 1" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon>
+              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon>
                 共 {{ filePageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
@@ -641,7 +669,7 @@
             </div>
 
             <div v-show="op === 3" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
+              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleSayingSizeChange"
@@ -656,7 +684,7 @@
             </div>
 
             <div v-show="op === 5" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
+              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleUserSizeChange"
@@ -671,7 +699,7 @@
             </div>
 
             <div v-show="op === 6" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
+              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
               <el-pagination
                   background
                   @size-change="handleGroupSizeChange"
@@ -686,7 +714,7 @@
             </div>
 
             <div v-show="op === 7" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text size="large" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
+              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
               <!--              <el-pagination-->
               <!--                  background-->
               <!--                  @size-change="handleItemSizeChange"-->
@@ -828,7 +856,7 @@
         </el-form>
 
         <template #footer>
-          <div class="user-dialog-footer">
+          <div class="user-setting-dialog-footer">
             <el-button plain @click="userSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleUserSettingSubmit">保存</el-button>
           </div>
@@ -858,7 +886,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="group-setting-dialog-footer">
             <el-button plain @click="groupSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleGroupSettingSubmit">保存</el-button>
           </div>
@@ -868,8 +896,21 @@
       <!-- 物品编辑对话框 -->
       <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
         <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
+          <el-form-item label="物品ID" prop="id">
+            <el-input v-model="itemForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
           <el-form-item label="名称" prop="name" :required="true">
             <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
           </el-form-item>
 
           <el-form-item label="品质" prop="rarity" :required="true">
@@ -880,15 +921,6 @@
               <el-option label="PURPLE" :value="3" />
               <el-option label="GOLD" :value="4" />
               <el-option label="RED" :value="5" />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="类别" prop="category" :required="true">
-            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
-              <el-option label="COMMON" :value="0" />
-              <el-option label="SPECIAL" :value="1" />
-              <el-option label="BREAD" :value="2" />
-              <el-option label="LOOTING" :value="3" />
             </el-select>
           </el-form-item>
 
@@ -924,7 +956,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="item-setting-dialog-footer">
             <el-button plain @click="itemSettingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleItemSettingSubmit">保存</el-button>
           </div>
@@ -938,6 +970,15 @@
             <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
           </el-form-item>
 
+          <el-form-item label="类别" prop="category" :required="true">
+            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+              <el-option label="COMMON" :value="0" />
+              <el-option label="SPECIAL" :value="1" />
+              <el-option label="BREAD" :value="2" />
+              <el-option label="LOOTING" :value="3" />
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="品质" prop="rarity" :required="true">
             <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
               <el-option label="WHITE" :value="0" />
@@ -946,15 +987,6 @@
               <el-option label="PURPLE" :value="3" />
               <el-option label="GOLD" :value="4" />
               <el-option label="RED" :value="5" />
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="类别" prop="category" :required="true">
-            <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
-              <el-option label="COMMON" :value="0" />
-              <el-option label="SPECIAL" :value="1" />
-              <el-option label="BREAD" :value="2" />
-              <el-option label="LOOTING" :value="3" />
             </el-select>
           </el-form-item>
 
@@ -990,7 +1022,7 @@
         </el-form>
 
         <template #footer>
-          <div class="group-dialog-footer">
+          <div class="item-adding-dialog-footer">
             <el-button plain @click="itemAddingVisible = false">取消</el-button>
             <el-button plain type="primary" @click="handleItemAddingSubmit">保存</el-button>
           </div>
@@ -1012,6 +1044,115 @@
             Drop csv file here or <em>click to import</em>
           </div>
         </el-upload>
+      </el-dialog>
+
+      <!-- 用户库存对话框 -->
+      <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
+        <el-table ref="inventoriesData" :data="inventoriesData" style="width: 100%" stripe>
+          <el-table-column type="index" label="序号" width="80">
+          </el-table-column>
+
+          <el-table-column label="库存ID" min-width="100">
+            <template v-slot="scope">
+              {{ scope.row.id }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="物品ID" min-width="100">
+            <template v-slot="scope">
+              {{ scope.row.itemId }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="名称" min-width="150">
+            <template v-slot="scope">
+              {{ scope.row.itemName }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="类别" min-width="100" align="center">
+            <template v-slot="scope">
+              {{ scope.row.category }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="品质" min-width="100" align="center">
+            <template v-slot="scope">
+              {{ scope.row.rarity }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="价格" min-width="100" align="center">
+            <template v-slot="scope">
+              {{ scope.row.price }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="数量" min-width="100" align="center">
+            <template v-slot="scope">
+              {{ scope.row.amount }}
+            </template>
+          </el-table-column>
+
+          <el-table-column fixed="right" label="操作" width="200" align="center">
+            <template v-slot="scope">
+              <div style="display: flex; gap: 2px; justify-content: center;">
+                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置">
+                  <el-icon size="14"><Setting /></el-icon>
+                </el-button>
+                <el-popconfirm title="确认删除吗?" @confirm="deleteInventory(scope.row)">
+                  <template #reference>
+                    <el-button type="danger" plain size="small" title="删除">
+                      <el-icon size="14"><Delete /></el-icon>
+                    </el-button>
+                  </template>
+                </el-popconfirm>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
+
+      <!-- 用户库存编辑对话框 -->
+      <el-dialog v-model="inventorySettingVisible" title="库存设置" width="500px">
+        <el-form ref="inventorySettingFormRef" :model="inventoryForm" label-width="100px">
+          <el-form-item label="库存ID" prop="id">
+            <el-input v-model="inventoryForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="物品ID" prop="itemId">
+            <el-input v-model="inventoryForm.itemId" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="名称" prop="itemName">
+            <el-input v-model="inventoryForm.itemName" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="类别" prop="category">
+            <el-select v-model="inventoryForm.category" :disabled="true" style="width: 90%">
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="品质" prop="rarity">
+            <el-select v-model="inventoryForm.rarity" :disabled="true" style="width: 90%">
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="价格" prop="price">
+            <el-input v-model="inventoryForm.price" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="数量" prop="amount" :required="true">
+            <el-input v-model="inventoryForm.amount" oninput="value=value.replace(/\D/g,'')" placeholder="请输入数量..." style="width: 90%"/>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="inventory-setting-dialog-footer">
+            <el-button plain @click="inventorySettingVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleInventorySettingSubmit">保存</el-button>
+          </div>
+        </template>
       </el-dialog>
 
     </el-container>
@@ -1090,8 +1231,8 @@ export default {
       },
 
       searchTableVisible: false,
-      searchKey: '',
       searchData: [],
+      searchKey: '',
 
       uploadDir: '',
       uploadFileList: [],
@@ -1148,6 +1289,7 @@ export default {
       //   pages: 0
       // },
 
+      itemSearchRarity: null,
       itemSearchCategory: null,
       itemSearchKey: '',
 
@@ -1167,6 +1309,22 @@ export default {
       },
 
       itemImportVisible: false,
+
+      inventoriesVisible: false,
+      inventoriesData: [],
+      inventoriesTitle: '',
+
+      inventorySettingVisible: false,
+      inventoryForm: {
+        id: '',
+        ownerId: '',
+        itemId: '',
+        itemName: '',
+        category: null,
+        rarity: null,
+        price: '',
+        amount: ''
+      },
 
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
@@ -1194,9 +1352,11 @@ export default {
       return this.itemTableData.filter(item => {
         // 类别过滤
         const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory;
+        // 品质过滤
+        const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity;
         // 关键词过滤
         const keyMatch = this.itemSearchKey === null || item.name.includes(this.itemSearchKey);
-        return categoryMatch && keyMatch;
+        return categoryMatch && rarityMatch && keyMatch;
       });
     },
 
@@ -1733,6 +1893,40 @@ export default {
       })
     },
 
+    deleteUser(user) {
+      this.$axios.delete('/user/delete/' + user.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
+    deleteGroup(group) {
+      this.$axios.delete('/group/delete/' + group.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
     handleGroupSetting(row) {
       // 深拷贝row对象，避免修改原数据
       this.groupForm = JSON.parse(JSON.stringify(row))
@@ -1919,6 +2113,70 @@ export default {
       }).catch(error => {
         this.$message.error("导出失败")
       });
+    },
+
+    handleInventories(row) {
+      this.inventoriesTitle = `库存 - ${row.name}`
+      this.getInventoryList(row.id)
+      this.inventoriesVisible = true
+    },
+
+    getInventoryList(id) {
+      this.$axios({
+        url: '/inventory/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET',
+        params: {
+          userId: id,
+        }
+      }).then(res => {
+        this.inventoriesData = JSON.parse(JSON.stringify(res.data.data.inventories))
+      })
+    },
+
+    deleteInventory(inventory) {
+      this.$axios.delete('/inventory/delete/' + inventory.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getInventoryList(inventory.ownerId)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
+    handleInventorySetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.inventoryForm = JSON.parse(JSON.stringify(row))
+      this.inventorySettingVisible = true
+    },
+
+    handleInventorySettingSubmit() {
+      this.$axios({
+        url: '/inventory/update',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.inventoryForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.getInventoryList(this.inventoryForm.ownerId)
+          this.inventorySettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
     }
   },
 
