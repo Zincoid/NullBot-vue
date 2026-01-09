@@ -491,7 +491,11 @@
             <!-- 物品管理 -->
             <div v-show="op === 7">
               <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
-                <el-table-column type="index" label="序号" width="60" align="center">
+                <el-table-column v-if="hasItemFilter" type="index" label="序号" width="60" align="center">
+                </el-table-column>
+
+                <el-table-column v-if="!hasItemFilter" type="index" label="序号" width="60" align="center"
+                                 :index="(itemPageInfo.current - 1) * itemPageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="物品ID" width="90" align="center">
@@ -726,18 +730,20 @@
             </div>
 
             <div v-show="op === 7" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
-<!--              <el-pagination-->
-<!--                  background-->
-<!--                  @size-change="handleItemSizeChange"-->
-<!--                  @current-change="handleItemCurrentChange"-->
-<!--                  layout="sizes, prev, pager, next"-->
-<!--                  :page-sizes="[10, 20, 30, 40]"-->
-<!--                  :page-size="itemPageInfo.size"-->
-<!--                  :total="itemPageInfo.total"-->
-<!--                  :current-page="itemPageInfo.current"-->
-<!--                  :pager-count="7">-->
-<!--              </el-pagination>-->
+              <el-text v-if="hasItemFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
+              <el-text v-if="!hasItemFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ itemPageInfo.total }} 条记录</el-text>
+              <el-pagination
+                  v-if="!hasItemFilter"
+                  background
+                  @size-change="handleItemSizeChange"
+                  @current-change="handleItemCurrentChange"
+                  layout="sizes, prev, pager, next"
+                  :page-sizes="[10, 20, 30, 40]"
+                  :page-size="itemPageInfo.size"
+                  :total="itemPageInfo.total"
+                  :current-page="itemPageInfo.current"
+                  :pager-count="7">
+              </el-pagination>
             </div>
           </el-footer>
         </el-container>
@@ -1316,12 +1322,13 @@ export default {
       },
 
       itemTableData: [],
-      // itemPageInfo: {
-      //   total: 0,
-      //   size: 0,
-      //   current: 0,
-      //   pages: 0
-      // },
+      allItemTableData: [],
+      itemPageInfo: {
+        total: 0,
+        size: 0,
+        current: 0,
+        pages: 0
+      },
 
       itemSearchRarity: null,
       itemSearchCategory: null,
@@ -1388,16 +1395,24 @@ export default {
       return Search
     },
 
+    hasItemFilter() {
+      return this.itemSearchCategory !== null || this.itemSearchRarity !== null || this.itemSearchKey !== ''
+    },
+
     filteredItemTableData() {
-      return this.itemTableData.filter(item => {
-        // 类别过滤
-        const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory;
-        // 品质过滤
-        const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity;
-        // 关键词过滤
-        const keyMatch = this.itemSearchKey === null || item.name.includes(this.itemSearchKey);
-        return categoryMatch && rarityMatch && keyMatch;
-      });
+      if(this.hasItemFilter) {
+        return this.allItemTableData.filter(item => {
+          // 类别过滤
+          const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory;
+          // 品质过滤
+          const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity;
+          // 关键词过滤
+          const keyMatch = this.itemSearchKey === '' || item.name.includes(this.itemSearchKey);
+          return categoryMatch && rarityMatch && keyMatch;
+        });
+      } else {
+        return this.itemTableData
+      }
     },
 
     uploadHeaders() {
@@ -1577,13 +1592,13 @@ export default {
       this.getGroupPage(1, pageSize)
     },
 
-    // handleItemCurrentChange(currentPage) {
-    //   this.getItemPage(currentPage, this.groupPageInfo.size)
-    // },
-    //
-    // handleItemSizeChange(pageSize) {
-    //   this.getItemPage(1, pageSize)
-    // },
+    handleItemCurrentChange(currentPage) {
+      this.getItemPage(currentPage, this.itemPageInfo.size)
+    },
+
+    handleItemSizeChange(pageSize) {
+      this.getItemPage(1, pageSize)
+    },
 
     shiftMenu(op) {
       this.op = op
@@ -1855,7 +1870,7 @@ export default {
       this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
       this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
-      // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+      this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
       this.getItemList()
       this.getStatistic()
       this.getInfo()
@@ -2018,25 +2033,23 @@ export default {
       })
     },
 
-    // getItemPage(currentPage, pageSize) {
-    //   this.$axios({
-    //     url: '/item/list/' + currentPage + '/' + pageSize,
-    //     headers: {
-    //       'token': localStorage.getItem("token")
-    //     },
-    //     method: 'GET'
-    //   }).then(res => {
-    //     this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.items))
-    //     this.itemPageInfo.total = res.data.data.itemPage.total
-    //     this.itemPageInfo.size = res.data.data.itemPage.pageSize
-    //     this.itemPageInfo.current = res.data.data.itemPage.currentPage
-    //     this.itemPageInfo.pages = res.data.data.itemPage.totalPage
-    //     // console.log('itemTableData:')
-    //     // console.log(this.itemTableData)
-    //   })
-    // },
+    getItemPage(currentPage, pageSize) {
+      this.$axios({
+        url: '/item/page/' + currentPage + '/' + pageSize,
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.items))
+        this.itemPageInfo.total = res.data.data.itemPage.total
+        this.itemPageInfo.size = res.data.data.itemPage.pageSize
+        this.itemPageInfo.current = res.data.data.itemPage.currentPage
+        this.itemPageInfo.pages = res.data.data.itemPage.totalPage
+      })
+    },
 
-    getItemList(currentPage, pageSize) {
+    getItemList() {
       this.$axios({
         url: '/item/list',
         headers: {
@@ -2044,9 +2057,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.items))
-        // console.log('itemTableData:')
-        // console.log(this.itemTableData)
+        this.allItemTableData = JSON.parse(JSON.stringify(res.data.data.items))
       })
     },
 
@@ -2068,7 +2079,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
           this.getItemList()
           this.itemSettingVisible = false
         } else {
@@ -2105,7 +2116,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
           this.getItemList()
           this.itemAddingVisible = false
         } else {
@@ -2254,7 +2265,7 @@ export default {
     this.getSayingPage(1, 20)
     this.getUserPage(1, 20)
     this.getGroupPage(1, 20)
-    // this.getItemPage(1, 20)
+    this.getItemPage(1, 20)
     this.getItemList()
   },
 
