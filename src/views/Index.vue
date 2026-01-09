@@ -639,15 +639,15 @@
 
             <!-- 个人中心 -->
             <div v-show="op === 2" style="margin-right: 20px;">
-              <el-descriptions class="info" title="用户信息" :column="1" border>
-                <el-descriptions-item label="用户名">
+              <el-descriptions title="用户信息" :column="1" border>
+                <el-descriptions-item label="名称">
                   <el-tag>{{ info.username }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="邮箱">
                   <el-tag>{{ info.email }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="Token">
-                  <el-tag copyable>{{ token }}</el-tag>
+                  <el-tag>{{ token }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
