@@ -524,7 +524,7 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="价格" width="100" align="center">
+                <el-table-column prop="price" label="价格" width="100" align="center" sortable>
                   <template v-slot="scope">
                     {{ scope.row.price }}
                   </template>
@@ -1101,7 +1101,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="价格" width="100" align="center">
+          <el-table-column prop="price" label="价格" width="100" align="center" sortable>
             <template v-slot="scope">
               {{ scope.row.price }}
             </template>
