@@ -528,7 +528,7 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="price" label="价格" width="100" align="center" sortable>
+                <el-table-column prop="price" label="价格" width="100" align="center" :sortable="hasItemFilter">
                   <template v-slot="scope">
                     {{ scope.row.price }}
                   </template>
@@ -2133,6 +2133,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
+          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
           this.getItemList()
         } else {
           this.$message.error(res.data.message)
