@@ -254,6 +254,12 @@
             <!-- 用户操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
+                <el-button round plain @click="inventoryImportVisible = true">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入库存
+                </el-button>
+                <el-button round plain @click="exportInventoryCsv()">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出库存
+                </el-button>
                 <el-button round plain @click="userImportVisible = true">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入用户
                 </el-button>
@@ -1268,6 +1274,26 @@
         </el-upload>
       </el-dialog>
 
+      <!-- 库存导入对话框 -->
+      <el-dialog v-model="inventoryImportVisible" title="导入 - 库存 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-inventory"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction('/inventory/importCsv')"
+            :on-error="(error, file, fileList) => {
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
       <!-- 用户库存对话框 -->
       <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
         <el-table ref="inventoriesData" :data="inventoriesData" style="width: 100%" stripe>
@@ -1603,6 +1629,8 @@ export default {
         price: '',
         amount: ''
       },
+
+      inventoryImportVisible: false,
 
       previewVisible: false, // 控制预览对话框显示
       previewUrl: '', // 预览文件的完整URL
@@ -2639,6 +2667,29 @@ export default {
           this.$message.error(res.data.message)
         }
       })
+    },
+
+    exportInventoryCsv() {
+      this.$axios({
+        url: '/inventory/exportCsv',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Inventories_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
     },
 
     sync() {
