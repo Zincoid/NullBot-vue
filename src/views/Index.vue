@@ -795,8 +795,9 @@
           <!-- 下部分页区域 -->
           <el-footer height="60px" style="padding: 10px 20px;">
             <div v-show="op === 1" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon>
-                共 {{ filePageInfo.total }} 条记录</el-text>
+              <el-text style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon>共 {{ filePageInfo.total }} 条记录
+              </el-text>
               <el-pagination
                   background
                   @size-change="handleFileSizeChange"
@@ -811,8 +812,12 @@
             </div>
 
             <div v-show="op === 3" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasSayingFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredSayingTableData.length }} 条记录</el-text>
-              <el-text v-if="!hasSayingFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasSayingFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ filteredSayingTableData.length }} 条记录
+              </el-text>
+              <el-text v-if="!hasSayingFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录
+              </el-text>
               <el-pagination
                   v-if="!hasSayingFilter"
                   background
@@ -828,8 +833,12 @@
             </div>
 
             <div v-show="op === 5" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasUserFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredUserTableData.length }} 条记录</el-text>
-              <el-text v-if="!hasUserFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasUserFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ filteredUserTableData.length }} 条记录
+              </el-text>
+              <el-text v-if="!hasUserFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录
+              </el-text>
               <el-pagination
                   v-if="!hasUserFilter"
                   background
@@ -845,8 +854,12 @@
             </div>
 
             <div v-show="op === 6" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasGroupFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredGroupTableData.length }} 条记录</el-text>
-              <el-text v-if="!hasGroupFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasGroupFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ filteredGroupTableData.length }} 条记录
+              </el-text>
+              <el-text v-if="!hasGroupFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录
+              </el-text>
               <el-pagination
                   v-if="!hasGroupFilter"
                   background
@@ -862,8 +875,12 @@
             </div>
 
             <div v-show="op === 7" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasItemFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录</el-text>
-              <el-text v-if="!hasItemFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ itemPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasItemFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录
+              </el-text>
+              <el-text v-if="!hasItemFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon><InfoFilled /></el-icon> 共 {{ itemPageInfo.total }} 条记录
+              </el-text>
               <el-pagination
                   v-if="!hasItemFilter"
                   background
