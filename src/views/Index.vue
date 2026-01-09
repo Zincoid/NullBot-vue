@@ -196,6 +196,108 @@
               </div>
             </el-header>
 
+          <!-- 语录管理头部 -->
+          <el-header v-show="op === 3" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px"><Filter /></el-icon>&nbsp;
+              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+                <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
+                </el-form-item>
+
+                <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
+                  <el-input
+                      placeholder="请输入关键字..."
+                      :prefix-icon="Search"
+                      v-model="sayingSearchKey"
+                      clearable
+                      style="width: 100%"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <!-- 语录操作按钮 -->
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <el-button-group style="display: inline-flex; margin-right: 1px">
+                <el-button round plain @click="sayingImportVisible = true">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入语录
+                </el-button>
+                <el-button round plain @click="exportSayingCsv()">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出语录
+                </el-button>
+              </el-button-group>
+            </div>
+          </el-header>
+
+          <!-- 用户管理头部 -->
+          <el-header v-show="op === 5" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px"><Filter /></el-icon>&nbsp;
+              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+                <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
+                </el-form-item>
+
+                <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
+                  <el-input
+                      placeholder="请输入关键字..."
+                      :prefix-icon="Search"
+                      v-model="userSearchKey"
+                      clearable
+                      style="width: 100%"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <!-- 用户操作按钮 -->
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <el-button-group style="display: inline-flex; margin-right: 1px">
+                <el-button round plain @click="userImportVisible = true">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入用户
+                </el-button>
+                <el-button round plain @click="exportUserCsv()">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出用户
+                </el-button>
+              </el-button-group>
+            </div>
+          </el-header>
+
+          <!-- 群组管理头部 -->
+          <el-header v-show="op === 6" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px"><Filter /></el-icon>&nbsp;
+              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+                <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
+                </el-form-item>
+
+                <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
+                  <el-input
+                      placeholder="请输入关键字..."
+                      :prefix-icon="Search"
+                      v-model="groupSearchKey"
+                      clearable
+                      style="width: 100%"
+                  >
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+
+            <!-- 群组操作按钮 -->
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <el-button-group style="display: inline-flex; margin-right: 1px">
+                <el-button round plain @click="groupImportVisible = true">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入群组
+                </el-button>
+                <el-button round plain @click="exportGroupCsv()">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出群组
+                </el-button>
+              </el-button-group>
+            </div>
+          </el-header>
+
           <!-- 物品管理头部 -->
           <el-header v-show="op === 7" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
@@ -332,9 +434,18 @@
 
             <!-- 语录管理 -->
             <div v-show="op === 3">
-              <el-table ref="sayingTableData" :data="sayingTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" width="60" align="center"
+              <el-table ref="sayingTableData" :data="filteredSayingTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <el-table-column v-if="hasSayingFilter" type="index" label="序号" width="60" align="center">
+                </el-table-column>
+
+                <el-table-column v-if="!hasSayingFilter" type="index" label="序号" width="60" align="center"
                                  :index="(sayingPageInfo.current - 1) * sayingPageInfo.size + 1">
+                </el-table-column>
+
+                <el-table-column label="语录ID" width="90" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.id }}
+                  </template>
                 </el-table-column>
 
                 <el-table-column label="用户ID" min-width="120" align="center">
@@ -375,8 +486,11 @@
 
             <!-- 用户管理 -->
             <div v-show="op === 5">
-              <el-table ref="userTableData" :data="userTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" width="60" align="center"
+              <el-table ref="userTableData" :data="filteredUserTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <el-table-column v-if="hasUserFilter" type="index" label="序号" width="60" align="center">
+                </el-table-column>
+
+                <el-table-column v-if="!hasUserFilter" type="index" label="序号" width="60" align="center"
                                  :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
                 </el-table-column>
 
@@ -446,8 +560,11 @@
 
             <!-- 群组管理 -->
             <div v-show="op === 6">
-              <el-table ref="groupTableData" :data="groupTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" width="60" align="center"
+              <el-table ref="groupTableData" :data="filteredGroupTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <el-table-column v-if="hasGroupFilter" type="index" label="序号" width="60" align="center">
+                </el-table-column>
+
+                <el-table-column v-if="!hasGroupFilter" type="index" label="序号" width="60" align="center"
                                  :index="(groupPageInfo.current - 1) * groupPageInfo.size + 1">
                 </el-table-column>
 
@@ -685,8 +802,10 @@
             </div>
 
             <div v-show="op === 3" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasSayingFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredSayingTableData.length }} 条记录</el-text>
+              <el-text v-if="!hasSayingFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录</el-text>
               <el-pagination
+                  v-if="!hasSayingFilter"
                   background
                   @size-change="handleSayingSizeChange"
                   @current-change="handleSayingCurrentChange"
@@ -700,8 +819,10 @@
             </div>
 
             <div v-show="op === 5" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasUserFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredUserTableData.length }} 条记录</el-text>
+              <el-text v-if="!hasUserFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录</el-text>
               <el-pagination
+                  v-if="!hasUserFilter"
                   background
                   @size-change="handleUserSizeChange"
                   @current-change="handleUserCurrentChange"
@@ -715,8 +836,10 @@
             </div>
 
             <div v-show="op === 6" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
+              <el-text v-if="hasGroupFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ filteredGroupTableData.length }} 条记录</el-text>
+              <el-text v-if="!hasGroupFilter" style="flex: 1; text-align: left;"><el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录</el-text>
               <el-pagination
+                  v-if="!hasGroupFilter"
                   background
                   @size-change="handleGroupSizeChange"
                   @current-change="handleGroupCurrentChange"
@@ -1057,14 +1180,85 @@
         </template>
       </el-dialog>
 
+      <!-- 语录导入对话框 -->
+      <el-dialog v-model="sayingImportVisible" title="导入 - 语录 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-saying"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction('/saying/importCsv')"
+            :on-success="refreshSaying"
+            :on-error="(error, file, fileList) => {
+              refreshSaying()
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
+      <!-- 用户导入对话框 -->
+      <el-dialog v-model="userImportVisible" title="导入 - 用户 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-user"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction('/user/importCsv')"
+            :on-success="refreshUser"
+            :on-error="(error, file, fileList) => {
+              refreshUser()
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
+      <!-- 群组导入对话框 -->
+      <el-dialog v-model="groupImportVisible" title="导入 - 群组 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-group"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction('/group/importCsv')"
+            :on-success="refreshGroup"
+            :on-error="(error, file, fileList) => {
+              refreshGroup()
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
+      <!-- 物品导入对话框 -->
       <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
         <el-upload
             class="upload-import-item"
             drag
             :before-upload="isCsv"
             :headers="uploadHeaders"
-            :action="uploadAction"
+            :action="uploadAction('/item/importCsv')"
             :on-success="refreshItem"
+            :on-error="(error, file, fileList) => {
+              refreshItem()
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
             multiple
         >
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -1203,14 +1397,39 @@
 import {
   Box,
   Cellphone,
-  ChatDotSquare, Comment,
-  Delete, Document, DocumentAdd, DocumentCopy,
-  Download, Edit,
-  Files, Filter, Folder, FolderAdd,
-  FolderOpened, Histogram,
-  HomeFilled, InfoFilled, Monitor, MostlyCloudy, OfficeBuilding, Operation, Picture, Plus,
-  Promotion, RefreshLeft, Search, Setting, Switch, SwitchButton, Tools, UploadFilled,
-  User, UserFilled, Warning
+  ChatDotSquare,
+  Comment,
+  Delete,
+  Document,
+  DocumentAdd,
+  DocumentCopy,
+  Download,
+  Edit,
+  Files,
+  Filter,
+  Folder,
+  FolderAdd,
+  FolderOpened,
+  Histogram,
+  HomeFilled,
+  InfoFilled,
+  Monitor,
+  MostlyCloudy,
+  OfficeBuilding,
+  Operation,
+  Picture,
+  Plus,
+  Promotion,
+  RefreshLeft,
+  Search,
+  Setting,
+  Switch,
+  SwitchButton,
+  Tools,
+  UploadFilled,
+  User,
+  UserFilled,
+  Warning
 } from "@element-plus/icons-vue";
 import axios from "axios";
 import LineChart from "@/components/LineChart.vue";
@@ -1259,8 +1478,9 @@ export default {
         email: 'null'
       },
 
-      curDir: '/',
       op: 1,
+
+      curDir: '/',
 
       fileTableData: [],
       filePageInfo: {
@@ -1280,6 +1500,7 @@ export default {
       uploading: false,
 
       sayingTableData: [],
+      allSayingTableData: [],
       sayingPageInfo: {
         total: 0,
         size: 0,
@@ -1287,13 +1508,22 @@ export default {
         pages: 0
       },
 
+      sayingSearchKey: '',
+
+      sayingImportVisible: false,
+
       userTableData: [],
+      allUserTableData: [],
       userPageInfo: {
         total: 0,
         size: 0,
         current: 0,
         pages: 0
       },
+
+      userSearchKey: '',
+
+      userImportVisible: false,
 
       userSettingVisible: false,
       userForm: {
@@ -1307,12 +1537,17 @@ export default {
       },
 
       groupTableData: [],
+      allGroupTableData: [],
       groupPageInfo: {
         total: 0,
         size: 0,
         current: 0,
         pages: 0
       },
+
+      groupSearchKey: '',
+
+      groupImportVisible: false,
 
       groupSettingVisible: false,
       groupForm: {
@@ -1334,6 +1569,8 @@ export default {
       itemSearchCategory: null,
       itemSearchKey: '',
 
+      itemImportVisible: false,
+
       itemSettingVisible: false,
       itemAddingVisible: false,
       itemForm: {
@@ -1348,8 +1585,6 @@ export default {
         imagePath: '',
         available: false,
       },
-
-      itemImportVisible: false,
 
       inventoriesVisible: false,
       inventoriesData: [],
@@ -1403,15 +1638,63 @@ export default {
       if(this.hasItemFilter) {
         return this.allItemTableData.filter(item => {
           // 类别过滤
-          const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory;
+          const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory
           // 品质过滤
-          const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity;
+          const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity
           // 关键词过滤
-          const keyMatch = this.itemSearchKey === '' || item.name.includes(this.itemSearchKey);
-          return categoryMatch && rarityMatch && keyMatch;
+          const keyMatch = this.itemSearchKey === '' || item.name.includes(this.itemSearchKey)
+          return categoryMatch && rarityMatch && keyMatch
         });
       } else {
         return this.itemTableData
+      }
+    },
+
+    hasSayingFilter() {
+      return this.sayingSearchKey !== ''
+    },
+
+    filteredSayingTableData() {
+      if(this.hasSayingFilter) {
+        return this.allSayingTableData.filter(saying => {
+          // 关键词过滤
+          return this.sayingSearchKey === '' ||
+              String(saying.userId).includes(this.sayingSearchKey) || saying.userName.includes(this.sayingSearchKey) || saying.text.includes(this.sayingSearchKey)
+        });
+      } else {
+        return this.sayingTableData
+      }
+    },
+
+    hasUserFilter() {
+      return this.userSearchKey !== ''
+    },
+
+    filteredUserTableData() {
+      if(this.hasUserFilter) {
+        return this.allUserTableData.filter(user => {
+          // 关键词过滤
+          return this.userSearchKey === '' ||
+              String(user.id).includes(this.userSearchKey) || user.name.includes(this.userSearchKey)
+        });
+      } else {
+        return this.userTableData
+      }
+    },
+
+    hasGroupFilter() {
+      return this.groupSearchKey !== ''
+    },
+
+    filteredGroupTableData() {
+      if(this.hasGroupFilter) {
+        return this.allGroupTableData.filter(group => {
+          // 关键词过滤
+          return this.groupSearchKey === '' ||
+              String(group.id).includes(this.groupSearchKey) || group.name.includes(this.groupSearchKey)
+        });
+      } else {
+        return this.groupTableData
       }
     },
 
@@ -1424,16 +1707,16 @@ export default {
         // 'X-Auth-Token': token
         // 'token': token
       }
-    },
-
-    uploadAction() {
-      const baseURL = axios.defaults.baseURL || ''
-      let path = '/item/importCsv'
-      return `${baseURL}${path}`
     }
   },
 
   methods: {
+
+    uploadAction(url) {
+      const baseURL = axios.defaults.baseURL || ''
+      return `${baseURL}${url}`
+    },
+
     isCsv(file) {
       // // 方法1：通过文件扩展名验证
       // const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
@@ -1570,34 +1853,42 @@ export default {
 
     handleSayingCurrentChange(currentPage) {
       this.getSayingPage(currentPage, this.sayingPageInfo.size)
+      this.getSayingList()
     },
 
     handleSayingSizeChange(pageSize) {
       this.getSayingPage(1, pageSize)
+      this.getSayingList()
     },
 
     handleUserCurrentChange(currentPage) {
       this.getUserPage(currentPage, this.userPageInfo.size)
+      this.getUserList()
     },
 
     handleUserSizeChange(pageSize) {
       this.getUserPage(1, pageSize)
+      this.getUserList()
     },
 
     handleGroupCurrentChange(currentPage) {
       this.getGroupPage(currentPage, this.groupPageInfo.size)
+      this.getGroupList()
     },
 
     handleGroupSizeChange(pageSize) {
       this.getGroupPage(1, pageSize)
+      this.getGroupList()
     },
 
     handleItemCurrentChange(currentPage) {
       this.getItemPage(currentPage, this.itemPageInfo.size)
+      this.getItemList()
     },
 
     handleItemSizeChange(pageSize) {
       this.getItemPage(1, pageSize)
+      this.getItemList()
     },
 
     shiftMenu(op) {
@@ -1856,24 +2147,26 @@ export default {
       });
     },
 
-    logout() {
-      localStorage.clear()
-      this.$router.push('/login')
+    refreshSaying() {
+      this.getSayingList()
+      this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
     },
 
-    sync() {
-      this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-      this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
-      this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
-      this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
-      this.refreshItem()
-      this.getStatistic()
-      this.getInfo()
+    getSayingList() {
+      this.$axios({
+        url: '/saying/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.allSayingTableData = JSON.parse(JSON.stringify(res.data.data.sayings))
+      })
     },
 
     getSayingPage(currentPage, pageSize) {
       this.$axios({
-        url: '/saying/list/' + currentPage + '/' + pageSize,
+        url: '/saying/page/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -1895,7 +2188,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
+          this.refreshSaying()
         } else {
           this.$message.error(res.data.message)
         }
@@ -1904,9 +2197,49 @@ export default {
       })
     },
 
+    exportSayingCsv() {
+      this.$axios({
+        url: '/saying/exportCsv',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Sayings_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
+    },
+
+    refreshUser() {
+      this.getUserList()
+      this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
+    },
+
+    getUserList() {
+      this.$axios({
+        url: '/user/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.allUserTableData = JSON.parse(JSON.stringify(res.data.data.users))
+      })
+    },
+
     getUserPage(currentPage, pageSize) {
       this.$axios({
-        url: '/user/list/' + currentPage + '/' + pageSize,
+        url: '/user/page/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -1920,9 +2253,92 @@ export default {
       })
     },
 
+    deleteUser(user) {
+      this.$axios.delete('/user/delete/' + user.id, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.refreshUser()
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(() => {
+        this.$message.error("删除失败!")
+      })
+    },
+
+    handleUserSetting(row) {
+      // 深拷贝row对象，避免修改原数据
+      this.userForm = JSON.parse(JSON.stringify(row))
+      this.userSettingVisible = true
+    },
+
+    handleUserSettingSubmit() {
+      this.$axios({
+        url: '/user/update',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.userForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.refreshUser()
+          this.userSettingVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
+    exportUserCsv() {
+      this.$axios({
+        url: '/user/exportCsv',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Users_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
+    },
+
+    refreshGroup() {
+      this.getGroupList()
+      this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+    },
+
+    getGroupList() {
+      this.$axios({
+        url: '/group/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.allGroupTableData = JSON.parse(JSON.stringify(res.data.data.groups))
+      })
+    },
+
     getGroupPage(currentPage, pageSize) {
       this.$axios({
-        url: '/group/list/' + currentPage + '/' + pageSize,
+        url: '/group/page/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -1936,23 +2352,6 @@ export default {
       })
     },
 
-    deleteUser(user) {
-      this.$axios.delete('/user/delete/' + user.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          this.$message.success(res.data.message)
-          this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
-        } else {
-          this.$message.error(res.data.message)
-        }
-      }).catch(() => {
-        this.$message.error("删除失败!")
-      })
-    },
-
     deleteGroup(group) {
       this.$axios.delete('/group/delete/' + group.id, {
         headers: {
@@ -1961,7 +2360,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+          this.refreshGroup()
         } else {
           this.$message.error(res.data.message)
         }
@@ -1988,7 +2387,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+          this.refreshGroup()
           this.groupSettingVisible = false
         } else {
           this.$message.error(res.data.message)
@@ -1996,35 +2395,44 @@ export default {
       })
     },
 
-    handleUserSetting(row) {
-      // 深拷贝row对象，避免修改原数据
-      this.userForm = JSON.parse(JSON.stringify(row))
-      this.userSettingVisible = true
-    },
-
-    handleUserSettingSubmit() {
+    exportGroupCsv() {
       this.$axios({
-        url: '/user/update',
+        url: '/group/exportCsv',
         headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
+          'token': localStorage.getItem("token")
         },
-        data: this.userForm,
-        method: 'PUT'
+        method: 'GET'
       }).then(res => {
-        if (res.data.code === 200) {
-          this.$message.success(res.data.message)
-          this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
-          this.userSettingVisible = false
-        } else {
-          this.$message.error(res.data.message)
-        }
-      })
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Groups_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
     },
 
     refreshItem() {
       this.getItemList()
       this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+    },
+
+    getItemList() {
+      this.$axios({
+        url: '/item/list',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        this.allItemTableData = JSON.parse(JSON.stringify(res.data.data.items))
+      })
     },
 
     getItemPage(currentPage, pageSize) {
@@ -2040,18 +2448,6 @@ export default {
         this.itemPageInfo.size = res.data.data.itemPage.pageSize
         this.itemPageInfo.current = res.data.data.itemPage.currentPage
         this.itemPageInfo.pages = res.data.data.itemPage.totalPage
-      })
-    },
-
-    getItemList() {
-      this.$axios({
-        url: '/item/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.allItemTableData = JSON.parse(JSON.stringify(res.data.data.items))
       })
     },
 
@@ -2244,6 +2640,23 @@ export default {
         }
       })
     },
+
+    sync() {
+      this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
+
+      this.refreshSaying()
+      this.refreshUser()
+      this.refreshGroup()
+      this.refreshItem()
+
+      this.getStatistic()
+      this.getInfo()
+    },
+
+    logout() {
+      localStorage.clear()
+      this.$router.push('/login')
+    }
   },
 
   created() {
@@ -2252,13 +2665,24 @@ export default {
       this.$router.push('/login')
       return
     }
+
     this.getInfo()
+
     this.getFilePage(1, 20)
+
     this.getSayingPage(1, 20)
+    this.getSayingList()
+
     this.getUserPage(1, 20)
+    this.getUserList()
+
     this.getGroupPage(1, 20)
+    this.getGroupList()
+
     this.getItemPage(1, 20)
     this.getItemList()
+
+    this.getStatistic()
   },
 
   mounted() {
@@ -2277,14 +2701,14 @@ export default {
     op(newVal) {
       if (newVal === 4) {
         this.getStatistic()
-      } else if (newVal === 3){
-        this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       } else if (newVal === 1){
         this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
+      } else if (newVal === 3){
+        this.refreshSaying()
       } else if (newVal === 5){
-        this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
+        this.refreshUser()
       } else if (newVal === 6){
-        this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
+        this.refreshGroup()
       } else if (newVal === 7){
         this.refreshItem()
       }
