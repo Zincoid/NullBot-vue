@@ -401,7 +401,7 @@
 
                 <el-table-column label="文件类型" width="100" align="center">
                   <template v-slot="scope">
-                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px">
+                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
                       {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
                     </el-tag>
                   </template>
