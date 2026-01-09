@@ -175,13 +175,13 @@
                     style="display: inline-flex; padding-left: 5px"
                 >
                   <template #trigger>
-                    <el-button type="primary" plain :disabled="uploading">
+                    <el-button type="primary" plain :disabled="uploading || userType === 0">
                       <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;{{uploading ? uploadFilesTotal + "/" + uploadFileList.length : "添加文件"}}
                     </el-button>
                   </template>
                 </el-upload>
 
-                <el-button class="ml-1" type="success" plain @click="upload" :loading="uploading">
+                <el-button class="ml-1" type="success" plain @click="upload" :loading="uploading" :disabled="userType === 0">
                   <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{uploading ? "处理中..." : "上传"}}
                 </el-button>
 
@@ -189,7 +189,7 @@
                   <el-button round plain @click="backDir">
                     <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
                   </el-button>
-                  <el-button round plain @click="createDir">
+                  <el-button round plain @click="createDir" :disabled="userType === 0">
                     <el-icon size="15"><FolderAdd /></el-icon>&nbsp;新建目录
                   </el-button>
                 </el-button-group>
@@ -220,10 +220,10 @@
             <!-- 语录操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
-                <el-button round plain @click="sayingImportVisible = true">
+                <el-button round plain @click="sayingImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入语录
                 </el-button>
-                <el-button round plain @click="exportSayingCsv()">
+                <el-button round plain @click="exportSayingCsv()" :disabled="userType === 0">
                   <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出语录
                 </el-button>
               </el-button-group>
@@ -254,16 +254,16 @@
             <!-- 用户操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
-                <el-button round plain @click="inventoryImportVisible = true">
+                <el-button round plain @click="inventoryImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入库存
                 </el-button>
-                <el-button round plain @click="exportInventoryCsv()">
+                <el-button round plain @click="exportInventoryCsv()" :disabled="userType === 0">
                   <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出库存
                 </el-button>
-                <el-button round plain @click="userImportVisible = true">
+                <el-button round plain @click="userImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入用户
                 </el-button>
-                <el-button round plain @click="exportUserCsv()">
+                <el-button round plain @click="exportUserCsv()" :disabled="userType === 0">
                   <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出用户
                 </el-button>
               </el-button-group>
@@ -294,10 +294,10 @@
             <!-- 群组操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
-                <el-button round plain @click="groupImportVisible = true">
+                <el-button round plain @click="groupImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入群组
                 </el-button>
-                <el-button round plain @click="exportGroupCsv()">
+                <el-button round plain @click="exportGroupCsv()" :disabled="userType === 0">
                   <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出群组
                 </el-button>
               </el-button-group>
@@ -357,13 +357,13 @@
             <!-- 物品操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
-                <el-button round plain @click="itemImportVisible = true">
+                <el-button round plain @click="itemImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
                 </el-button>
-                <el-button round plain @click="handleItemAdding()">
+                <el-button round plain @click="handleItemAdding()" :disabled="userType === 0">
                   <el-icon size="15"><Plus /></el-icon>&nbsp;新增物品
                 </el-button>
-                <el-button round plain @click="exportItemCsv()">
+                <el-button round plain @click="exportItemCsv()" :disabled="userType === 0">
                   <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出物品
                 </el-button>
               </el-button-group>
@@ -422,12 +422,12 @@
                                  v-if="scope.row.isDir === 0" title="下载">
                         <el-icon size="14"><Download /></el-icon>
                       </el-button>
-                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名">
+                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
                         <el-icon size="14"><Edit /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
                         <template #reference>
-                          <el-button type="danger" plain size="small" title="删除">
+                          <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                             <el-icon size="14"><Delete /></el-icon>
                           </el-button>
                         </template>
@@ -480,7 +480,7 @@
                   <template v-slot="scope">
                     <el-popconfirm title="确认删除吗?" @confirm="deleteSaying(scope.row)">
                       <template #reference>
-                        <el-button type="danger" plain size="small" title="删除">
+                        <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                           <el-icon size="14"><Delete /></el-icon>
                         </el-button>
                       </template>
@@ -548,12 +548,12 @@
                       <el-button type="success" plain size="small" @click="handleInventories(scope.row)" title="库存">
                         <el-icon size="14"><Box /></el-icon>
                       </el-button>
-                      <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置">
+                      <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteUser(scope.row)">
                         <template #reference>
-                          <el-button type="danger" plain size="small" title="删除">
+                          <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                             <el-icon size="14"><Delete /></el-icon>
                           </el-button>
                         </template>
@@ -595,12 +595,12 @@
                 <el-table-column fixed="right" label="操作" width="150" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置">
+                      <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteGroup(scope.row)">
                         <template #reference>
-                          <el-button type="danger" plain size="small" title="删除">
+                          <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                             <el-icon size="14"><Delete /></el-icon>
                           </el-button>
                         </template>
@@ -684,12 +684,12 @@
                 <el-table-column fixed="right" label="操作" width="150" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置">
+                      <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteItem(scope.row)">
                         <template #reference>
-                          <el-button type="danger" plain size="small" title="删除">
+                          <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                             <el-icon size="14"><Delete /></el-icon>
                           </el-button>
                         </template>
@@ -776,6 +776,9 @@
               </el-descriptions>
 
               <el-descriptions title="访问信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+                <el-descriptions-item label="Type">
+                  <el-tag type="warning">{{ userType }}</el-tag>
+                </el-descriptions-item>
                 <el-descriptions-item label="Token">
                   <el-tag type="warning">{{ token }}</el-tag>
                 </el-descriptions-item>
@@ -921,12 +924,12 @@
                            v-if="scope.row.isDir === 0" title="下载">
                   <el-icon size="14"><Download /></el-icon>
                 </el-button>
-                <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名">
+                <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
                   <el-icon size="14"><Edit /></el-icon>
                 </el-button>
                 <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
                   <template #reference>
-                    <el-button type="danger" plain size="small" title="删除">
+                    <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                       <el-icon size="14"><Delete /></el-icon>
                     </el-button>
                   </template>
@@ -1345,12 +1348,12 @@
           <el-table-column fixed="right" label="操作" width="150" align="center">
             <template v-slot="scope">
               <div style="display: flex; gap: 2px; justify-content: center;">
-                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置">
+                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
                   <el-icon size="14"><Setting /></el-icon>
                 </el-button>
                 <el-popconfirm title="确认删除吗?" @confirm="deleteInventory(scope.row)">
                   <template #reference>
-                    <el-button type="danger" plain size="small" title="删除">
+                    <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
                       <el-icon size="14"><Delete /></el-icon>
                     </el-button>
                   </template>
@@ -1366,7 +1369,7 @@
               <el-input :prefix-icon="Box" v-model="newItemId" oninput="value=value.replace(/\D/g,'')"
                         placeholder="请输入新增库存物品ID..." style="width: 100%"/>
             </el-form-item>
-            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px">
+            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px" :disabled="userType === 0">
               <el-icon size="15px"><Plus /></el-icon>&nbsp;新增库存
             </el-button>
           </div>
@@ -1504,6 +1507,7 @@ export default {
         email: 'null'
       },
 
+      userType: 0,
       op: 1,
 
       curDir: '/',
@@ -1865,6 +1869,7 @@ export default {
         if (res.data.code === 200) {
           var info = res.data.data.info
           this.info = JSON.parse(JSON.stringify(info))
+          this.userType = res.data.data.userType
         } else if (res.data.code === 400) {
           this.$message.error(res.data.message)
         }
@@ -2068,6 +2073,7 @@ export default {
         this.curDir += "/" + dir.fileName
       }
       this.getFilePage(1, this.filePageInfo.size)
+      this.searchTableVisible = false
     },
 
     backDir() {
