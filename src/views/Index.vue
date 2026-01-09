@@ -639,19 +639,22 @@
 
             <!-- 个人中心 -->
             <div v-show="op === 2" style="margin-right: 20px;">
-              <el-descriptions title="用户信息" :column="1" border>
+              <el-descriptions title="用户信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
                 <el-descriptions-item label="名称">
-                  <el-tag>{{ info.username }}</el-tag>
+                  <el-tag type="success">{{ info.username }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="邮箱">
                   <el-tag>{{ info.email }}</el-tag>
                 </el-descriptions-item>
+              </el-descriptions>
+
+              <el-descriptions title="访问信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
                 <el-descriptions-item label="Token">
-                  <el-tag>{{ token }}</el-tag>
+                  <el-tag type="warning">{{ token }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
-              <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+              <div style="margin-top: 210px; display: flex; justify-content: flex-end;">
                 <el-button type="danger" round plain @click="logout">
                   <el-icon size="15"><SwitchButton /></el-icon>&nbsp;退出登录
                 </el-button>
