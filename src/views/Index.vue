@@ -1064,7 +1064,7 @@
             :before-upload="isCsv"
             :headers="uploadHeaders"
             :action="uploadAction"
-            :on-success="getItemList"
+            :on-success="refreshItem"
             multiple
         >
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -1561,11 +1561,11 @@ export default {
     },
 
     handleFileCurrentChange(currentPage) {
-      this.getPage(currentPage, this.filePageInfo.size)
+      this.getFilePage(currentPage, this.filePageInfo.size)
     },
 
     handleFileSizeChange(pageSize) {
-      this.getPage(1, pageSize)
+      this.getFilePage(1, pageSize)
     },
 
     handleSayingCurrentChange(currentPage) {
@@ -1612,7 +1612,7 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     },
 
-    getPage(currentPage, pageSize) {
+    getFilePage(currentPage, pageSize) {
       this.$axios({
         url: '/file/list/' + currentPage + '/' + pageSize,
         headers: {
@@ -1628,10 +1628,6 @@ export default {
         this.filePageInfo.size = res.data.data.filePage.pageSize
         this.filePageInfo.current = res.data.data.filePage.currentPage
         this.filePageInfo.pages = res.data.data.filePage.totalPage
-        // console.log('filePageInfo:')
-        // console.log(this.filePageInfo)
-        // console.log('fileTableData:')
-        // console.log(this.fileTableData)
       })
     },
 
@@ -1662,7 +1658,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getPage(this.filePageInfo.current, this.filePageInfo.size)
+          this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
           }
@@ -1715,9 +1711,9 @@ export default {
       // 刷新页面数据
       if(this.curDir === this.uploadDir){
         if (this.filePageInfo.pages === 0) {
-          this.getPage(1, this.filePageInfo.size)
+          this.getFilePage(1, this.filePageInfo.size)
         } else {
-          this.getPage(this.filePageInfo.pages, this.filePageInfo.size)
+          this.getFilePage(this.filePageInfo.pages, this.filePageInfo.size)
         }
       }
       this.uploading = false
@@ -1752,7 +1748,7 @@ export default {
       } else {
         this.curDir += "/" + dir.fileName
       }
-      this.getPage(1, this.filePageInfo.size)
+      this.getFilePage(1, this.filePageInfo.size)
     },
 
     backDir() {
@@ -1766,7 +1762,7 @@ export default {
           this.curDir = this.curDir.substring(0, index)
         }
       }
-      this.getPage(1, this.filePageInfo.size)
+      this.getFilePage(1, this.filePageInfo.size)
     },
 
     createDir() {
@@ -1795,7 +1791,7 @@ export default {
                 type: 'success',
                 message: value + '创建成功!'
               })
-              this.getPage(this.filePageInfo.current, this.filePageInfo.size)
+              this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
             } else {
               this.$message({
                 type: 'error',
@@ -1844,7 +1840,7 @@ export default {
             this.$message.success('重命名成功');
 
             // 刷新当前视图
-            this.getPage(this.filePageInfo.current, this.filePageInfo.size);
+            this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
               this.searchFile();
             }
@@ -1866,12 +1862,11 @@ export default {
     },
 
     sync() {
-      this.getPage(this.filePageInfo.current, this.filePageInfo.size)
+      this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
       this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
       this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
-      this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-      this.getItemList()
+      this.refreshItem()
       this.getStatistic()
       this.getInfo()
     },
@@ -1889,8 +1884,6 @@ export default {
         this.sayingPageInfo.size = res.data.data.sayingPage.pageSize
         this.sayingPageInfo.current = res.data.data.sayingPage.currentPage
         this.sayingPageInfo.pages = res.data.data.sayingPage.totalPage
-        // console.log('sayingTableData:')
-        // console.log(this.sayingTableData)
       })
     },
 
@@ -1924,8 +1917,6 @@ export default {
         this.userPageInfo.size = res.data.data.userPage.pageSize
         this.userPageInfo.current = res.data.data.userPage.currentPage
         this.userPageInfo.pages = res.data.data.userPage.totalPage
-        // console.log('userTableData:')
-        // console.log(this.userTableData)
       })
     },
 
@@ -1942,8 +1933,6 @@ export default {
         this.groupPageInfo.size = res.data.data.groupPage.pageSize
         this.groupPageInfo.current = res.data.data.groupPage.currentPage
         this.groupPageInfo.pages = res.data.data.groupPage.totalPage
-        // console.log('groupTableData:')
-        // console.log(this.groupTableData)
       })
     },
 
@@ -2033,6 +2022,11 @@ export default {
       })
     },
 
+    refreshItem() {
+      this.getItemList()
+      this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
+    },
+
     getItemPage(currentPage, pageSize) {
       this.$axios({
         url: '/item/page/' + currentPage + '/' + pageSize,
@@ -2079,8 +2073,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-          this.getItemList()
+          this.refreshItem()
           this.itemSettingVisible = false
         } else {
           this.$message.error(res.data.message)
@@ -2116,8 +2109,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-          this.getItemList()
+          this.refreshItem()
           this.itemAddingVisible = false
         } else {
           this.$message.error(res.data.message)
@@ -2133,8 +2125,7 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           this.$message.success(res.data.message)
-          this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-          this.getItemList()
+          this.refreshItem()
         } else {
           this.$message.error(res.data.message)
         }
@@ -2158,7 +2149,7 @@ export default {
         elink.href = URL.createObjectURL(blob);
         document.body.appendChild(elink);
         elink.click();
-        URL.revokeObjectURL(elink.href); // 释放URL 对象
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
         this.$message.success("导出成功")
       }).catch(error => {
@@ -2262,7 +2253,7 @@ export default {
       return
     }
     this.getInfo()
-    this.getPage(1, 20)
+    this.getFilePage(1, 20)
     this.getSayingPage(1, 20)
     this.getUserPage(1, 20)
     this.getGroupPage(1, 20)
@@ -2289,14 +2280,13 @@ export default {
       } else if (newVal === 3){
         this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
       } else if (newVal === 1){
-        this.getPage(this.filePageInfo.current, this.filePageInfo.size)
+        this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
       } else if (newVal === 5){
         this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
       } else if (newVal === 6){
         this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
       } else if (newVal === 7){
-        // this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-        this.getItemList()
+        this.refreshItem()
       }
     }
   }
