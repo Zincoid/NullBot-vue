@@ -198,11 +198,17 @@
 
           <!-- 物品管理头部 -->
           <el-header v-show="op === 7" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
               <el-icon size="18px"><Filter /></el-icon>&nbsp;
-              <el-form :inline="true" style="display: inline-flex;">
-                <el-form-item label="过滤器" style="margin-top: 18px; min-width: 200px">
-                  <el-select placeholder="ALL TYPES" v-model="itemSearchCategory">
+              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+                <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
+                </el-form-item>
+                <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
+                  <el-select
+                      placeholder="All Types"
+                      v-model="itemSearchCategory"
+                      style="width: 100%"
+                  >
                     <el-option label="ALL" :value="null" />
                     <el-option label="COMMON" :value="'COMMON'" />
                     <el-option label="SPECIAL" :value="'SPECIAL'" />
@@ -211,8 +217,12 @@
                   </el-select>
                 </el-form-item>
 
-                <el-form-item style="margin-left: -20px; margin-top: 18px; min-width: 150px">
-                  <el-select placeholder="ALL RARITY" v-model="itemSearchRarity">
+                <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
+                  <el-select
+                      placeholder="All Rarity"
+                      v-model="itemSearchRarity"
+                      style="width: 100%"
+                  >
                     <el-option label="ALL" :value="null" />
                     <el-option label="WHITE" :value="'WHITE'" />
                     <el-option label="GREEN" :value="'GREEN'" />
@@ -223,13 +233,13 @@
                   </el-select>
                 </el-form-item>
 
-                <el-form-item style="margin-left: -20px; margin-top: 18px">
+                <el-form-item style="margin: 0; flex: 2;  min-width: 150px; max-width: 500px">
                   <el-input
                       placeholder="请输入关键字..."
                       :prefix-icon="Search"
                       v-model="itemSearchKey"
                       clearable
-                      style="flex: 1; min-width: 400px;"
+                      style="width: 100%"
                   >
                   </el-input>
                 </el-form-item>
@@ -237,9 +247,8 @@
             </div>
 
             <!-- 物品操作按钮 -->
-            <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
-            <div style="display: flex; align-items: center;">
-              <el-button-group style="margin-left: 10px; display: inline-flex;">
+            <div style="display: flex; align-items: center; flex-shrink: 0;">
+              <el-button-group style="display: inline-flex;">
                 <el-button round plain @click="itemImportVisible = true">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
                 </el-button>
@@ -377,43 +386,43 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="昵称" min-width="200">
+                <el-table-column label="昵称" min-width="200" show-overflow-tooltip>
                   <template v-slot="scope">
                     {{ scope.row.name }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="限权" min-width="100" align="center">
+                <el-table-column label="限权" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.access }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="等级" min-width="100" align="center">
+                <el-table-column label="等级" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.level }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="现金" min-width="100" align="center">
+                <el-table-column label="现金" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.cash }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="抽数" min-width="100" align="center">
+                <el-table-column label="抽数" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.drawTimes }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="仓库容量" min-width="100" align="center">
+                <el-table-column label="库容" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.capacity }}
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="300" align="center">
+                <el-table-column fixed="right" label="操作" width="216" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
                       <el-button type="success" plain size="small" @click="handleInventories(scope.row)" title="库存">
@@ -448,19 +457,19 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="群名" min-width="300">
+                <el-table-column label="群名" min-width="300" show-overflow-tooltip>
                   <template v-slot="scope">
                     {{ scope.row.name }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="限权" min-width="100" align="center">
+                <el-table-column label="限权" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.access }}
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="200" align="center">
+                <el-table-column fixed="right" label="操作" width="150" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
                       <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置">
@@ -497,31 +506,31 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="类别" min-width="100" align="center">
+                <el-table-column label="类别" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.category }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="品质" min-width="100" align="center">
+                <el-table-column label="品质" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.rarity }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="可获取" min-width="100" align="center">
+                <el-table-column label="可获取" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.available ? 'YES' : 'NO' }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="价格" min-width="100" align="center">
+                <el-table-column label="价格" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.price }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="重量" min-width="100" align="center">
+                <el-table-column label="重量" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.weight }}
                   </template>
@@ -545,7 +554,7 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="200" align="center">
+                <el-table-column fixed="right" label="操作" width="150" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
                       <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置">
