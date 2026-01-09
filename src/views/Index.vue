@@ -154,7 +154,7 @@
         <el-container style="height: 100%;">
             <!-- 文件管理头部 -->
             <el-header v-show="op === 1" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-              <div style="display: flex; align-items: center;">
+              <div style="display: flex; align-items: center; padding-right: 10px">
                 <el-icon size="20">
                   <HomeFilled />
                 </el-icon>
@@ -185,7 +185,7 @@
                   <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{uploading ? "处理中..." : "上传"}}
                 </el-button>
 
-                <el-button-group style="margin-left: 10px; display: inline-flex;">
+                <el-button-group style="margin-left: 10px; margin-right: 1px;display: inline-flex;">
                   <el-button round plain @click="backDir">
                     <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
                   </el-button>
@@ -248,7 +248,7 @@
 
             <!-- 物品操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
-              <el-button-group style="display: inline-flex;">
+              <el-button-group style="display: inline-flex; margin-right: 1px">
                 <el-button round plain @click="itemImportVisible = true">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
                 </el-button>
@@ -267,7 +267,7 @@
             <!-- 文件管理 -->
             <div v-show="op === 1">
               <el-table ref="fileTableData" :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
-                <el-table-column type="index" label="序号" min-width="80"
+                <el-table-column type="index" label="序号" width="80" align="center"
                                  :index="(filePageInfo.current - 1) * filePageInfo.size + 1">
                 </el-table-column>
 
@@ -285,15 +285,15 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="文件大小" min-width="120">
+                <el-table-column label="文件大小" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.isDir === 1 ? '-' : formatFileSize(scope.row.fileSize) }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="文件类型" min-width="100">
+                <el-table-column label="文件类型" width="100" align="center">
                   <template v-slot="scope">
-                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'">
+                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px">
                       {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
                     </el-tag>
                   </template>
@@ -333,11 +333,11 @@
             <!-- 语录管理 -->
             <div v-show="op === 3">
               <el-table ref="sayingTableData" :data="sayingTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" min-width="80"
+                <el-table-column type="index" label="序号" width="60" align="center"
                                  :index="(sayingPageInfo.current - 1) * sayingPageInfo.size + 1">
                 </el-table-column>
 
-                <el-table-column label="用户ID" min-width="120">
+                <el-table-column label="用户ID" min-width="120" align="center">
                   <template v-slot="scope">
                     {{ scope.row.userId }}
                   </template>
@@ -353,7 +353,7 @@
                   <!-- 不设置宽度，自动填充剩余空间 -->
                 </el-table-column>
 
-                <el-table-column label="时间" min-width="180">
+                <el-table-column label="时间" width="180" align="center">
                   <template v-slot="scope">
                     {{ scope.row.time }}
                   </template>
@@ -376,11 +376,11 @@
             <!-- 用户管理 -->
             <div v-show="op === 5">
               <el-table ref="userTableData" :data="userTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" min-width="80"
+                <el-table-column type="index" label="序号" width="60" align="center"
                                  :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
                 </el-table-column>
 
-                <el-table-column label="用户ID" min-width="120">
+                <el-table-column label="用户ID" min-width="120" align="center">
                   <template v-slot="scope">
                     {{ scope.row.id }}
                   </template>
@@ -447,11 +447,11 @@
             <!-- 群组管理 -->
             <div v-show="op === 6">
               <el-table ref="groupTableData" :data="groupTableData" style="width: 100%" height="calc(100vh - 210px)">
-                <el-table-column type="index" label="序号" min-width="80"
+                <el-table-column type="index" label="序号" width="60" align="center"
                                  :index="(groupPageInfo.current - 1) * groupPageInfo.size + 1">
                 </el-table-column>
 
-                <el-table-column label="群组ID" min-width="120">
+                <el-table-column label="群组ID" min-width="120" align="center">
                   <template v-slot="scope">
                     {{ scope.row.id }}
                   </template>
@@ -491,10 +491,10 @@
             <!-- 物品管理 -->
             <div v-show="op === 7">
               <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
-                <el-table-column type="index" label="序号" min-width="80">
+                <el-table-column type="index" label="序号" width="60" align="center">
                 </el-table-column>
 
-                <el-table-column label="物品ID" min-width="100">
+                <el-table-column label="物品ID" width="90" align="center">
                   <template v-slot="scope">
                     {{ scope.row.id }}
                   </template>
@@ -542,13 +542,13 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column label="指令" min-width="200" show-overflow-tooltip>
+                <el-table-column label="指令" min-width="150" show-overflow-tooltip>
                   <template v-slot="scope">
                     {{ scope.row.command || '无指令' }}
                   </template>
                 </el-table-column>
 
-                <el-table-column label="图路径" min-width="200" show-overflow-tooltip>
+                <el-table-column label="图路径" min-width="150" show-overflow-tooltip>
                   <template v-slot="scope">
                     {{ scope.row.imagePath || '无图片' }}
                   </template>
@@ -743,7 +743,7 @@
       <!-- 搜索对话框 -->
       <el-dialog title="搜索结果" v-model="searchTableVisible" width="55%">
         <el-table ref="searchData" :data="searchData" style="width: 100%" stripe>
-          <el-table-column type="index" label="序号" width="80">
+          <el-table-column type="index" label="序号" width="60" align="center">
           </el-table-column>
 
           <el-table-column label="文件名" min-width="200">
@@ -754,36 +754,46 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="文件大小" width="120">
+          <el-table-column label="文件大小" width="120" align="center">
             <template v-slot="scope">
               {{ scope.row.isDir === 1 ? '/' : (scope.row.fileSize / 1024).toFixed(2) + 'KB' }}
             </template>
           </el-table-column>
 
-          <el-table-column label="文件类型" width="100">
+          <el-table-column label="文件类型" width="120" align="center">
             <template v-slot="scope">
-              {{ scope.row.isDir === 1 ? '文件夹' : '文件' }}
+              <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px">
+                {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
+              </el-tag>
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" width="340" align="center">
+          <el-table-column fixed="right" label="操作" width="216" align="center">
             <template v-slot="scope">
-              <el-button type="text" @click="handlePreview(scope.row)" size="small" v-if="isPreviewable(scope.row)">
-                <el-icon size="17"><Picture /></el-icon>预览
-              </el-button>
-              <el-button type="text" @click="download(scope.row)" size="small" v-if="scope.row.isDir === 0">
-                <el-icon size="17"><Download /></el-icon>下载
-              </el-button>
-              <el-button type="text" @click="handleRename(scope.row)" size="small">
-                <el-icon size="17"><Edit /></el-icon>重命名
-              </el-button>
-              <el-popconfirm title="确认删除?" @confirm="deleteFile(scope.row)">
-                <template #reference>
-                  <el-button type="text" size="small">
-                    <el-icon size="17"><Delete /></el-icon>删除
-                  </el-button>
-                </template>
-              </el-popconfirm>
+              <div style="display: flex; gap: 2px; justify-content: center;">
+                <el-button type="info" plain @click="handlePreview(scope.row)"
+                           v-if="isPreviewable(scope.row)" size="small" title="预览">
+                  <el-icon size="14"><Picture /></el-icon>
+                </el-button>
+                <el-button type="primary" plain size="small" @click="enterDir(scope.row)"
+                           v-if="scope.row.isDir === 1" title="进入文件夹">
+                  <el-icon size="14"><FolderOpened /></el-icon>
+                </el-button>
+                <el-button type="success" plain size="small" @click="download(scope.row)"
+                           v-if="scope.row.isDir === 0" title="下载">
+                  <el-icon size="14"><Download /></el-icon>
+                </el-button>
+                <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名">
+                  <el-icon size="14"><Edit /></el-icon>
+                </el-button>
+                <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
+                  <template #reference>
+                    <el-button type="danger" plain size="small" title="删除">
+                      <el-icon size="14"><Delete /></el-icon>
+                    </el-button>
+                  </template>
+                </el-popconfirm>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -1058,16 +1068,16 @@
       <!-- 用户库存对话框 -->
       <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
         <el-table ref="inventoriesData" :data="inventoriesData" style="width: 100%" stripe>
-          <el-table-column type="index" label="序号" width="80">
+          <el-table-column type="index" label="序号" width="60" align="center">
           </el-table-column>
 
-          <el-table-column label="库存ID" min-width="100">
+          <el-table-column label="库存ID" width="90" align="center">
             <template v-slot="scope">
               {{ scope.row.id }}
             </template>
           </el-table-column>
 
-          <el-table-column label="物品ID" min-width="100">
+          <el-table-column label="物品ID" width="90" align="center">
             <template v-slot="scope">
               {{ scope.row.itemId }}
             </template>
@@ -1079,31 +1089,31 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="类别" min-width="100" align="center">
+          <el-table-column label="类别" width="100" align="center">
             <template v-slot="scope">
               {{ scope.row.category }}
             </template>
           </el-table-column>
 
-          <el-table-column label="品质" min-width="100" align="center">
+          <el-table-column label="品质" width="100" align="center">
             <template v-slot="scope">
               {{ scope.row.rarity }}
             </template>
           </el-table-column>
 
-          <el-table-column label="价格" min-width="100" align="center">
+          <el-table-column label="价格" width="100" align="center">
             <template v-slot="scope">
               {{ scope.row.price }}
             </template>
           </el-table-column>
 
-          <el-table-column label="数量" min-width="100" align="center">
+          <el-table-column label="数量" width="100" align="center">
             <template v-slot="scope">
               {{ scope.row.amount }}
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" width="200" align="center">
+          <el-table-column fixed="right" label="操作" width="150" align="center">
             <template v-slot="scope">
               <div style="display: flex; gap: 2px; justify-content: center;">
                 <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置">
@@ -1457,8 +1467,8 @@ export default {
       if (lastDotIndex === -1 || lastDotIndex === fileName.length - 1) {
         return '未知类型'
       }
-      // 获取后缀并转为大写
-      const extension = fileName.substring(lastDotIndex + 1).toUpperCase()
+      // 获取后缀并转为小写
+      const extension = fileName.substring(lastDotIndex + 1).toLowerCase()
       // 如果后缀太长，可以截断显示
       return extension.length > 8 ? extension.substring(0, 8) + '...' : extension
     },
@@ -1816,9 +1826,8 @@ export default {
             this.$message.success('重命名成功');
 
             // 刷新当前视图
-            if (this.op === 1) {
-              this.getPage(this.filePageInfo.current, this.filePageInfo.size);
-            } else if (this.searchTableVisible) {
+            this.getPage(this.filePageInfo.current, this.filePageInfo.size);
+            if (this.searchTableVisible) {
               this.searchFile();
             }
           } else {
