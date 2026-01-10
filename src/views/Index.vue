@@ -393,7 +393,30 @@
                       <el-icon v-else style="margin-right: 8px;">
                         <Document />
                       </el-icon>
-                      {{ scope.row.fileName }}
+
+                      <!-- 文件名部分 -->
+                      <span v-if="scope.row.isDir === 1" class="file-name-clickable"
+                            @click="enterDir(scope.row)"
+                            :title="`进入文件夹: ${scope.row.fileName}`"
+                            style="cursor: pointer; color: #409eff; text-decoration: none;"
+                            @mouseenter="e => e.target.style.textDecoration = 'underline'"
+                            @mouseleave="e => e.target.style.textDecoration = 'none'"
+                      >
+                        {{ scope.row.fileName }}
+                      </span>
+
+                      <span v-else-if="isPreviewable(scope.row)" class="file-name-clickable"
+                            @click="handlePreview(scope.row)"
+                            :title="`预览文件: ${scope.row.fileName}`"
+                            style="cursor: pointer; color: #67c23a; text-decoration: none;"
+                            @mouseenter="e => e.target.style.textDecoration = 'underline'"
+                            @mouseleave="e => e.target.style.textDecoration = 'none'"
+                      >
+                        {{ scope.row.fileName }}
+                      </span>
+                      <span v-else style="color: #cdd1da;">
+                        {{ scope.row.fileName }}
+                      </span>
                     </div>
                   </template>
                 </el-table-column>
@@ -426,7 +449,7 @@
 
                 <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
                   <template v-slot="scope">
-                    <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
+                    <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(218,62,113,0.95)"
                                :loading="scope.row._loading" :before-change="() => changeFileVisible(scope.row)"/>
                   </template>
                 </el-table-column>
@@ -1576,8 +1599,8 @@ export default {
       fileTableData: [],
       filePageInfo: {
         total: 0,
-        size: 0,
-        current: 0,
+        size: 20,
+        current: 1,
         pages: 0
       },
 
@@ -1594,8 +1617,8 @@ export default {
       allSayingTableData: [],
       sayingPageInfo: {
         total: 0,
-        size: 0,
-        current: 0,
+        size: 20,
+        current: 1,
         pages: 0
       },
 
@@ -1607,8 +1630,8 @@ export default {
       allUserTableData: [],
       userPageInfo: {
         total: 0,
-        size: 0,
-        current: 0,
+        size: 20,
+        current: 1,
         pages: 0
       },
 
@@ -1631,8 +1654,8 @@ export default {
       allGroupTableData: [],
       groupPageInfo: {
         total: 0,
-        size: 0,
-        current: 0,
+        size: 20,
+        current: 1,
         pages: 0
       },
 
@@ -1651,8 +1674,8 @@ export default {
       allItemTableData: [],
       itemPageInfo: {
         total: 0,
-        size: 0,
-        current: 0,
+        size: 20,
+        current: 1,
         pages: 0
       },
 
@@ -2830,18 +2853,18 @@ export default {
           this.$message.error(res.data.message)
         }
       })
-          .then(() => this.getStatistic())
           .then(() => this.getInfo())
+          .then(() => this.getStatistic())
           .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
           .then(() => this.refreshSaying())
           .then(() => this.refreshUser())
           .then(() => this.refreshGroup())
           .then(() => this.refreshItem())
           .then(() => {
-            this.$message.success("浏览数据 已同步")
+            this.$message.success("全部浏览数据 已更新")
           })
           .catch(error => {
-            this.$message.error("同步失败：" + (error.message || '未知错误'))
+            this.$message.error("同步更新失败：" + (error.message || '未知错误'))
           })
     },
 
@@ -2857,24 +2880,7 @@ export default {
       this.$router.push('/login')
       return
     }
-
-    this.getInfo()
-
-    this.getFilePage(1, 20)
-
-    this.getSayingPage(1, 20)
-    this.getSayingList()
-
-    this.getUserPage(1, 20)
-    this.getUserList()
-
-    this.getGroupPage(1, 20)
-    this.getGroupList()
-
-    this.getItemPage(1, 20)
-    this.getItemList()
-
-    this.getStatistic()
+    this.sync()
   },
 
   mounted() {
