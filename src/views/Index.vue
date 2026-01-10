@@ -409,7 +409,8 @@
 
                 <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
                   <template v-slot="scope">
-                    <el-switch v-model="scope.row.visible" :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
+                    <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
+                               :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
                   </template>
                 </el-table-column>
 
@@ -934,7 +935,8 @@
 
           <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
             <template v-slot="scope">
-              <el-switch v-model="scope.row.visible" :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
+              <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
+                         :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
             </template>
           </el-table-column>
 
@@ -1455,7 +1457,7 @@
 import {
   Box,
   Cellphone,
-  ChatDotSquare,
+  ChatDotSquare, Check, Close,
   Comment,
   Delete,
   Document,
@@ -1683,6 +1685,15 @@ export default {
   },
 
   computed: {
+
+    Check() {
+      return Check
+    },
+
+    Close() {
+      return Close
+    },
+
     Box() {
       return Box
     },
