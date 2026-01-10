@@ -185,7 +185,7 @@
                   <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{uploading ? "处理中..." : "上传"}}
                 </el-button>
 
-                <el-button-group style="margin-left: 10px; margin-right: 1px;display: inline-flex;">
+                <el-button-group style="margin-left: 15px; margin-right: 1px;display: inline-flex;">
                   <el-button round plain @click="backDir">
                     <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
                   </el-button>
