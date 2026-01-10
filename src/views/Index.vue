@@ -925,9 +925,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="文件类型" width="120" align="center">
+          <el-table-column label="文件类型" width="100" align="center">
             <template v-slot="scope">
-              <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px">
+              <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
                 {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
               </el-tag>
             </template>
@@ -935,7 +935,7 @@
 
           <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
             <template v-slot="scope">
-              <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
+              <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
                          :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
             </template>
           </el-table-column>
