@@ -97,7 +97,7 @@
           >
             <h3 align="center"><el-icon>
               <Promotion />
-            </el-icon>导航</h3>
+            </el-icon>&nbsp;导航</h3>
             <el-menu-item
                 index="1"
                 @click="shiftMenu(1)"
@@ -404,6 +404,12 @@
                     <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
                       {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
                     </el-tag>
+                  </template>
+                </el-table-column>
+
+                <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
+                  <template v-slot="scope">
+                    <el-switch v-model="scope.row.visible" :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
                   </template>
                 </el-table-column>
 
@@ -914,7 +920,7 @@
 
           <el-table-column label="文件大小" width="120" align="center">
             <template v-slot="scope">
-              {{ scope.row.isDir === 1 ? '/' : (scope.row.fileSize / 1024).toFixed(2) + 'KB' }}
+              {{ scope.row.isDir === 1 ? '-' : formatFileSize(scope.row.fileSize) }}
             </template>
           </el-table-column>
 
@@ -923,6 +929,12 @@
               <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px">
                 {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
               </el-tag>
+            </template>
+          </el-table-column>
+
+          <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
+            <template v-slot="scope">
+              <el-switch v-model="scope.row.visible" :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
             </template>
           </el-table-column>
 
@@ -2179,13 +2191,12 @@ export default {
           }
         }).then(res => {
           if (res.data.code === 200) {
-            this.$message.success('重命名成功');
-
             // 刷新当前视图
             this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
               this.searchFile();
             }
+            this.$message.success('重命名成功');
           } else {
             this.$message.error(`${file.fileName} - ${res.data.message}`);
           }
@@ -2196,6 +2207,42 @@ export default {
       }).catch(() => {
         this.$message.info('已取消重命名');
       });
+    },
+
+    changeFileVisible(row) {
+      return new Promise((resolve, reject) => {
+        try{
+          row.loading = true
+          this.$axios({
+            url: `file/setVisible/${row.id}`,
+            method: 'GET',
+            headers: {
+              'token': localStorage.getItem("token")
+            },
+            params: {
+              visible: !row.visible
+            }
+          }).then(res => {
+            if (res.data.code === 200) {
+              // 刷新当前视图
+              this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
+              if (this.searchTableVisible) {
+                this.searchFile();
+              }
+              this.$message.success('修改成功');
+              return resolve(true)
+            } else {
+              this.$message.error('修改失败');
+              return reject(false)
+            }
+          })
+        } catch(err) {
+          this.$message.error('请求失败');
+          reject(false)
+        } finally {
+          row.loading = false
+        }
+      })
     },
 
     refreshSaying() {
