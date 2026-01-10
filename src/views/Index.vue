@@ -68,6 +68,11 @@
           <!-- 右侧用户信息 -->
           <el-sub-menu style="margin-left: auto;">
             <el-menu-item>
+              <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;" @click="initRootFile">
+                <el-icon size="15"><Coin /></el-icon>根初始化
+              </el-button>
+            </el-menu-item>
+            <el-menu-item>
               <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
                 <el-icon size="15"><Switch /></el-icon>数据同步
               </el-button>
@@ -393,6 +398,18 @@
                   </template>
                 </el-table-column>
 
+                <el-table-column label="所有者" width="100" align="center" show-overflow-tooltip>
+                  <template v-slot="scope">
+                    {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})` : `(${scope.row.ownerId})`) : '-' }}
+                  </template>
+                </el-table-column>
+
+                <el-table-column label="修改日期" width="160" align="center">
+                  <template v-slot="scope">
+                    {{ scope.row.lastModified === null ? '-' : scope.row.lastModified.replace('T', ' ') }}
+                  </template>
+                </el-table-column>
+
                 <el-table-column label="文件大小" width="100" align="center">
                   <template v-slot="scope">
                     {{ scope.row.isDir === 1 ? '-' : formatFileSize(scope.row.fileSize) }}
@@ -479,7 +496,7 @@
 
                 <el-table-column label="时间" width="180" align="center">
                   <template v-slot="scope">
-                    {{ scope.row.time }}
+                    {{ scope.row.time.replace('T', ' ') }}
                   </template>
                 </el-table-column>
 
@@ -906,7 +923,7 @@
       </el-container>
 
       <!-- 搜索对话框 -->
-      <el-dialog title="搜索结果" v-model="searchTableVisible" width="55%">
+      <el-dialog title="搜索结果" v-model="searchTableVisible" width="75%">
         <el-table ref="searchData" :data="searchData" style="width: 100%" stripe>
           <el-table-column type="index" label="序号" width="60" align="center">
           </el-table-column>
@@ -916,6 +933,18 @@
               <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                 {{ scope.row.fileName }}
               </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="所有者" width="100" align="center" show-overflow-tooltip>
+            <template v-slot="scope">
+              {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})` : `(${scope.row.ownerId})`) : '-' }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="修改日期" width="160" align="center">
+            <template v-slot="scope">
+              {{ scope.row.lastModified === null ? '-' : scope.row.lastModified.replace('T', ' ') }}
             </template>
           </el-table-column>
 
@@ -1457,7 +1486,7 @@
 import {
   Box,
   Cellphone,
-  ChatDotSquare, Check, Close,
+  ChatDotSquare, Check, Close, Coin,
   Comment,
   Delete,
   Document,
@@ -1497,6 +1526,7 @@ import BarChart from "@/components/BarChart.vue";
 
 export default {
   components: {
+    Coin,
     Filter,
     InfoFilled,
     Plus,
@@ -1978,7 +2008,7 @@ export default {
 
     getFilePage(currentPage, pageSize) {
       this.$axios({
-        url: '/file/list/' + currentPage + '/' + pageSize,
+        url: '/file/page/' + currentPage + '/' + pageSize,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -2774,16 +2804,45 @@ export default {
       });
     },
 
+    initRootFile() {
+      this.$axios.get('/file/init', {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+        } else if (res.data.code === 400) {
+          this.$message.warning(res.data.message)
+        }
+      })
+    },
+
     sync() {
-      this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-
-      this.refreshSaying()
-      this.refreshUser()
-      this.refreshGroup()
-      this.refreshItem()
-
-      this.getStatistic()
-      this.getInfo()
+      this.$axios.get('/file/sync', {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+        } else if (res.data.code === 400) {
+          this.$message.error(res.data.message)
+        }
+      })
+          .then(() => this.getStatistic())
+          .then(() => this.getInfo())
+          .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
+          .then(() => this.refreshSaying())
+          .then(() => this.refreshUser())
+          .then(() => this.refreshGroup())
+          .then(() => this.refreshItem())
+          .then(() => {
+            this.$message.success("浏览数据 已同步")
+          })
+          .catch(error => {
+            this.$message.error("同步失败：" + (error.message || '未知错误'))
+          })
     },
 
     logout() {
