@@ -410,7 +410,7 @@
                 <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
                   <template v-slot="scope">
                     <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
-                               :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
+                               :loading="scope.row._loading" :before-change="() => changeFileVisible(scope.row)"/>
                   </template>
                 </el-table-column>
 
@@ -936,7 +936,7 @@
           <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
             <template v-slot="scope">
               <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
-                         :loading="scope.row.loading" :before-change="() => changeFileVisible(scope.row)"/>
+                         :loading="scope.row._loading" :before-change="() => changeFileVisible(scope.row)"/>
             </template>
           </el-table-column>
 
@@ -1120,8 +1120,8 @@
                 v-model="itemForm.available"
                 inline-prompt
                 style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                active-text="Y"
-                inactive-text="N"
+                :active-icon="Check"
+                :inactive-icon="Close"
             />
           </el-form-item>
 
@@ -1186,8 +1186,8 @@
                 v-model="itemForm.available"
                 inline-prompt
                 style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-                active-text="Y"
-                inactive-text="N"
+                :active-icon="Check"
+                :inactive-icon="Close"
             />
           </el-form-item>
 
@@ -2222,8 +2222,8 @@ export default {
 
     changeFileVisible(row) {
       return new Promise((resolve, reject) => {
-        try{
-          row.loading = true
+        try {
+          row._loading = true
           this.$axios({
             url: `file/setVisible/${row.id}`,
             method: 'GET',
@@ -2240,18 +2240,19 @@ export default {
               if (this.searchTableVisible) {
                 this.searchFile();
               }
+              // row._loading = false
               this.$message.success('修改成功');
               return resolve(true)
             } else {
+              // row._loading = false
               this.$message.error('修改失败');
               return reject(false)
             }
           })
         } catch(err) {
+          // row._loading = false
           this.$message.error('请求失败');
           reject(false)
-        } finally {
-          row.loading = false
         }
       })
     },
