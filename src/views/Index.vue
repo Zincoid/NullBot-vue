@@ -1546,6 +1546,7 @@ import {
 import axios from "axios";
 import LineChart from "@/components/LineChart.vue";
 import BarChart from "@/components/BarChart.vue";
+import {ElLoading, ElMessage, ElNotification} from "element-plus";
 
 export default {
   components: {
@@ -2834,23 +2835,44 @@ export default {
         }
       }).then(res => {
         if (res.data.code === 200) {
-          this.$message.success(res.data.message)
+          ElMessage({
+            message: res.data.message,
+            type: 'success',
+            placement: 'bottom-left',
+          })
         } else if (res.data.code === 400) {
-          this.$message.warning(res.data.message)
+          ElMessage({
+            message: res.data.message,
+            type: 'warning',
+            placement: 'bottom-left',
+          })
         }
       })
     },
 
     sync() {
+      const loading = ElLoading.service({
+        lock: true,
+        text: '同步中...',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
       this.$axios.get('/file/sync', {
         headers: {
           token: localStorage.getItem("token")
         }
       }).then(res => {
         if (res.data.code === 200) {
-          this.$message.success(res.data.message)
+          ElMessage({
+            message: '本地与数据库 - 已同步',
+            type: 'success',
+            placement: 'bottom-left',
+          })
         } else if (res.data.code === 400) {
-          this.$message.error(res.data.message)
+          ElMessage({
+            message: res.data.message,
+            type: 'error',
+            placement: 'bottom-left',
+          })
         }
       })
           .then(() => this.getInfo())
@@ -2861,10 +2883,20 @@ export default {
           .then(() => this.refreshGroup())
           .then(() => this.refreshItem())
           .then(() => {
-            this.$message.success("全部浏览数据 已更新")
+            loading.close()
+            ElMessage({
+              message: '全部浏览数据 - 已更新',
+              type: 'success',
+              placement: 'bottom-left',
+            })
           })
           .catch(error => {
-            this.$message.error("同步更新失败：" + (error.message || '未知错误'))
+            loading.close()
+            ElMessage({
+              message: "同步更新失败：" + (error.message || '未知错误'),
+              type: 'error',
+              placement: 'bottom-left',
+            })
           })
     },
 
