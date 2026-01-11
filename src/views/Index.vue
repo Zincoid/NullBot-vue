@@ -843,7 +843,7 @@
           <el-footer height="60px" style="padding: 10px 20px;">
             <div v-show="op === 1" style="display: flex; align-items: center; justify-content: space-between;">
               <el-text style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon>共 {{ filePageInfo.total }} 条记录
+                <el-icon><InfoFilled /></el-icon> 共 {{ filePageInfo.total }} 条记录
               </el-text>
               <el-pagination
                   background
