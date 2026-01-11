@@ -2836,13 +2836,13 @@ export default {
       }).then(res => {
         if (res.data.code === 200) {
           ElMessage({
-            message: res.data.message,
+            message: 'Root 文件 - 初始化完成',
             type: 'success',
             placement: 'bottom-left',
           })
         } else if (res.data.code === 400) {
           ElMessage({
-            message: res.data.message,
+            message: 'Root 文件 - 已初始化过',
             type: 'warning',
             placement: 'bottom-left',
           })
@@ -2869,7 +2869,7 @@ export default {
           })
         } else if (res.data.code === 400) {
           ElMessage({
-            message: res.data.message,
+            message: '本地与数据库 - 同步失败',
             type: 'error',
             placement: 'bottom-left',
           })
@@ -2893,7 +2893,7 @@ export default {
           .catch(error => {
             loading.close()
             ElMessage({
-              message: "同步更新失败：" + (error.message || '未知错误'),
+              message: "同步更新异常: " + (error.message || '未知错误'),
               type: 'error',
               placement: 'bottom-left',
             })
