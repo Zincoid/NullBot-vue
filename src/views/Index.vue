@@ -175,7 +175,8 @@
                     class="upload"
                     action=""
                     :file-list="uploadFileList"
-                    :on-change="handleChange"
+                    :on-change="handleFileChange"
+                    :on-remove="handleFileChange"
                     :auto-upload="false"
                     style="display: inline-flex; padding-left: 5px"
                 >
@@ -2137,7 +2138,7 @@ export default {
       this.uploading = false
     },
 
-    handleChange(file, fileList) {
+    handleFileChange(file, fileList) {
       this.uploadFileList = fileList;
     },
 
