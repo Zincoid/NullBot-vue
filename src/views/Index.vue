@@ -640,9 +640,12 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="150" align="center">
+                <el-table-column fixed="right" label="操作" width="216" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
+                      <el-button type="primary" plain @click="handleGroupFunc(scope.row)" size="small" title="功能" :disabled="userType === 0">
+                        <el-icon size="14"><TurnOff /></el-icon>
+                      </el-button>
                       <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
                         <el-icon size="14"><Setting /></el-icon>
                       </el-button>
@@ -1137,6 +1140,164 @@
         </template>
       </el-dialog>
 
+      <!-- 功能设置对话框 -->
+      <el-dialog v-model="groupFuncVisible" :title="`功能设置 - 群聊 ${groupFuncForm.groupId}`" width="500px">
+        <div class="function-sections">
+          <!-- AI 功能模块 -->
+          <div class="function-section">
+            <div class="section-header">
+              <el-icon><Promotion /></el-icon>
+              <span class="section-title">AI 设置</span>
+            </div>
+
+            <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+              <el-form-item label="作用域" prop="scope">
+                <el-select v-model="groupFuncForm.scope" style="width: 300px">
+                  <el-option label="Group" :value="'Group'" />
+                  <el-option label="Personal" :value="'Personal'" />
+                  <el-option label="Monitor" :value="'Monitor'" />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="思考模式" prop="thinking" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.thinking"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="指令模式" prop="embedding">
+                <el-switch
+                    v-model="groupFuncForm.embedding"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="防注模式" prop="antiInjection" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.antiInjection"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="自定模式" prop="custom">
+                <el-switch
+                    v-model="groupFuncForm.custom"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="指令校验" prop="embeddingAuth" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.embeddingAuth"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- Monitor 功能模块 -->
+          <div class="function-section">
+            <div class="section-header">
+              <el-icon><Monitor /></el-icon>
+              <span class="section-title">监控设置</span>
+            </div>
+
+            <el-form ref="groupFuncMonitorFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+              <el-form-item label="图片收集" prop="imageCollect" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.imageCollect"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="消息收集" prop="messageCollect">
+                <el-switch
+                    v-model="groupFuncForm.messageCollect"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="关键词检测" prop="keywordDetect" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.keywordDetect"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="戳一戳检测" prop="pokeDetect">
+                <el-switch
+                    v-model="groupFuncForm.pokeDetect"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="防撤回" prop="recallDetect" style="margin-left: 15px">
+                <el-switch
+                    v-model="groupFuncForm.recallDetect"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- Guess 功能模块 -->
+          <div class="function-section">
+            <div class="section-header">
+              <el-icon><Grid /></el-icon>
+              <span class="section-title">Guess 设置</span>
+            </div>
+
+            <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+              <el-form-item label="切割比例" prop="guessRatio" :required="true">
+                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入切割比例..." style="width: 300px"/>
+              </el-form-item>
+
+              <el-form-item label="内边距" prop="guessPadding" :required="true">
+                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入内边距..." style="width: 300px"/>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+
+        <template #footer>
+          <div class="group-func-dialog-footer">
+            <el-button plain @click="groupFuncVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleGroupFuncSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
       <!-- 物品编辑对话框 -->
       <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
         <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
@@ -1172,7 +1333,7 @@
             <el-switch
                 v-model="itemForm.available"
                 inline-prompt
-                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
                 :active-icon="Check"
                 :inactive-icon="Close"
             />
@@ -1238,7 +1399,7 @@
             <el-switch
                 v-model="itemForm.available"
                 inline-prompt
-                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+                style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
                 :active-icon="Check"
                 :inactive-icon="Close"
             />
@@ -1538,7 +1699,7 @@ import {
   Setting,
   Switch,
   SwitchButton,
-  Tools,
+  Tools, TurnOff,
   UploadFilled,
   User,
   UserFilled,
@@ -1551,6 +1712,7 @@ import {ElLoading, ElMessage, ElNotification} from "element-plus";
 
 export default {
   components: {
+    TurnOff,
     Coin,
     Filter,
     InfoFilled,
@@ -1669,7 +1831,25 @@ export default {
       groupForm: {
         id: '',
         name: '',
-        access: 0
+        access: 0,
+      },
+
+      groupFuncVisible: false,
+      groupFuncForm: {
+        groupId: '',
+        scope: null,
+        antiInjection: false,
+        thinking: false,
+        embedding: false,
+        embeddingAuth: false,
+        custom: false,
+        imageCollect: false,
+        messageCollect: false,
+        keywordDetect: false,
+        pokeDetect: false,
+        recallDetect: false,
+        guessRatio: 0.1,
+        guessPadding: 250
       },
 
       itemTableData: [],
@@ -2560,6 +2740,43 @@ export default {
       })
     },
 
+    handleGroupFunc(row) {
+      this.$axios({
+        url: '/setting/' + row.id,
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        method: 'GET'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.groupFuncForm = JSON.parse(JSON.stringify(res.data.data.setting));
+          this.groupFuncVisible = true
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
+    handleGroupFuncSubmit() {
+      this.$axios({
+        url: '/setting/update',
+        headers: {
+          'token': localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        },
+        data: this.groupFuncForm,
+        method: 'PUT'
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.groupFuncVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      })
+    },
+
     exportGroupCsv() {
       this.$axios({
         url: '/group/exportCsv',
@@ -3037,5 +3254,47 @@ export default {
 .inventories-dialog-footer ::v-deep .el-form-item {
   margin-bottom: 0;
   flex: 1; /* 让表单项占据剩余空间 */
+}
+
+/* 自定义功能设置对话框样式 */
+
+.function-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.function-section {
+  border: 1px solid #555555;
+  border-radius: 8px;
+  padding: 16px;
+
+  transition: all 0.3s ease;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #555555;
+}
+
+.section-header .el-icon {
+  color: #409eff;
+  font-size: 15px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.group-func-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
 }
 </style>
