@@ -2433,7 +2433,7 @@ export default {
         cancelButtonText: '取消',
         inputValue: file.fileName,
         inputPattern: /^[^\\\/:*?"<>|]+$/,
-        inputErrorMessage: '文件名不能包含 \\ / : * ? " < > | 等字符'
+        inputErrorMessage: '名称非法：文件名不能包含 \\ / : * ? " < > | 等字符'
       }).then(({ value }) => {
         if (!value || value.trim() === '') {
           this.$message.error('文件名不能为空');
@@ -2476,6 +2476,8 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputValue: this.curDir,
+        inputPattern: /^\/$|^\/([^\/]+\/)*[^\/]+$/,
+        inputErrorMessage: '路径非法：除根外不能以 / 结尾且不能有连续 / 且非空'
       }).then(({ value }) => {
         if (!value || value.trim() === '') {
           this.$message.error('路径不能为空');
