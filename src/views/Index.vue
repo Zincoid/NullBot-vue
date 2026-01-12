@@ -2503,7 +2503,7 @@ export default {
             }
             this.$message.success('移动成功');
           } else {
-            this.$message.error(`${file.fileName} - ${res.data.message}`);
+            this.$message.error(`${res.data.message}`);
           }
         }).catch(err => {
           this.$message.error('移动失败');
