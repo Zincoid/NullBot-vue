@@ -2477,7 +2477,7 @@ export default {
         cancelButtonText: '取消',
         inputValue: this.curDir,
         inputPattern: /^\/$|^\/([^\/]+\/)*[^\/]+$/,
-        inputErrorMessage: '路径非法：除根外不能以 / 结尾且不能有连续 / 且非空'
+        inputErrorMessage: '路径非法：非空且不能有连续 / 且除根外不能以 / 结尾'
       }).then(({ value }) => {
         if (!value || value.trim() === '') {
           this.$message.error('路径不能为空');
