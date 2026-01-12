@@ -1151,7 +1151,7 @@
             </div>
 
             <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
-              <el-form-item label="作用域" prop="scope">
+              <el-form-item label="会话范围" prop="scope">
                 <el-select v-model="groupFuncForm.scope" style="width: 250px">
                   <el-option label="Group" :value="'Group'" />
                   <el-option label="Personal" :value="'Personal'" />
@@ -1280,11 +1280,11 @@
 
             <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
               <el-form-item label="切割比例" prop="guessRatio" :required="true">
-                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入切割比例..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入比例..." style="width: 250px"/>
               </el-form-item>
 
-              <el-form-item label="内边距" prop="guessPadding" :required="true">
-                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入内边距..." style="width: 250px"/>
+              <el-form-item label="切割边距" prop="guessPadding" :required="true">
+                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入边距..." style="width: 250px"/>
               </el-form-item>
             </el-form>
           </div>
