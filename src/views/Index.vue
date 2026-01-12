@@ -159,11 +159,12 @@
         <el-container style="height: 100%;">
             <!-- 文件管理头部 -->
             <el-header v-show="op === 1" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-              <div style="display: flex; align-items: center; padding-right: 10px">
+              <div style="display: flex; align-items: center; padding-right: 5px">
                 <el-icon size="20">
                   <HomeFilled />
                 </el-icon>
-                <el-text size="large">{{ " "+curDir }}</el-text>
+                <el-text size="large">{{ " "+curDir }}&nbsp;</el-text>
+                <el-button type="text" title="复制路径" @click="copyCurDir"><el-icon size="15"><DocumentCopy /></el-icon></el-button>
               </div>
 
               <!-- 文件操作按钮 -->
@@ -455,10 +456,10 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column fixed="right" label="操作" width="216" align="center">
+                <el-table-column fixed="right" label="操作" width="275" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="info" plain @click="handlePreview(scope.row)"
+                      <el-button type="primary" plain @click="handlePreview(scope.row)"
                                  v-if="isPreviewable(scope.row)" size="small" title="预览">
                         <el-icon size="14"><Picture /></el-icon>
                       </el-button>
@@ -470,8 +471,11 @@
                                  v-if="scope.row.isDir === 0" title="下载">
                         <el-icon size="14"><Download /></el-icon>
                       </el-button>
-                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
+                      <el-button type="info" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
                         <el-icon size="14"><Edit /></el-icon>
+                      </el-button>
+                      <el-button type="warning" plain size="small" @click="handleMove(scope.row)" title="移动" :disabled="userType === 0">
+                        <el-icon size="14"><CopyDocument /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
                         <template #reference>
@@ -1672,7 +1676,7 @@ import {
   Box,
   Cellphone,
   ChatDotSquare, Check, Close, Coin,
-  Comment,
+  Comment, CopyDocument,
   Delete,
   Document,
   DocumentAdd,
@@ -1712,6 +1716,7 @@ import {ElLoading, ElMessage, ElNotification} from "element-plus";
 
 export default {
   components: {
+    CopyDocument,
     TurnOff,
     Coin,
     Filter,
@@ -1759,6 +1764,8 @@ export default {
       op: 1,
 
       curDir: '/',
+
+      moveFileId: 0,
 
       fileTableData: [],
       filePageInfo: {
@@ -2142,13 +2149,25 @@ export default {
         }
       }).then(res => {
         if (res.data.code === 200) {
-          var info = res.data.data.info
+          let info = res.data.data.info
           this.info = JSON.parse(JSON.stringify(info))
           this.userType = res.data.data.userType
         } else if (res.data.code === 400) {
           this.$message.error(res.data.message)
         }
       })
+    },
+
+    copyCurDir() {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(this.curDir)
+            .then(() => {
+              ElMessage.success("路径已复制")
+            })
+            .catch(err => {
+              ElMessage.error('复制失败 - ', err)
+            })
+      }
     },
 
     handleFileCurrentChange(currentPage) {
@@ -2420,12 +2439,10 @@ export default {
           this.$message.error('文件名不能为空');
           return;
         }
-
         if (value === file.fileName) {
           this.$message.warning('文件名未更改');
           return;
         }
-
         this.$axios({
           url: `/file/rename/${file.id}`,
           method: 'GET',
@@ -2446,12 +2463,53 @@ export default {
           } else {
             this.$message.error(`${file.fileName} - ${res.data.message}`);
           }
-        }).catch(error => {
-          console.error('重命名失败:', error);
+        }).catch(err => {
           this.$message.error('重命名失败');
         });
       }).catch(() => {
         this.$message.info('已取消重命名');
+      });
+    },
+
+    handleMove(file) {
+      this.$prompt('请输入移动至的目录路径', '移动文件', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: this.curDir,
+      }).then(({ value }) => {
+        if (!value || value.trim() === '') {
+          this.$message.error('路径不能为空');
+          return;
+        }
+        if (value === this.curDir) {
+          this.$message.warning('路径未更改');
+          return;
+        }
+        this.$axios({
+          url: `/file/move/${file.id}`,
+          method: 'GET',
+          headers: {
+            'token': localStorage.getItem("token")
+          },
+          params: {
+            newDir: value
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            // 刷新当前视图
+            this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
+            if (this.searchTableVisible) {
+              this.searchFile();
+            }
+            this.$message.success('移动成功');
+          } else {
+            this.$message.error(`${file.fileName} - ${res.data.message}`);
+          }
+        }).catch(err => {
+          this.$message.error('移动失败');
+        });
+      }).catch(() => {
+        this.$message.info('已取消移动');
       });
     },
 
