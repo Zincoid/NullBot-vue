@@ -459,11 +459,11 @@
                 <el-table-column fixed="right" label="操作" width="275" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="primary" plain @click="handlePreview(scope.row)"
+                      <el-button type="info" plain @click="handlePreview(scope.row)"
                                  v-if="isPreviewable(scope.row)" size="small" title="预览">
                         <el-icon size="14"><Picture /></el-icon>
                       </el-button>
-                      <el-button type="primary" plain size="small" @click="enterDir(scope.row)"
+                      <el-button type="info" plain size="small" @click="enterDir(scope.row)"
                                  v-if="scope.row.isDir === 1" title="进入文件夹">
                         <el-icon size="14"><FolderOpened /></el-icon>
                       </el-button>
@@ -471,10 +471,10 @@
                                  v-if="scope.row.isDir === 0" title="下载">
                         <el-icon size="14"><Download /></el-icon>
                       </el-button>
-                      <el-button type="info" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
+                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
                         <el-icon size="14"><Edit /></el-icon>
                       </el-button>
-                      <el-button type="warning" plain size="small" @click="handleMove(scope.row)" title="移动" :disabled="userType === 0">
+                      <el-button type="primary" plain size="small" @click="handleMove(scope.row)" title="移动" :disabled="userType === 0">
                         <el-icon size="14"><CopyDocument /></el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
