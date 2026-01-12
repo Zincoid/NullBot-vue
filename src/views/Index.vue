@@ -1141,18 +1141,18 @@
       </el-dialog>
 
       <!-- 功能设置对话框 -->
-      <el-dialog v-model="groupFuncVisible" :title="`功能设置 - 群聊 ${groupFuncForm.groupId}`" width="500px">
+      <el-dialog v-model="groupFuncVisible" :title="`功能设置 - 群聊 ${groupFuncForm.groupId}`" width="450px">
         <div class="function-sections">
-          <!-- AI 功能模块 -->
+          <!-- AIChat 功能模块 -->
           <div class="function-section">
             <div class="section-header">
               <el-icon><Promotion /></el-icon>
-              <span class="section-title">AI 设置</span>
+              <span class="section-title">AIChat 设置</span>
             </div>
 
             <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
               <el-form-item label="作用域" prop="scope">
-                <el-select v-model="groupFuncForm.scope" style="width: 300px">
+                <el-select v-model="groupFuncForm.scope" style="width: 250px">
                   <el-option label="Group" :value="'Group'" />
                   <el-option label="Personal" :value="'Personal'" />
                   <el-option label="Monitor" :value="'Monitor'" />
@@ -1215,7 +1215,7 @@
           <div class="function-section">
             <div class="section-header">
               <el-icon><Monitor /></el-icon>
-              <span class="section-title">监控设置</span>
+              <span class="section-title">Monitor 设置</span>
             </div>
 
             <el-form ref="groupFuncMonitorFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
@@ -1239,7 +1239,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="关键词检测" prop="keywordDetect" style="margin-left: 15px">
+              <el-form-item label="词语检测" prop="keywordDetect" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.keywordDetect"
                     inline-prompt
@@ -1249,7 +1249,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="戳一戳检测" prop="pokeDetect">
+              <el-form-item label="戳戳检测" prop="pokeDetect">
                 <el-switch
                     v-model="groupFuncForm.pokeDetect"
                     inline-prompt
@@ -1259,7 +1259,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="防撤回" prop="recallDetect" style="margin-left: 15px">
+              <el-form-item label="撤回检测" prop="recallDetect" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.recallDetect"
                     inline-prompt
@@ -1280,11 +1280,11 @@
 
             <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
               <el-form-item label="切割比例" prop="guessRatio" :required="true">
-                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入切割比例..." style="width: 300px"/>
+                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入切割比例..." style="width: 250px"/>
               </el-form-item>
 
               <el-form-item label="内边距" prop="guessPadding" :required="true">
-                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入内边距..." style="width: 300px"/>
+                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入内边距..." style="width: 250px"/>
               </el-form-item>
             </el-form>
           </div>
