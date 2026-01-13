@@ -301,6 +301,12 @@
             <!-- 群组操作按钮 -->
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
+                <el-button round plain @click="funcImportVisible = true" :disabled="userType === 0">
+                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入配置
+                </el-button>
+                <el-button round plain @click="exportFuncCsv()" :disabled="userType === 0">
+                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出配置
+                </el-button>
                 <el-button round plain @click="groupImportVisible = true" :disabled="userType === 0">
                   <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入群组
                 </el-button>
@@ -1518,6 +1524,27 @@
         </el-upload>
       </el-dialog>
 
+      <!-- 功能导入对话框 -->
+      <el-dialog v-model="funcImportVisible" title="导入 - 配置 CSV 文件" width="500px">
+        <el-upload
+            class="upload-import-func"
+            drag
+            :before-upload="isCsv"
+            :headers="uploadHeaders"
+            :action="uploadAction('/setting/importCsv')"
+            :on-success="refreshSaying"
+            :on-error="(error, file, fileList) => {
+              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+            }"
+            multiple
+        >
+          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+          <div class="el-upload__text">
+            Drop csv file here or <em>click to import</em>
+          </div>
+        </el-upload>
+      </el-dialog>
+
       <!-- 物品导入对话框 -->
       <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
         <el-upload
@@ -1877,6 +1904,8 @@ export default {
         guessRatio: 0.1,
         guessPadding: 250
       },
+
+      funcImportVisible: false,
 
       itemTableData: [],
       allItemTableData: [],
@@ -2896,6 +2925,29 @@ export default {
         const blob = new Blob([res.data]);
         const elink = document.createElement('a');
         elink.download = `Groups_${new Date().toLocaleString()}.csv`;
+        elink.style.display = 'none';
+        elink.href = URL.createObjectURL(blob);
+        document.body.appendChild(elink);
+        elink.click();
+        URL.revokeObjectURL(elink.href); // 释放 URL 对象
+        document.body.removeChild(elink);
+        this.$message.success("导出成功")
+      }).catch(error => {
+        this.$message.error("导出失败")
+      });
+    },
+
+    exportFuncCsv() {
+      this.$axios({
+        url: '/setting/exportCsv',
+        headers: {
+          'token': localStorage.getItem("token")
+        },
+        method: 'GET'
+      }).then(res => {
+        const blob = new Blob([res.data]);
+        const elink = document.createElement('a');
+        elink.download = `Settings_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
         elink.href = URL.createObjectURL(blob);
         document.body.appendChild(elink);
