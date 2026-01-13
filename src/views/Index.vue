@@ -1163,6 +1163,10 @@
                 </el-select>
               </el-form-item>
 
+              <el-form-item label="发言频率" prop="replyFrequency" :required="true">
+                <el-input v-model="groupFuncForm.replyFrequency" placeholder="请输入频率(0~1)..." style="width: 250px"/>
+              </el-form-item>
+
               <el-form-item label="思考模式" prop="thinking" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.thinking"
@@ -1206,6 +1210,16 @@
               <el-form-item label="指令校验" prop="embeddingAuth" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.embeddingAuth"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="自动发言" prop="autoReply">
+                <el-switch
+                    v-model="groupFuncForm.autoReply"
                     inline-prompt
                     style="--el-switch-on-color: rgba(19,206,102,0.75)"
                     :active-icon="Check"
@@ -1844,17 +1858,22 @@ export default {
       groupFuncVisible: false,
       groupFuncForm: {
         groupId: '',
+
         scope: null,
         antiInjection: false,
         thinking: false,
         embedding: false,
         embeddingAuth: false,
         custom: false,
+        autoReply: false,
+        replyFrequency: 0.01,
+
         imageCollect: false,
         messageCollect: false,
         keywordDetect: false,
         pokeDetect: false,
         recallDetect: false,
+
         guessRatio: 0.1,
         guessPadding: 250
       },
