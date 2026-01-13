@@ -2159,14 +2159,40 @@ export default {
     },
 
     copyCurDir() {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(this.curDir)
-            .then(() => {
-              ElMessage.success("路径已复制")
-            })
-            .catch(err => {
-              ElMessage.error('复制失败 - ', err)
-            })
+      const text = this.curDir;
+
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999px";
+      textArea.style.top = "-999px";
+      document.body.appendChild(textArea);
+
+      textArea.focus();
+      textArea.select();
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text)
+              .then(() => {
+                ElMessage.success("路径已复制");
+              })
+              .catch(() => {
+                if (document.execCommand('copy')) {
+                  ElMessage.success("路径已复制");
+                } else {
+                  throw new Error('复制失败');
+                }
+              });
+        } else if (document.execCommand('copy')) {
+          ElMessage.success("路径已复制");
+        } else {
+          prompt("请手动复制以下路径：", text);
+        }
+      } catch (err) {
+        ElMessage.warning("复制失败");
+      } finally {
+        document.body.removeChild(textArea);
       }
     },
 
