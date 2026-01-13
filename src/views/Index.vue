@@ -2383,6 +2383,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
+        this.$message.success('下载成功');
+      }).catch(err => {
+        this.$message.error('下载失败');
       })
     },
 
