@@ -2897,7 +2897,7 @@ export default {
 
     handleGroupFuncSubmit() {
       this.$axios({
-        url: '/setting/update',
+        url: '/setting/set',
         headers: {
           'token': localStorage.getItem("token"),
           'Content-Type': 'application/json'
