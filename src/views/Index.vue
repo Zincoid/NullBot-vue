@@ -1183,7 +1183,17 @@
                 />
               </el-form-item>
 
-              <el-form-item label="指令模式" prop="embedding">
+              <el-form-item label="语音模式" prop="voice">
+                <el-switch
+                    v-model="groupFuncForm.voice"
+                    inline-prompt
+                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
+                    :active-icon="Check"
+                    :inactive-icon="Close"
+                />
+              </el-form-item>
+
+              <el-form-item label="指令模式" prop="embedding" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.embedding"
                     inline-prompt
@@ -1193,7 +1203,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="防注模式" prop="antiInjection" style="margin-left: 15px">
+              <el-form-item label="防注模式" prop="antiInjection">
                 <el-switch
                     v-model="groupFuncForm.antiInjection"
                     inline-prompt
@@ -1203,7 +1213,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="自定模式" prop="custom">
+              <el-form-item label="自定模式" prop="custom" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.custom"
                     inline-prompt
@@ -1213,7 +1223,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="指令校验" prop="embeddingAuth" style="margin-left: 15px">
+              <el-form-item label="指令校验" prop="embeddingAuth">
                 <el-switch
                     v-model="groupFuncForm.embeddingAuth"
                     inline-prompt
@@ -1223,7 +1233,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="自动发言" prop="autoReply">
+              <el-form-item label="自动发言" prop="autoReply" style="margin-left: 15px">
                 <el-switch
                     v-model="groupFuncForm.autoReply"
                     inline-prompt
@@ -1889,6 +1899,7 @@ export default {
         scope: null,
         antiInjection: false,
         thinking: false,
+        voice: false,
         embedding: false,
         embeddingAuth: false,
         custom: false,
