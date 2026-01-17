@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item>
         <div style="display: flex; justify-content: center; width: 100%;">
-          <el-button type="warning" plain @click="guest()" style="width: 35%;"><el-icon size="15"><Lock /></el-icon>&nbsp;暂访</el-button>
+          <el-button type="warning" plain @click="guest" style="width: 35%;"><el-icon size="15"><Lock /></el-icon>&nbsp;暂访</el-button>
           <el-button type="success" plain @click="login" style="width: 65%;"><el-icon size="15"><Key /></el-icon>&nbsp;登录</el-button>
         </div>
       </el-form-item>
