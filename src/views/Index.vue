@@ -387,6 +387,10 @@
             <!-- 文件管理 -->
             <div v-show="op === 1">
               <el-table ref="fileTableData" :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <template #empty>
+                  <el-empty description="暂无文件"></el-empty>
+                </template>
+
                 <el-table-column type="index" label="序号" width="80" align="center"
                                  :index="(filePageInfo.current - 1) * filePageInfo.size + 1">
                 </el-table-column>
@@ -498,6 +502,10 @@
             <!-- 语录管理 -->
             <div v-show="op === 3">
               <el-table ref="sayingTableData" :data="filteredSayingTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <template #empty>
+                  <el-empty description="暂无语录"></el-empty>
+                </template>
+
                 <el-table-column v-if="hasSayingFilter" type="index" label="序号" width="60" align="center">
                 </el-table-column>
 
@@ -550,6 +558,10 @@
             <!-- 用户管理 -->
             <div v-show="op === 5">
               <el-table ref="userTableData" :data="filteredUserTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <template #empty>
+                  <el-empty description="暂无用户"></el-empty>
+                </template>
+
                 <el-table-column v-if="hasUserFilter" type="index" label="序号" width="60" align="center">
                 </el-table-column>
 
@@ -624,6 +636,10 @@
             <!-- 群组管理 -->
             <div v-show="op === 6">
               <el-table ref="groupTableData" :data="filteredGroupTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <template #empty>
+                  <el-empty description="暂无群组"></el-empty>
+                </template>
+
                 <el-table-column v-if="hasGroupFilter" type="index" label="序号" width="60" align="center">
                 </el-table-column>
 
@@ -674,6 +690,10 @@
             <!-- 物品管理 -->
             <div v-show="op === 7">
               <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
+                <template #empty>
+                  <el-empty description="暂无物品"></el-empty>
+                </template>
+
                 <el-table-column v-if="hasItemFilter" type="index" label="序号" width="60" align="center">
                 </el-table-column>
 
@@ -974,6 +994,10 @@
       <!-- 搜索对话框 -->
       <el-dialog title="搜索结果" v-model="searchTableVisible" width="75%">
         <el-table ref="searchData" :data="searchData" style="width: 100%" stripe>
+          <template #empty>
+            <el-empty description="无搜索结果"></el-empty>
+          </template>
+
           <el-table-column type="index" label="序号" width="60" align="center">
           </el-table-column>
 
@@ -1612,6 +1636,10 @@
       <!-- 用户库存对话框 -->
       <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
         <el-table ref="inventoriesData" :data="inventoriesData" style="width: 100%" stripe>
+          <template #empty>
+            <el-empty description="暂无库存"></el-empty>
+          </template>
+
           <el-table-column type="index" label="序号" width="60" align="center">
           </el-table-column>
 
