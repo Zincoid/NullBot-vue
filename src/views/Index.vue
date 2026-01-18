@@ -66,24 +66,44 @@
 
           <!-- 右侧用户信息 -->
           <el-sub-menu style="margin-left: auto;">
-            <el-menu-item>
+            <div style="padding: 10px; margin-bottom: 2px">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <el-avatar
+                    :size="40"
+                    :src="info.avatar"
+                    style="background-color: #433d3d;"
+                >
+                  <template #default>
+                    <el-icon size="20px"><User /></el-icon>
+                  </template>
+                </el-avatar>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">{{ info.username || '未设置' }}</div>
+                  <div style="font-size: 12px">
+                    {{ this.userType === 0 ? '访客' : '管理员' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;" @click="initRootFile">
                 <el-icon size="15"><Coin /></el-icon>根初始化
               </el-button>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
                 <el-icon size="15"><Switch /></el-icon>数据同步
               </el-button>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
                 <el-icon size="15"><SwitchButton /></el-icon>退出登录
               </el-button>
             </el-menu-item>
             <template #title>
               <el-icon><User /></el-icon>
-              <el-text size="large" tag="b">{{ " "+info.username }}</el-text>
+              <el-text size="large" tag="b">&nbsp;{{ info.username || '未设置' }}</el-text>
             </template>
           </el-sub-menu>
         </el-menu>
@@ -867,9 +887,12 @@
                 </el-descriptions-item>
               </el-descriptions>
 
-              <div style="position: fixed; bottom: 50px; right: 50px;">
-                <el-button type="warning" round plain @click="handleAdminEdit">
+              <div style="position: fixed; bottom: 50px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
+                <el-button type="success" round plain @click="handleAdminEdit">
                   <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
+                </el-button>
+                <el-button type="warning" round plain @click="handlePasswordChange">
+                  <el-icon size="15"><Setting /></el-icon>&nbsp;修改密码
                 </el-button>
                 <el-popconfirm title="确认注销吗?" @confirm="deleteAdmin">
                   <template #reference>
@@ -1783,6 +1806,31 @@
         </template>
       </el-dialog>
 
+      <!-- 密码修改对话框 -->
+      <el-dialog v-model="passwordChangeVisible" title="密码修改" width="500px">
+        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" label-width="100px">
+          <el-form-item label="旧密码" prop="oldPassword" :required="true">
+            <el-input v-model="passwordChangeForm.oldPassword" show-password style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="新密码" prop="newPassword" :required="true">
+            <el-input v-model="passwordChangeForm.newPassword" show-password style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="确认密码" prop="confirmPassword" :required="true">
+            <el-input v-model="passwordChangeForm.confirmPassword" show-password style="width: 90%">
+            </el-input>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="admin-edit-dialog-footer">
+            <el-button plain @click="passwordChangeVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handlePasswordChangeSubmit">更改</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
     </el-container>
   </div>
 </template>
@@ -1870,11 +1918,12 @@ export default {
       currentTime: '',
       timer: null,
 
-      token: 'null',
+      token: '',
       info: {
         id: 0,
-        username: 'null',
-        email: 'null'
+        // avatar: '',  // 暂无
+        username: '',
+        email: ''
       },
 
       adminEditVisible: false,
@@ -1882,6 +1931,13 @@ export default {
         id: 0,
         username: '',
         email: ''
+      },
+
+      passwordChangeVisible: false,
+      passwordChangeForm: {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
       },
 
       userType: 0,
@@ -3377,6 +3433,32 @@ export default {
         }
       }).catch(err => {
         this.$message.error("注销失败: " + (err.message || '未知错误'))
+      })
+    },
+
+    handlePasswordChange() {
+      this.passwordChangeForm = {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
+      this.passwordChangeVisible = true
+    },
+
+    handlePasswordChangeSubmit() {
+      this.$axios.post('/changePwd', this.passwordChangeForm, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          this.passwordChangeVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(err => {
+        this.$message.error("更改失败: " + (err.message || '未知错误'))
       })
     },
 
