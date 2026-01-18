@@ -802,8 +802,8 @@
 
             <!-- 数据统计 -->
             <div v-if="op === 4" style="margin-right: 40px; margin-top: 10px;">
-              <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center;">
-                  <div class="statistic-card">
+              <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center">
+                  <div class="statistic-card" style="min-width: 110px">
                     <el-statistic :value="totalVisits">
                       <template #title>
                         <div style="display: inline-flex; align-items: center">
