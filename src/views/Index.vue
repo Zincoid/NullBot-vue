@@ -35,9 +35,8 @@
               </el-button>
             </div>
             <!-- op=2时 显示问候 -->
-            <h3 v-show="op === 2" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <h3 v-show="op === 2" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; white-space: nowrap">
               <span>Ciallo～(∠・ω< ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
-
             </h3>
             <!-- op=3时 显示语录管理 -->
             <h3 v-show="op === 3" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
@@ -828,11 +827,14 @@
             <!-- 个人中心 -->
             <div v-show="op === 2" style="margin-right: 20px;">
               <el-descriptions title="用户信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+                <el-descriptions-item label="ID">
+                  <el-tag type="danger">{{ info.id || '无' }}</el-tag>
+                </el-descriptions-item>
                 <el-descriptions-item label="名称">
-                  <el-tag type="success">{{ info.username }}</el-tag>
+                  <el-tag type="success">{{ info.username || '无' }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="邮箱">
-                  <el-tag>{{ info.email }}</el-tag>
+                  <el-tag>{{ info.email || '无' }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
@@ -841,11 +843,21 @@
                   <el-tag type="warning">{{ userType }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="Token">
-                  <el-tag type="warning">{{ token }}</el-tag>
+                  <el-tag type="warning" style="white-space: normal; word-break: break-all; height: auto; padding-bottom: 5px; padding-top: 5px">{{ token }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
-              <div style="margin-top: 210px; display: flex; justify-content: flex-end;">
+              <div style="position: fixed; bottom: 50px; right: 50px;">
+                <el-button type="warning" round plain @click="handleAdminEdit">
+                  <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
+                </el-button>
+                <el-popconfirm title="确认注销吗?" @confirm="deleteAdmin">
+                  <template #reference>
+                    <el-button type="primary" round plain :disabled="userType === 0">
+                      <el-icon size="15"><Delete /></el-icon>&nbsp;注销账号
+                    </el-button>
+                  </template>
+                </el-popconfirm>
                 <el-button type="danger" round plain @click="logout">
                   <el-icon size="15"><SwitchButton /></el-icon>&nbsp;退出登录
                 </el-button>
@@ -1718,6 +1730,31 @@
         </template>
       </el-dialog>
 
+      <!-- 个人信息编辑对话框 -->
+      <el-dialog v-model="adminEditVisible" title="个人信息修改" width="500px">
+        <el-form ref="adminEditFormRef" :model="adminEditForm" label-width="100px">
+          <el-form-item label="ID" prop="id">
+            <el-input v-model="adminEditForm.id" :disabled="true" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="名称" prop="username">
+            <el-input v-model="adminEditForm.username" style="width: 90%"/>
+          </el-form-item>
+
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="adminEditForm.email" style="width: 90%">
+            </el-input>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="admin-edit-dialog-footer">
+            <el-button plain @click="adminEditVisible = false">取消</el-button>
+            <el-button plain type="primary" @click="handleAdminEditSubmit">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
     </el-container>
   </div>
 </template>
@@ -1807,8 +1844,16 @@ export default {
 
       token: 'null',
       info: {
+        id: 0,
         username: 'null',
         email: 'null'
+      },
+
+      adminEditVisible: false,
+      adminEditForm: {
+        id: 0,
+        username: '',
+        email: ''
       },
 
       userType: 0,
@@ -3287,6 +3332,48 @@ export default {
               placement: 'bottom-left',
             })
           })
+    },
+
+    deleteAdmin() {
+      this.$axios.delete('/delete', {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+          localStorage.clear()
+          this.$router.push('/login')
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(err => {
+        this.$message.error("注销失败: " + (err.message || '未知错误'))
+      })
+    },
+
+    handleAdminEdit() {
+      // 深拷贝info对象，避免修改原数据
+      this.adminEditForm = JSON.parse(JSON.stringify(this.info))
+      this.adminEditVisible = true
+    },
+
+    handleAdminEditSubmit() {
+      this.$axios.post('/update', this.adminEditForm, {
+        headers: {
+          token: localStorage.getItem("token")
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.getInfo()
+          this.$message.success(res.data.message)
+          this.adminEditVisible = false
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(err => {
+        this.$message.error("更新失败: " + (err.message || '未知错误'))
+      })
     },
 
     logout() {
