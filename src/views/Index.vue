@@ -888,10 +888,10 @@
               </el-descriptions>
 
               <div style="position: fixed; bottom: 50px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
-                <el-button type="success" round plain @click="handleAdminEdit">
+                <el-button type="success" round plain @click="handleAdminEdit" :disabled="userType === 0">
                   <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
                 </el-button>
-                <el-button type="warning" round plain @click="handlePasswordChange">
+                <el-button type="warning" round plain @click="handlePasswordChange" :disabled="userType === 0">
                   <el-icon size="15"><Setting /></el-icon>&nbsp;修改密码
                 </el-button>
                 <el-popconfirm title="确认注销吗?" @confirm="deleteAdmin">
