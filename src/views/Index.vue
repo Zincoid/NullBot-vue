@@ -171,6 +171,14 @@
             >
               <span><el-icon><UserFilled /></el-icon>个人中心</span>
             </el-menu-item>
+            <el-menu-item
+                index="8"
+                v-if="userType === 1"
+                @click="shiftMenu(8)"
+                style="display: flex; justify-content: center; align-items: center;"
+            >
+              <span><el-icon><Platform /></el-icon>系统调用</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
 
@@ -906,6 +914,28 @@
                 </el-button>
               </div>
             </div>
+
+            <!-- 系统调用 -->
+            <div v-show="op === 8" style="margin-right: 20px;">
+              <el-form>
+                <el-form-item label="调用指令" prop="invokeCommand">
+                  <div style="display: flex; width: 100%">
+                    <el-input placeholder="请输入指令... 格式: [Bean名] [方法名] [参数...]" v-model="invokeCommand" style="flex: 1; min-width: 0;"/>
+                    <el-button type="danger" plain @click="this.invokeResult = ''" style="white-space: nowrap; margin-left: 0">
+                      <el-icon size="15"><Delete /></el-icon>&nbsp;清空
+                    </el-button>
+                    <el-button type="primary" plain @click="invoke" style="white-space: nowrap; margin-left: 0">
+                      <el-icon size="15"><Grid /></el-icon>&nbsp;调用
+                    </el-button>
+                  </div>
+                </el-form-item>
+
+                <el-form-item label="执行结果" prop="invokeResult">
+                  <el-input placeholder="无指令输出..." v-model="invokeResult" type="textarea" :autosize="{ minRows: 50, maxRows: 50 }" style="width: 100%"/>
+                </el-form-item>
+              </el-form>
+            </div>
+
           </el-main>
 
           <!-- 下部分页区域 -->
@@ -1851,7 +1881,7 @@ import {
   Filter,
   Folder,
   FolderAdd,
-  FolderOpened,
+  FolderOpened, Grid,
   Histogram,
   HomeFilled,
   InfoFilled,
@@ -1859,7 +1889,7 @@ import {
   MostlyCloudy,
   OfficeBuilding,
   Operation,
-  Picture,
+  Picture, Platform,
   Plus,
   Promotion,
   RefreshLeft,
@@ -1880,6 +1910,8 @@ import {ElLoading, ElMessage, ElNotification} from "element-plus";
 
 export default {
   components: {
+    Grid,
+    Platform,
     CopyDocument,
     TurnOff,
     Coin,
@@ -2110,7 +2142,10 @@ export default {
       topUsersData: [],
       topUsersAxis: [],
       topCommandsData: [],
-      topCommandsAxis: []
+      topCommandsAxis: [],
+
+      invokeCommand: '',
+      invokeResult: ''
     }
   },
 
@@ -3489,6 +3524,26 @@ export default {
     logout() {
       localStorage.clear()
       this.$router.push('/login')
+    },
+
+    invoke() {
+      this.$axios.get('/system/invoke', {
+        headers: {
+          token: localStorage.getItem("token")
+        },
+        params: {
+          command: this.invokeCommand
+        }
+      }).then(res => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.message)
+        } else {
+          this.$message.error(res.data.message)
+        }
+        this.invokeResult = this.invokeResult + res.data.data.result  + '\n'
+      }).catch(err => {
+        this.$message.error("失败: " + (err.message || '未知错误'))
+      })
     }
   },
 
