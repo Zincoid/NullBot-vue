@@ -895,7 +895,7 @@
                 </el-descriptions-item>
               </el-descriptions>
 
-              <div style="position: fixed; bottom: 50px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
+              <div style="position: fixed; bottom: 75px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
                 <el-button type="success" round plain @click="handleAdminEdit" :disabled="userType === 0">
                   <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
                 </el-button>
