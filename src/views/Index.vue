@@ -1128,14 +1128,14 @@
 
       <!-- 图片/视频预览对话框 -->
       <el-dialog v-model="previewVisible" :title="previewTitle" :destroy-on-close="true" width="70%" top="5vh" center>
-        <div style="text-align: center; max-height: 70vh; overflow: auto;">
+        <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
           <!-- 图片预览 -->
           <el-image
               v-if="previewType === 'image'"
               :src="previewUrl"
               :preview-src-list="[previewUrl]"
               fit="contain"
-              style="max-width: 100%; max-height: 65vh;"
+              style="width: 100%; display: flex; justify-content: center;"
               :hide-on-click-modal="true"
           />
           <!-- 视频预览 -->
@@ -1151,11 +1151,10 @@
           <!-- 音频预览 -->
           <audio
               v-else-if="previewType === 'audio'"
-              ref="videoPlayer"
               :src="previewUrl"
               controls
               autoplay
-              style="max-width: 100%; max-height: 65vh;"
+              style="width: 100%;"
           >
             您的浏览器不支持 audio 标签。
           </audio>
