@@ -3420,31 +3420,38 @@ export default {
       })
     },
 
-    sync() {
+    sync(isFileSync = true) {
       const loading = ElLoading.service({
         lock: true,
         text: '同步中...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      this.$axios.get('/file/sync', {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.data.code === 200) {
-          ElMessage({
-            message: '本地与数据库 - 已同步',
-            type: 'success',
-            placement: 'bottom-left',
+
+      // 根据参数决定是否执行文件同步
+      const syncPromise = isFileSync
+          ? this.$axios.get('/file/sync', {
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          }).then(res => {
+            if (res.data.code === 200) {
+              ElMessage({
+                message: '本地与数据库 - 已同步',
+                type: 'success',
+                placement: 'bottom-left',
+              })
+            } else if (res.data.code === 400) {
+              ElMessage({
+                message: '本地与数据库 - 同步失败',
+                type: 'error',
+                placement: 'bottom-left',
+              })
+            }
           })
-        } else if (res.data.code === 400) {
-          ElMessage({
-            message: '本地与数据库 - 同步失败',
-            type: 'error',
-            placement: 'bottom-left',
-          })
-        }
-      })
+          : Promise.resolve()
+
+      // 后续操作链
+      syncPromise
           .then(() => this.getInfo())
           .then(() => this.getStatistic())
           .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
@@ -3570,7 +3577,7 @@ export default {
       this.$router.push('/login')
       return
     }
-    this.sync()
+    this.sync(false)
   },
 
   mounted() {
