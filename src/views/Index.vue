@@ -1249,8 +1249,8 @@
             </div>
 
             <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
-              <el-form-item label="会话范围" prop="scope">
-                <el-select v-model="groupFuncForm.scope" style="width: 250px">
+              <el-form-item label="会话范围" prop="chatScope">
+                <el-select v-model="groupFuncForm.chatScope" style="width: 250px">
                   <el-option label="Group" :value="'Group'" />
                   <el-option label="Personal" :value="'Personal'" />
                   <el-option label="Monitor" :value="'Monitor'" />
@@ -2074,7 +2074,7 @@ export default {
       groupFuncForm: {
         groupId: '',
 
-        scope: null,
+        chatScope: null,
         antiInjection: false,
         thinking: false,
         voice: false,
