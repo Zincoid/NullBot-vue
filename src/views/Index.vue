@@ -1253,8 +1253,7 @@
                 <el-select v-model="groupFuncForm.limitScope" style="width: 250px">
                   <el-option label="Group" :value="'Group'" />
                   <el-option label="User" :value="'User'" />
-                  <el-option label="Command" :value="'Command'" />
-                  <el-option label="Global" :value="'Global'" />
+                  <el-option label="Cmd" :value="'Cmd'" />
                 </el-select>
               </el-form-item>
 
