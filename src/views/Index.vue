@@ -1241,6 +1241,33 @@
       <!-- 功能设置对话框 -->
       <el-dialog v-model="groupFuncVisible" :title="`功能设置 - 群聊 ${groupFuncForm.groupId}`" width="450px">
         <div class="function-sections">
+          <!-- Limit 功能模块 -->
+          <div class="function-section">
+            <div class="section-header">
+              <el-icon><Odometer /></el-icon>
+              <span class="section-title">Limit 设置</span>
+            </div>
+
+            <el-form ref="groupFuncLimitFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+              <el-form-item label="限速范围" prop="limitScope">
+                <el-select v-model="groupFuncForm.limitScope" style="width: 250px">
+                  <el-option label="Group" :value="'Group'" />
+                  <el-option label="User" :value="'User'" />
+                  <el-option label="Command" :value="'Command'" />
+                  <el-option label="Global" :value="'Global'" />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="限速容量" prop="limitCapacity" :required="true">
+                <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." style="width: 250px"/>
+              </el-form-item>
+
+              <el-form-item label="限速补充" prop="limitRefill" :required="true">
+                <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充..." style="width: 250px"/>
+              </el-form-item>
+            </el-form>
+          </div>
+
           <!-- AIChat 功能模块 -->
           <div class="function-section">
             <div class="section-header">
@@ -1903,7 +1930,7 @@ import {
   HomeFilled,
   InfoFilled,
   Monitor,
-  MostlyCloudy,
+  MostlyCloudy, Odometer,
   OfficeBuilding,
   Operation,
   Picture, Platform,
@@ -1927,6 +1954,7 @@ import {ElLoading, ElMessage, ElNotification} from "element-plus";
 
 export default {
   components: {
+    Odometer,
     Grid,
     Platform,
     CopyDocument,
@@ -2073,6 +2101,10 @@ export default {
       groupFuncVisible: false,
       groupFuncForm: {
         groupId: '',
+
+        limitScope: null,
+        limitCapacity: 25,
+        limitRefill: 10,
 
         chatScope: null,
         antiInjection: false,
