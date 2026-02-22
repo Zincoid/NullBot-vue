@@ -1261,8 +1261,12 @@
                 <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." style="width: 250px"/>
               </el-form-item>
 
-              <el-form-item label="限速补充" prop="limitRefill" :required="true">
-                <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充..." style="width: 250px"/>
+              <el-form-item label="补充数量" prop="limitRefill" :required="true">
+                <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充数量..." style="width: 250px"/>
+              </el-form-item>
+
+              <el-form-item label="补充间隔" prop="limitInterval" :required="true">
+                <el-input v-model="groupFuncForm.limitInterval" placeholder="请输入补充间隔(单位:Min)..." style="width: 250px"/>
               </el-form-item>
             </el-form>
           </div>
@@ -2104,6 +2108,7 @@ export default {
         limitScope: null,
         limitCapacity: 25,
         limitRefill: 10,
+        limitInterval: 1,
 
         chatScope: null,
         antiInjection: false,
