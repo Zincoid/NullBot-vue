@@ -1431,12 +1431,16 @@
             </div>
 
             <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
-              <el-form-item label="切割比例" prop="guessRatio" :required="true">
-                <el-input v-model="groupFuncForm.guessRatio" placeholder="请输入比例..." style="width: 250px"/>
+              <el-form-item label="切割比例" prop="guessCropRatio" :required="true">
+                <el-input v-model="groupFuncForm.guessCropRatio" placeholder="请输入切割比例..." style="width: 250px"/>
+              </el-form-item>
+
+              <el-form-item label="透明比例" prop="guessTransparentRatio" :required="true">
+                <el-input v-model="groupFuncForm.guessTransparentRatio" placeholder="请输入透明比例(最大)..." style="width: 250px"/>
               </el-form-item>
 
               <el-form-item label="切割边距" prop="guessPadding" :required="true">
-                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入边距..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入切割边距..." style="width: 250px"/>
               </el-form-item>
             </el-form>
           </div>
@@ -2126,7 +2130,8 @@ export default {
         pokeDetect: false,
         recallDetect: false,
 
-        guessRatio: 0.1,
+        guessCropRatio: 0.1,
+        guessTransparentRatio: 0.75,
         guessPadding: 250
       },
 
