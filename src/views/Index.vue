@@ -2477,51 +2477,51 @@ export default {
       }
     },
 
-    handleFileCurrentChange(currentPage) {
-      this.getFilePage(currentPage, this.filePageInfo.size)
+    handleFileCurrentChange(current) {
+      this.getFilePage(current, this.filePageInfo.size)
     },
 
-    handleFileSizeChange(pageSize) {
-      this.getFilePage(1, pageSize)
+    handleFileSizeChange(size) {
+      this.getFilePage(1, size)
     },
 
-    handleSayingCurrentChange(currentPage) {
-      this.getSayingPage(currentPage, this.sayingPageInfo.size)
+    handleSayingCurrentChange(current) {
+      this.getSayingPage(current, this.sayingPageInfo.size)
       this.getSayingList()
     },
 
-    handleSayingSizeChange(pageSize) {
-      this.getSayingPage(1, pageSize)
+    handleSayingSizeChange(size) {
+      this.getSayingPage(1, size)
       this.getSayingList()
     },
 
-    handleUserCurrentChange(currentPage) {
-      this.getUserPage(currentPage, this.userPageInfo.size)
+    handleUserCurrentChange(current) {
+      this.getUserPage(current, this.userPageInfo.size)
       this.getUserList()
     },
 
-    handleUserSizeChange(pageSize) {
-      this.getUserPage(1, pageSize)
+    handleUserSizeChange(size) {
+      this.getUserPage(1, size)
       this.getUserList()
     },
 
-    handleGroupCurrentChange(currentPage) {
-      this.getGroupPage(currentPage, this.groupPageInfo.size)
+    handleGroupCurrentChange(current) {
+      this.getGroupPage(current, this.groupPageInfo.size)
       this.getGroupList()
     },
 
-    handleGroupSizeChange(pageSize) {
-      this.getGroupPage(1, pageSize)
+    handleGroupSizeChange(size) {
+      this.getGroupPage(1, size)
       this.getGroupList()
     },
 
-    handleItemCurrentChange(currentPage) {
-      this.getItemPage(currentPage, this.itemPageInfo.size)
+    handleItemCurrentChange(current) {
+      this.getItemPage(current, this.itemPageInfo.size)
       this.getItemList()
     },
 
-    handleItemSizeChange(pageSize) {
-      this.getItemPage(1, pageSize)
+    handleItemSizeChange(size) {
+      this.getItemPage(1, size)
       this.getItemList()
     },
 
@@ -2537,9 +2537,9 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     },
 
-    getFilePage(currentPage, pageSize) {
+    getFilePage(current, size) {
       this.$axios({
-        url: '/file/page/' + currentPage + '/' + pageSize,
+        url: '/file/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
         },
@@ -2548,11 +2548,11 @@ export default {
           curDir: this.curDir,
         }
       }).then(res => {
-        this.fileTableData = JSON.parse(JSON.stringify(res.data.data.filePage.files))
+        this.fileTableData = JSON.parse(JSON.stringify(res.data.data.filePage.data))
         this.filePageInfo.total = res.data.data.filePage.total
-        this.filePageInfo.size = res.data.data.filePage.pageSize
-        this.filePageInfo.current = res.data.data.filePage.currentPage
-        this.filePageInfo.pages = res.data.data.filePage.totalPage
+        this.filePageInfo.size = res.data.data.filePage.size
+        this.filePageInfo.current = res.data.data.filePage.current
+        this.filePageInfo.pages = res.data.data.filePage.pages
       })
     },
 
@@ -2568,7 +2568,7 @@ export default {
           curDir: this.curDir,
         }
       }).then(res => {
-        this.searchData = JSON.parse(JSON.stringify(res.data.data.filePage.files))
+        this.searchData = JSON.parse(JSON.stringify(res.data.data.filePage.data))
         this.searchTableVisible = true
         console.log('searchData:')
         console.log(this.searchData)
@@ -2879,19 +2879,19 @@ export default {
       })
     },
 
-    getSayingPage(currentPage, pageSize) {
+    getSayingPage(current, size) {
       this.$axios({
-        url: '/saying/page/' + currentPage + '/' + pageSize,
+        url: '/saying/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
         },
         method: 'GET'
       }).then(res => {
-        this.sayingTableData = JSON.parse(JSON.stringify(res.data.data.sayingPage.sayings))
+        this.sayingTableData = JSON.parse(JSON.stringify(res.data.data.sayingPage.data))
         this.sayingPageInfo.total = res.data.data.sayingPage.total
-        this.sayingPageInfo.size = res.data.data.sayingPage.pageSize
-        this.sayingPageInfo.current = res.data.data.sayingPage.currentPage
-        this.sayingPageInfo.pages = res.data.data.sayingPage.totalPage
+        this.sayingPageInfo.size = res.data.data.sayingPage.size
+        this.sayingPageInfo.current = res.data.data.sayingPage.current
+        this.sayingPageInfo.pages = res.data.data.sayingPage.pages
       })
     },
 
@@ -2952,19 +2952,19 @@ export default {
       })
     },
 
-    getUserPage(currentPage, pageSize) {
+    getUserPage(current, size) {
       this.$axios({
-        url: '/user/page/' + currentPage + '/' + pageSize,
+        url: '/user/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
         },
         method: 'GET'
       }).then(res => {
-        this.userTableData = JSON.parse(JSON.stringify(res.data.data.userPage.users))
+        this.userTableData = JSON.parse(JSON.stringify(res.data.data.userPage.data))
         this.userPageInfo.total = res.data.data.userPage.total
-        this.userPageInfo.size = res.data.data.userPage.pageSize
-        this.userPageInfo.current = res.data.data.userPage.currentPage
-        this.userPageInfo.pages = res.data.data.userPage.totalPage
+        this.userPageInfo.size = res.data.data.userPage.size
+        this.userPageInfo.current = res.data.data.userPage.current
+        this.userPageInfo.pages = res.data.data.userPage.pages
       })
     },
 
@@ -3051,19 +3051,19 @@ export default {
       })
     },
 
-    getGroupPage(currentPage, pageSize) {
+    getGroupPage(current, size) {
       this.$axios({
-        url: '/group/page/' + currentPage + '/' + pageSize,
+        url: '/group/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
         },
         method: 'GET'
       }).then(res => {
-        this.groupTableData = JSON.parse(JSON.stringify(res.data.data.groupPage.groups))
+        this.groupTableData = JSON.parse(JSON.stringify(res.data.data.groupPage.data))
         this.groupPageInfo.total = res.data.data.groupPage.total
-        this.groupPageInfo.size = res.data.data.groupPage.pageSize
-        this.groupPageInfo.current = res.data.data.groupPage.currentPage
-        this.groupPageInfo.pages = res.data.data.groupPage.totalPage
+        this.groupPageInfo.size = res.data.data.groupPage.size
+        this.groupPageInfo.current = res.data.data.groupPage.current
+        this.groupPageInfo.pages = res.data.data.groupPage.pages
       })
     },
 
@@ -3210,19 +3210,19 @@ export default {
       })
     },
 
-    getItemPage(currentPage, pageSize) {
+    getItemPage(current, size) {
       this.$axios({
-        url: '/item/page/' + currentPage + '/' + pageSize,
+        url: '/item/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
         },
         method: 'GET'
       }).then(res => {
-        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.items))
+        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.data))
         this.itemPageInfo.total = res.data.data.itemPage.total
-        this.itemPageInfo.size = res.data.data.itemPage.pageSize
-        this.itemPageInfo.current = res.data.data.itemPage.currentPage
-        this.itemPageInfo.pages = res.data.data.itemPage.totalPage
+        this.itemPageInfo.size = res.data.data.itemPage.size
+        this.itemPageInfo.current = res.data.data.itemPage.current
+        this.itemPageInfo.pages = res.data.data.itemPage.pages
       })
     },
 
