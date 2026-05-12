@@ -90,10 +90,10 @@ export default {
       this.$axios.post('/regist', this.registForm)
           .then(res => {
             console.log(res.data)
-            if (res.data.code === 200) {
+            if (res.data.code === 1) {
               this.$message.success(res.data.message)
               this.$router.push('/login')
-            } else if (res.data.code === 400) {
+            } else {
               this.$message.warning(res.data.message)
             }
           })

@@ -74,11 +74,11 @@ export default {
       this.$axios.post('/login', this.loginForm)
           .then(res => {
             console.log(res.data)
-            if (res.data.code === 200){
+            if (res.data.code === 1){
               this.$message.success(res.data.message)
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
-            }else if (res.data.code === 400){
+            } else {
               this.$message.warning(res.data.message)
             }
           })
@@ -88,11 +88,11 @@ export default {
       this.$axios.post('/guest')
           .then(res => {
             console.log(res.data)
-            if (res.data.code === 200){
+            if (res.data.code === 1) {
               this.$message.success(res.data.message)
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
-            }else if (res.data.code === 400){
+            } else {
               this.$message.warning(res.data.message)
             }
           })
