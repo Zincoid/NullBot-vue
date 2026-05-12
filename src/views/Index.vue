@@ -3578,11 +3578,12 @@ export default {
         }
       }).then(res => {
         if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+          this.$message.success('调用成功')
+          this.invokeResult = this.invokeResult + res.data.data.result  + '\n'
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error('调用失败')
+          this.invokeResult = this.invokeResult + res.data.message  + '\n'
         }
-        this.invokeResult = this.invokeResult + res.data.data.result  + '\n'
       })
     }
   },
