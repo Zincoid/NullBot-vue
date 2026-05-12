@@ -94,7 +94,7 @@ export default {
               this.$message.success(res.data.message)
               this.$router.push('/login')
             } else {
-              this.$message.warning(res.data.message)
+              this.$message.warning(`管理员注册失败: ${res.data.message}`)
             }
           })
     },

@@ -2407,16 +2407,15 @@ export default {
         }
       }).then(res => {
         if (res.data.code === 1) {
-          this.totalVisits = res.data.data.totalVisits
-          this.visitsXAxis = res.data.data.visitsXAxis
-          this.visitsData = res.data.data.visitsData
-          this.topGroupsAxis = res.data.data.topGroupsAxis
-          this.topGroupsData = res.data.data.topGroupsData
-          this.topUsersAxis = res.data.data.topUsersAxis
-          this.topUsersData = res.data.data.topUsersData
-          this.topCommandsAxis = res.data.data.topCommandsAxis
-          this.topCommandsData = res.data.data.topCommandsData
-          console.log(this.visitsXAxis)
+          this.totalVisits = res.data.data.statistic.totalVisits
+          this.visitsXAxis = res.data.data.statistic.visitsXAxis
+          this.visitsData = res.data.data.statistic.visitsData
+          this.topGroupsAxis = res.data.data.statistic.topGroupsAxis
+          this.topGroupsData = res.data.data.statistic.topGroupsData
+          this.topUsersAxis = res.data.data.statistic.topUsersAxis
+          this.topUsersData = res.data.data.statistic.topUsersData
+          this.topCommandsAxis = res.data.data.statistic.topCommandsAxis
+          this.topCommandsData = res.data.data.statistic.topCommandsData
         } else {
           this.$message.error(res.data.message)
         }
@@ -2590,8 +2589,6 @@ export default {
         } else {
           this.$message.error(`${file.fileName} - ${res.data.message}`)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -2773,9 +2770,7 @@ export default {
           } else {
             this.$message.error(`${file.fileName} - ${res.data.message}`);
           }
-        }).catch(err => {
-          this.$message.error('重命名失败');
-        });
+        })
       }).catch(() => {
         this.$message.info('已取消重命名');
       });
@@ -2817,9 +2812,7 @@ export default {
           } else {
             this.$message.error(`${res.data.message}`);
           }
-        }).catch(err => {
-          this.$message.error('移动失败');
-        });
+        })
       }).catch(() => {
         this.$message.info('已取消移动');
       });
@@ -2907,8 +2900,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -2980,8 +2971,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -3079,8 +3068,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -3300,8 +3287,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -3363,8 +3348,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(() => {
-        this.$message.error("删除失败!")
       })
     },
 
@@ -3531,8 +3514,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(err => {
-        this.$message.error("注销失败: " + (err.message || '未知错误'))
       })
     },
 
@@ -3555,10 +3536,8 @@ export default {
           this.$message.success(res.data.message)
           this.passwordChangeVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(`更改失败: ${res.data.message}`)
         }
-      }).catch(err => {
-        this.$message.error("更改失败: " + (err.message || '未知错误'))
       })
     },
 
@@ -3581,8 +3560,6 @@ export default {
         } else {
           this.$message.error(res.data.message)
         }
-      }).catch(err => {
-        this.$message.error("更新失败: " + (err.message || '未知错误'))
       })
     },
 
@@ -3606,8 +3583,6 @@ export default {
           this.$message.error(res.data.message)
         }
         this.invokeResult = this.invokeResult + res.data.data.result  + '\n'
-      }).catch(err => {
-        this.$message.error("失败: " + (err.message || '未知错误'))
       })
     }
   },
