@@ -2406,7 +2406,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.totalVisits = res.data.data.totalVisits
           this.visitsXAxis = res.data.data.visitsXAxis
           this.visitsData = res.data.data.visitsData
@@ -2417,7 +2417,7 @@ export default {
           this.topCommandsAxis = res.data.data.topCommandsAxis
           this.topCommandsData = res.data.data.topCommandsData
           console.log(this.visitsXAxis)
-        } else if (res.data.code === 400) {
+        } else {
           this.$message.error(res.data.message)
         }
       })
@@ -2429,11 +2429,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           let info = res.data.data.info
           this.info = JSON.parse(JSON.stringify(info))
           this.userType = res.data.data.userType
-        } else if (res.data.code === 400) {
+        } else {
           this.$message.error(res.data.message)
         }
       })
@@ -2581,7 +2581,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
           if (this.searchTableVisible === true) {
@@ -2618,7 +2618,7 @@ export default {
             timeout: 300000, // 5分钟超时
             maxContentLength: Infinity,
           })
-          if (res.data.code === 200) {
+          if (res.data.code === 1) {
             this.$message.success(`${fileObj.name} - 上传成功`)
           } else {
             this.$message.error(`${fileObj.name} - ${res.data.message}`)
@@ -2715,7 +2715,7 @@ export default {
               token: localStorage.getItem("token")
             }
           }).then(res => {
-            if (res.data.code === 200) {
+            if (res.data.code === 1) {
               this.$message({
                 type: 'success',
                 message: value + '创建成功!'
@@ -2763,7 +2763,7 @@ export default {
             newFileName: value
           }
         }).then(res => {
-          if (res.data.code === 200) {
+          if (res.data.code === 1) {
             // 刷新当前视图
             this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
@@ -2807,7 +2807,7 @@ export default {
             newDir: value
           }
         }).then(res => {
-          if (res.data.code === 200) {
+          if (res.data.code === 1) {
             // 刷新当前视图
             this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
@@ -2839,7 +2839,7 @@ export default {
               visible: !row.visible
             }
           }).then(res => {
-            if (res.data.code === 200) {
+            if (res.data.code === 1) {
               // 刷新当前视图
               this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
               if (this.searchTableVisible) {
@@ -2901,7 +2901,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshSaying()
         } else {
@@ -2974,7 +2974,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshUser()
         } else {
@@ -3001,7 +3001,7 @@ export default {
         data: this.userForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshUser()
           this.userSettingVisible = false
@@ -3073,7 +3073,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshGroup()
         } else {
@@ -3100,7 +3100,7 @@ export default {
         data: this.groupForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshGroup()
           this.groupSettingVisible = false
@@ -3119,7 +3119,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.groupFuncForm = JSON.parse(JSON.stringify(res.data.data.setting));
           this.groupFuncVisible = true
         } else {
@@ -3138,7 +3138,7 @@ export default {
         data: this.groupFuncForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.groupFuncVisible = false
         } else {
@@ -3242,7 +3242,7 @@ export default {
         data: this.itemForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshItem()
           this.itemSettingVisible = false
@@ -3278,7 +3278,7 @@ export default {
         data: this.itemForm,
         method: 'POST'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshItem()
           this.itemAddingVisible = false
@@ -3294,7 +3294,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.refreshItem()
         } else {
@@ -3357,7 +3357,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.getInventoryList(inventory.ownerId)
         } else {
@@ -3384,7 +3384,7 @@ export default {
         data: this.inventoryForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.getInventoryList(this.inventoryForm.ownerId)
           this.inventorySettingVisible = false
@@ -3407,7 +3407,7 @@ export default {
           itemId: itemid
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.getInventoryList(userId)
         } else {
@@ -3445,15 +3445,15 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           ElMessage({
-            message: 'Root 文件 - 初始化完成',
+            message: `Root 文件 - ${res.data.message}`,
             type: 'success',
             placement: 'bottom-left',
           })
-        } else if (res.data.code === 400) {
+        } else {
           ElMessage({
-            message: 'Root 文件 - 已初始化过',
+            message: `Root 文件 - ${res.data.message}`,
             type: 'warning',
             placement: 'bottom-left',
           })
@@ -3475,13 +3475,13 @@ export default {
               token: localStorage.getItem("token")
             }
           }).then(res => {
-            if (res.data.code === 200) {
+            if (res.data.code === 1) {
               ElMessage({
                 message: '本地与数据库 - 已同步',
                 type: 'success',
                 placement: 'bottom-left',
               })
-            } else if (res.data.code === 400) {
+            } else {
               ElMessage({
                 message: '本地与数据库 - 同步失败',
                 type: 'error',
@@ -3524,7 +3524,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           localStorage.clear()
           this.$router.push('/login')
@@ -3551,7 +3551,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
           this.passwordChangeVisible = false
         } else {
@@ -3574,7 +3574,7 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.getInfo()
           this.$message.success(res.data.message)
           this.adminEditVisible = false
@@ -3600,7 +3600,7 @@ export default {
           command: this.invokeCommand
         }
       }).then(res => {
-        if (res.data.code === 200) {
+        if (res.data.code === 1) {
           this.$message.success(res.data.message)
         } else {
           this.$message.error(res.data.message)
