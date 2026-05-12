@@ -10,8 +10,8 @@ import * as echarts from 'echarts'
 
 const app = createApp(App)
 
-axios.defaults.baseURL="http://101.200.136.96:8080/nullbot"  // 开发环境
-// axios.defaults.baseURL = "/api"  // 生产环境
+// axios.defaults.baseURL="http://101.200.136.96:8080/nullbot"  // 开发环境
+axios.defaults.baseURL = "/api"  // 生产环境
 
 Object.keys(Icons).forEach(key => {  
    app.component(key, Icons[key]);  
