@@ -88,3 +88,19 @@ export const moveFileApi = (fileId, newDir) => {
 export const setVisibleApi = (fileId, visible) => {
     return request.get(`/file/setVisible/${fileId}`, { params: { visible } })
 }
+
+/**
+ * 文件系统初始化接口
+ * @returns {Promise}
+ */
+export const initApi = () => {
+    return request.get('/file/init');
+}
+
+/**
+ * 文件系统同步接口
+ * @returns {Promise}
+ */
+export const syncApi = () => {
+    return request.get('/file/sync');
+}

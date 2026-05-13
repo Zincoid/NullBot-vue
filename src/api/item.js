@@ -11,8 +11,8 @@ export const getItemListApi = () => {
 
 /**
  * 物品分页获取接口
- * @param {number} current
- * @param {number} size
+ * @param {number} current 当前页码
+ * @param {number} size 每页数量
  * @returns {Promise}
  */
 export const getItemPageApi = (current, size) => {
@@ -21,25 +21,25 @@ export const getItemPageApi = (current, size) => {
 
 /**
  * 物品更新接口
- * @param {Object} data
+ * @param {Object} itemForm 物品表单数据
  * @returns {Promise}
  */
-export const updateItemApi = (data) => {
-    return request.put('/item/update', data);
+export const updateItemApi = (itemForm) => {
+    return request.put('/item/update', itemForm);
 }
 
 /**
  * 物品添加接口
- * @param {Object} data
+ * @param {Object} itemForm 物品表单数据
  * @returns {Promise}
  */
-export const addItemApi = (data) => {
-    return request.post('/item/add', data);
+export const addItemApi = (itemForm) => {
+    return request.post('/item/add', itemForm);
 }
 
 /**
  * 物品删除接口
- * @param {number} itemId
+ * @param {number} itemId 物品ID
  * @returns {Promise}
  */
 export const deleteItemApi = (itemId) => {

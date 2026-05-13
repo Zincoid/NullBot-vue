@@ -2,9 +2,7 @@ import request from '@/utils/request';
 
 /**
  * 管理登录接口
- * @param {Object} loginForm
- * @param {string} loginForm.id
- * @param {string} loginForm.password
+ * @param {Object} loginForm 登录表单数据
  * @returns {Promise}
  */
 export const loginApi = (loginForm) => {
@@ -21,15 +19,28 @@ export const guestApi = () => {
 
 /**
  * 管理员注册接口
- * @param {Object} registForm
- * @param {string} registForm.id
- * @param {string} registForm.password
- * @param {string} registForm.email
- * @param {string} registForm.activationCode
+ * @param {Object} registForm 注册表单数据
  * @returns {Promise}
  */
 export const registApi = (registForm) => {
     return request.post('/regist', registForm);
+}
+
+/**
+ * 用户删除接口
+ * @returns {Promise}
+ */
+export const deleteApi = () => {
+    return request.delete('/delete');
+}
+
+/**
+ * 用户更新接口
+ * @param {Object} adminEditForm 用户更新表单数据
+ * @returns {Promise}
+ */
+export const updateApi = (adminEditForm) => {
+    return request.post('/update', adminEditForm);
 }
 
 /**
@@ -41,8 +52,17 @@ export const getInfoApi = () => {
 }
 
 /**
+ * 密码修改接口
+ * @param {Object} passwordChangeForm 密码修改表单数据
+ * @returns {Promise}
+ */
+export const changePwdApi = (passwordChangeForm) => {
+    return request.post('/changePwd', passwordChangeForm);
+}
+
+/**
  * 系统调用接口
- * @param {string} command
+ * @param {string} command 命令
  * @returns {Promise}
  */
 export const invokeApi = (command) => {

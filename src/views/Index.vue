@@ -1896,12 +1896,13 @@ import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import LineChart from '@/components/LineChart.vue'
 import BarChart from '@/components/BarChart.vue'
 import request from '@/utils/request'
-import { invokeApi, getInfoApi } from '@/api/system'
+
+import { invokeApi, getInfoApi, deleteApi, changePwdApi, updateApi } from '@/api/system'
 import { getStatisticApi } from '@/api/statistic'
 import {
   getFilePageApi, searchFileApi, deleteFileApi, uploadFileApi,
   downloadFileApi, createDirApi, renameFileApi, moveFileApi,
-  setVisibleApi
+  setVisibleApi, initApi, syncApi
 } from '@/api/file'
 import { getSayingListApi, getSayingPageApi, deleteSayingApi, exportSayingCsvApi } from '@/api/saying'
 import { getUserListApi, getUserPageApi, deleteUserApi, updateUserApi, exportUserCsvApi } from '@/api/user'
@@ -1910,10 +1911,12 @@ import {
   getGroupSettingApi, updateGroupSettingApi, exportGroupSettingCsvApi
 } from '@/api/group'
 import {
-  getItemListApi, getItemPageApi, updateItemApi, addItemApi, deleteItemApi, exportItemCsvApi
+  getItemListApi, getItemPageApi, updateItemApi, addItemApi,
+  deleteItemApi, exportItemCsvApi
 } from '@/api/item'
 import {
-  getInventoryListApi, deleteInventoryApi, updateInventoryApi, addInventoryApi, exportInventoryCsvApi
+  getInventoryListApi, deleteInventoryApi, updateInventoryApi, addInventoryApi,
+  exportInventoryCsvApi
 } from '@/api/inventory'
 
 
@@ -2965,9 +2968,7 @@ const exportInventoryCsv = async () => {
 // ============================ 管理员相关 ============================
 
 const deleteAdmin = async () => {
-  const res = await request.delete('/delete', {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteApi()
   if (res.code === 1) {
     ElMessage.success(res.message)
     localStorage.clear()
@@ -2987,9 +2988,7 @@ const handlePasswordChange = () => {
 }
 
 const handlePasswordChangeSubmit = async () => {
-  const res = await request.post('/changePwd', passwordChangeForm.value, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await changePwdApi(passwordChangeForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     passwordChangeVisible.value = false
@@ -3004,9 +3003,7 @@ const handleAdminEdit = () => {
 }
 
 const handleAdminEditSubmit = async () => {
-  const res = await request.post('/update', adminEditForm.value, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await updateApi(adminEditForm.value)
   if (res.code === 1) {
     getInfo()
     ElMessage.success(res.message)
@@ -3019,9 +3016,7 @@ const handleAdminEditSubmit = async () => {
 // ============================ 系统相关 ============================
 
 const initRootFile = async () => {
-  const res = await request.get('/file/init', {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await initApi()
   if (res.code === 1) {
     ElMessage({ message: `Root 文件 - ${res.message}`, type: 'success', placement: 'bottom-left' })
   } else {
@@ -3038,9 +3033,7 @@ const sync = async (isFileSync = true) => {
 
   try {
     if (isFileSync) {
-      const res = await request.get('/file/sync', {
-        headers: { token: localStorage.getItem("token") }
-      })
+      const res = await syncApi()
       if (res.code === 1) {
         ElMessage({ message: '本地与数据库 - 已同步', type: 'success', placement: 'bottom-left' })
       } else {
