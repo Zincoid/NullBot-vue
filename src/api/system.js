@@ -31,3 +31,20 @@ export const guestApi = () => {
 export const registApi = (registForm) => {
     return request.post('/regist', registForm);
 }
+
+/**
+ * 用户信息获取接口
+ * @returns {Promise}
+ */
+export const getInfoApi = () => {
+    return request.get('/info');
+}
+
+/**
+ * 系统调用接口
+ * @param {string} command
+ * @returns {Promise}
+ */
+export const invokeApi = (command) => {
+    return request.get('/system/invoke', { params: { command } });
+}

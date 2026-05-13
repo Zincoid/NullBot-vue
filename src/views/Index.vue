@@ -1896,6 +1896,21 @@ import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import LineChart from '@/components/LineChart.vue'
 import BarChart from '@/components/BarChart.vue'
 import request from '@/utils/request'
+import { invokeApi, getInfoApi } from '@/api/system'
+import { getStatisticApi } from '@/api/statistic'
+import {
+  getFilePageApi, searchFileApi, deleteFileApi, uploadFileApi,
+  downloadFileApi, createDirApi, renameFileApi, moveFileApi,
+  setVisibleApi
+} from '@/api/file'
+import { getSayingListApi, getSayingPageApi, deleteSayingApi, exportSayingCsvApi } from '@/api/saying'
+import { getUserListApi, getUserPageApi, deleteUserApi, updateUserApi, exportUserCsvApi } from '@/api/user'
+import {
+  getGroupListApi, getGroupPageApi, deleteGroupApi, updateGroupApi, exportGroupCsvApi,
+  getGroupSettingApi, updateGroupSettingApi, exportGroupSettingCsvApi
+} from '@/api/group'
+
+
 
 const router = useRouter()
 
@@ -2224,9 +2239,7 @@ const handlePreview = (file) => {
 }
 
 const getStatistic = async () => {
-  const res = await request.get('/statistic', {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await getStatisticApi()
   if (res.code === 1) {
     totalVisits.value = res.data.statistic.totalVisits
     visitsXAxis.value = res.data.statistic.visitsXAxis
@@ -2243,9 +2256,7 @@ const getStatistic = async () => {
 }
 
 const getInfo = async () => {
-  const res = await request.get('/info', {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await getInfoApi()
   if (res.code === 1) {
     let infoData = res.data.info
     info.value = JSON.parse(JSON.stringify(infoData))
@@ -2344,13 +2355,10 @@ const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
 }
 
+// ============================ 文件相关 ============================
+
 const getFilePage = async (current, size) => {
-  const res = await request({
-    url: '/file/page/' + current + '/' + size,
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET',
-    params: { curDir: curDir.value }
-  })
+  const res = await getFilePageApi(current, size, curDir.value)
   fileTableData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
   filePageInfo.value.total = res.data.filePage.total
   filePageInfo.value.size = res.data.filePage.size
@@ -2359,20 +2367,13 @@ const getFilePage = async (current, size) => {
 }
 
 const searchFile = async () => {
-  const res = await request({
-    url: '/file/searchFile',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET',
-    params: { key: searchKey.value, curDir: curDir.value }
-  })
+  const res = await searchFileApi(searchKey.value, curDir.value)
   searchData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
   searchTableVisible.value = true
 }
 
 const deleteFile = async (file) => {
-  const res = await request.delete('/file/delete/' + file.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteFileApi(file.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     getFilePage(filePageInfo.value.current, filePageInfo.value.size)
@@ -2398,11 +2399,7 @@ const upload = async () => {
       let formData = new FormData()
       formData.append("uploadFile", fileObj.raw)
       formData.append("curDir", curDir.value)
-      const res = await request.post("/file/upload", formData, {
-        headers: { token: localStorage.getItem("token") },
-        timeout: 300000,
-        maxContentLength: Infinity,
-      })
+      const res = await uploadFileApi(formData)
       if (res.code === 1) {
         ElMessage.success(`${fileObj.name} - 上传成功`)
       } else {
@@ -2433,10 +2430,7 @@ const handleFileChange = (file, fileList) => {
 
 const download = async (file) => {
   try {
-    const res = await request.get("/file/download/" + file.id, {
-      responseType: "arraybuffer",
-      headers: { token: localStorage.getItem("token") },
-    })
+    const res = await downloadFileApi(file.id)
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = file.fileName
@@ -2486,12 +2480,7 @@ const createDir = () => {
     if (!value) {
       ElMessage({ type: 'error', message: '目录名不能为空' })
     } else {
-      const res = await request.post('/file/createDir', {
-        curDir: curDir.value !== '' ? curDir.value : '/',
-        dirName: value
-      }, {
-        headers: { token: localStorage.getItem("token") }
-      })
+      const res = await createDirApi(curDir.value, value)
       if (res.code === 1) {
         ElMessage({ type: 'success', message: value + '创建成功!' })
         getFilePage(filePageInfo.value.current, filePageInfo.value.size)
@@ -2520,12 +2509,7 @@ const handleRename = (file) => {
       ElMessage.warning('文件名未更改')
       return
     }
-    const res = await request({
-      url: `/file/rename/${file.id}`,
-      method: 'GET',
-      headers: { 'token': localStorage.getItem("token") },
-      params: { newFileName: value }
-    })
+    const res = await renameFileApi(file.id, value)
     if (res.code === 1) {
       getFilePage(filePageInfo.value.current, filePageInfo.value.size)
       if (searchTableVisible.value) {
@@ -2556,12 +2540,7 @@ const handleMove = (file) => {
       ElMessage.warning('路径未更改')
       return
     }
-    const res = await request({
-      url: `/file/move/${file.id}`,
-      method: 'GET',
-      headers: { 'token': localStorage.getItem("token") },
-      params: { newDir: value }
-    })
+    const res = await moveFileApi(file.id, value)
     if (res.code === 1) {
       getFilePage(filePageInfo.value.current, filePageInfo.value.size)
       if (searchTableVisible.value) {
@@ -2580,12 +2559,7 @@ const changeFileVisible = (row) => {
   return new Promise(async (resolve, reject) => {
     try {
       row._loading = true
-      const res = await request({
-        url: `file/setVisible/${row.id}`,
-        method: 'GET',
-        headers: { 'token': localStorage.getItem("token") },
-        params: { visible: !row.visible }
-      })
+      const res = await setVisibleApi(row.id, !row.visible)
       if (res.code === 1) {
         getFilePage(filePageInfo.value.current, filePageInfo.value.size)
         if (searchTableVisible.value) {
@@ -2604,26 +2578,20 @@ const changeFileVisible = (row) => {
   })
 }
 
+// ============================ 语录相关 ============================
+
 const refreshSaying = () => {
   getSayingList()
   getSayingPage(sayingPageInfo.value.current, sayingPageInfo.value.size)
 }
 
 const getSayingList = async () => {
-  const res = await request({
-    url: '/saying/list',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getSayingListApi()
   allSayingTableData.value = JSON.parse(JSON.stringify(res.data.sayings))
 }
 
 const getSayingPage = async (current, size) => {
-  const res = await request({
-    url: '/saying/page/' + current + '/' + size,
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getSayingPageApi(current, size)
   sayingTableData.value = JSON.parse(JSON.stringify(res.data.sayingPage.data))
   sayingPageInfo.value.total = res.data.sayingPage.total
   sayingPageInfo.value.size = res.data.sayingPage.size
@@ -2632,9 +2600,7 @@ const getSayingPage = async (current, size) => {
 }
 
 const deleteSaying = async (saying) => {
-  const res = await request.delete('/saying/delete/' + saying.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteSayingApi(saying.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshSaying()
@@ -2645,11 +2611,7 @@ const deleteSaying = async (saying) => {
 
 const exportSayingCsv = async () => {
   try {
-    const res = await request({
-      url: '/saying/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportSayingCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Sayings_${new Date().toLocaleString()}.csv`
@@ -2665,26 +2627,20 @@ const exportSayingCsv = async () => {
   }
 }
 
+// ============================ 用户相关 ============================
+
 const refreshUser = () => {
   getUserList()
   getUserPage(userPageInfo.value.current, userPageInfo.value.size)
 }
 
 const getUserList = async () => {
-  const res = await request({
-    url: '/user/list',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getUserListApi()
   allUserTableData.value = JSON.parse(JSON.stringify(res.data.users))
 }
 
 const getUserPage = async (current, size) => {
-  const res = await request({
-    url: '/user/page/' + current + '/' + size,
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getUserPageApi(current, size)
   userTableData.value = JSON.parse(JSON.stringify(res.data.userPage.data))
   userPageInfo.value.total = res.data.userPage.total
   userPageInfo.value.size = res.data.userPage.size
@@ -2693,9 +2649,7 @@ const getUserPage = async (current, size) => {
 }
 
 const deleteUser = async (user) => {
-  const res = await request.delete('/user/delete/' + user.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteUserApi(user.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshUser()
@@ -2710,12 +2664,7 @@ const handleUserSetting = (row) => {
 }
 
 const handleUserSettingSubmit = async () => {
-  const res = await request({
-    url: '/user/update',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: userForm.value,
-    method: 'PUT'
-  })
+  const res = await updateUserApi(userForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshUser()
@@ -2727,11 +2676,7 @@ const handleUserSettingSubmit = async () => {
 
 const exportUserCsv = async () => {
   try {
-    const res = await request({
-      url: '/user/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportUserCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Users_${new Date().toLocaleString()}.csv`
@@ -2747,26 +2692,20 @@ const exportUserCsv = async () => {
   }
 }
 
+// ============================ 群相关 ============================
+
 const refreshGroup = () => {
   getGroupList()
   getGroupPage(groupPageInfo.value.current, groupPageInfo.value.size)
 }
 
 const getGroupList = async () => {
-  const res = await request({
-    url: '/group/list',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getGroupListApi()
   allGroupTableData.value = JSON.parse(JSON.stringify(res.data.groups))
 }
 
 const getGroupPage = async (current, size) => {
-  const res = await request({
-    url: '/group/page/' + current + '/' + size,
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getGroupPageApi(current, size)
   groupTableData.value = JSON.parse(JSON.stringify(res.data.groupPage.data))
   groupPageInfo.value.total = res.data.groupPage.total
   groupPageInfo.value.size = res.data.groupPage.size
@@ -2775,9 +2714,7 @@ const getGroupPage = async (current, size) => {
 }
 
 const deleteGroup = async (group) => {
-  const res = await request.delete('/group/delete/' + group.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteGroupApi(group.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshGroup()
@@ -2792,12 +2729,7 @@ const handleGroupSetting = (row) => {
 }
 
 const handleGroupSettingSubmit = async () => {
-  const res = await request({
-    url: '/group/update',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: groupForm.value,
-    method: 'PUT'
-  })
+  const res = await updateGroupApi(groupForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshGroup()
@@ -2808,11 +2740,7 @@ const handleGroupSettingSubmit = async () => {
 }
 
 const handleGroupFunc = async (row) => {
-  const res = await request({
-    url: '/setting/' + row.id,
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    method: 'GET'
-  })
+  const res = await getGroupSettingApi(row.id)
   if (res.code === 1) {
     groupFuncForm.value = JSON.parse(JSON.stringify(res.data.setting))
     groupFuncVisible.value = true
@@ -2822,12 +2750,7 @@ const handleGroupFunc = async (row) => {
 }
 
 const handleGroupFuncSubmit = async () => {
-  const res = await request({
-    url: '/setting/set',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: groupFuncForm.value,
-    method: 'PUT'
-  })
+  const res = await updateGroupSettingApi(groupFuncForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     groupFuncVisible.value = false
@@ -2838,11 +2761,7 @@ const handleGroupFuncSubmit = async () => {
 
 const exportGroupCsv = async () => {
   try {
-    const res = await request({
-      url: '/group/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportGroupCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Groups_${new Date().toLocaleString()}.csv`
@@ -2860,11 +2779,7 @@ const exportGroupCsv = async () => {
 
 const exportFuncCsv = async () => {
   try {
-    const res = await request({
-      url: '/setting/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportGroupSettingCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Settings_${new Date().toLocaleString()}.csv`
@@ -2879,6 +2794,8 @@ const exportFuncCsv = async () => {
     ElMessage.error("导出失败")
   }
 }
+
+// ============================ 物品相关 ============================
 
 const refreshItem = () => {
   getItemList()
@@ -2994,6 +2911,8 @@ const exportItemCsv = async () => {
   }
 }
 
+// ============================ 库存相关 ============================
+
 const handleInventories = (row) => {
   inventoriesUserId.value = row.id
   inventoriesTitle.value = `库存 - ${row.name}`
@@ -3082,49 +3001,7 @@ const exportInventoryCsv = async () => {
   }
 }
 
-const initRootFile = async () => {
-  const res = await request.get('/file/init', {
-    headers: { token: localStorage.getItem("token") }
-  })
-  if (res.code === 1) {
-    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'success', placement: 'bottom-left' })
-  } else {
-    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'warning', placement: 'bottom-left' })
-  }
-}
-
-const sync = async (isFileSync = true) => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: '同步中...',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
-
-  try {
-    if (isFileSync) {
-      const res = await request.get('/file/sync', {
-        headers: { token: localStorage.getItem("token") }
-      })
-      if (res.code === 1) {
-        ElMessage({ message: '本地与数据库 - 已同步', type: 'success', placement: 'bottom-left' })
-      } else {
-        ElMessage({ message: '本地与数据库 - 同步失败', type: 'error', placement: 'bottom-left' })
-      }
-    }
-    await getInfo()
-    await getStatistic()
-    await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
-    refreshSaying()
-    refreshUser()
-    refreshGroup()
-    refreshItem()
-    loading.close()
-    ElMessage({ message: '全部浏览数据 - 已更新', type: 'success', placement: 'bottom-left' })
-  } catch (error) {
-    loading.close()
-    ElMessage({ message: "同步更新异常: " + (error.message || '未知错误'), type: 'error', placement: 'bottom-left' })
-  }
-}
+// ============================ 管理员相关 ============================
 
 const deleteAdmin = async () => {
   const res = await request.delete('/delete', {
@@ -3178,16 +3055,61 @@ const handleAdminEditSubmit = async () => {
   }
 }
 
+// ============================ 系统相关 ============================
+
+const initRootFile = async () => {
+  const res = await request.get('/file/init', {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'success', placement: 'bottom-left' })
+  } else {
+    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'warning', placement: 'bottom-left' })
+  }
+}
+
+const sync = async (isFileSync = true) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '同步中...',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+
+  try {
+    if (isFileSync) {
+      const res = await request.get('/file/sync', {
+        headers: { token: localStorage.getItem("token") }
+      })
+      if (res.code === 1) {
+        ElMessage({ message: '本地与数据库 - 已同步', type: 'success', placement: 'bottom-left' })
+      } else {
+        ElMessage({ message: '本地与数据库 - 同步失败', type: 'error', placement: 'bottom-left' })
+      }
+    }
+    await getInfo()
+    await getStatistic()
+    await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+    refreshSaying()
+    refreshUser()
+    refreshGroup()
+    refreshItem()
+    loading.close()
+    ElMessage({ message: '全部浏览数据 - 已更新', type: 'success', placement: 'bottom-left' })
+  } catch (error) {
+    loading.close()
+    ElMessage({ message: "同步更新异常: " + (error.message || '未知错误'), type: 'error', placement: 'bottom-left' })
+  }
+}
+
 const logout = () => {
   localStorage.clear()
   router.push('/login')
 }
 
+// ============================ 系统调用相关 ============================
+
 const invoke = async () => {
-  const res = await request.get('/system/invoke', {
-    headers: { token: localStorage.getItem("token") },
-    params: { command: invokeCommand.value }
-  })
+  const res = await invokeApi(invokeCommand.value)
   if (res.code === 1) {
     ElMessage.success('调用成功')
     invokeResult.value = invokeResult.value + res.data.result + '\n'
@@ -3245,6 +3167,7 @@ watch(op, (newVal) => {
   z-index: 9999;
   width: 300px;
   max-height: 300px;
+  overflow-x: hidden;
   overflow-y: auto;
   border-radius: 4px;
   background: #141414;
