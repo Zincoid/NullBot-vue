@@ -29,29 +29,16 @@
     </el-form>
   </div>
 
-  <!--  备案信息-->
-  <div
-    style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; padding: 10px; background-color: #000;">
-    <span style="display: inline-block;">
-      <img src="../assets/备案图标.png" alt="" style="width: 14px; vertical-align: middle">
-      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=21021702000850" rel="noreferrer" target="_blank"
-        style="font-size:13px; margin-left: 6px; text-decoration: none; color: white;"
-        onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
-        onmouseout="this.style.textDecoration='none';this.style.color='white'">辽公网安备21021702000850号</a>
-      <a href="https://beian.miit.gov.cn/" target="_blank"
-        style="font-size:13px; margin-left: 20px; text-decoration: none; color: white;"
-        onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
-        onmouseout="this.style.textDecoration='none';this.style.color='white'">辽ICP备2026000475号-1</a>
-    </span>
-  </div>
+  <FilingInfo />
 </template>
 
 <script setup>
 import { Connection, Key, Lock } from "@element-plus/icons-vue";
+import FilingInfo from '@/components/FilingInfo.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
-import request from "@/utils/request";
+import { loginApi, guestApi } from "@/api/system";
 
 const router = useRouter()
 
@@ -61,7 +48,7 @@ const loginForm = ref({
 })
 
 const login = async () => {
-  const res = await request.post('/login', loginForm.value)
+  const res = await loginApi(loginForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     localStorage.setItem("token", res.data.token)
@@ -72,7 +59,7 @@ const login = async () => {
 }
 
 const guest = async () => {
-  const res = await request.post('/guest')
+  const res = await guestApi()
   if (res.code === 1) {
     ElMessage.success(res.message)
     localStorage.setItem("token", res.data.token)
