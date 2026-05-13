@@ -2388,9 +2388,9 @@ const deleteFile = async (file) => {
   })
   if (res.code === 1) {
     ElMessage.success(res.message)
-    await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+    getFilePage(filePageInfo.value.current, filePageInfo.value.size)
     if (searchTableVisible.value === true) {
-      await searchFile(searchKey.value, curDir.value)
+      searchFile(searchKey.value, curDir.value)
     }
   } else {
     ElMessage.error(`${file.fileName} - ${res.message}`)
@@ -2432,9 +2432,9 @@ const upload = async () => {
   uploadRef.value.clearFiles()
   if (curDir.value === uploadDir.value) {
     if (filePageInfo.value.pages === 0) {
-      await getFilePage(1, filePageInfo.value.size)
+      getFilePage(1, filePageInfo.value.size)
     } else {
-      await getFilePage(filePageInfo.value.pages, filePageInfo.value.size)
+      getFilePage(filePageInfo.value.pages, filePageInfo.value.size)
     }
   }
   uploading.value = false
@@ -2507,7 +2507,7 @@ const createDir = () => {
       })
       if (res.code === 1) {
         ElMessage({ type: 'success', message: value + '创建成功!' })
-        await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+        getFilePage(filePageInfo.value.current, filePageInfo.value.size)
       } else {
         ElMessage({ type: 'error', message: res.message })
       }
@@ -2540,9 +2540,9 @@ const handleRename = (file) => {
       params: { newFileName: value }
     })
     if (res.code === 1) {
-      await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+      getFilePage(filePageInfo.value.current, filePageInfo.value.size)
       if (searchTableVisible.value) {
-        await searchFile()
+        searchFile()
       }
       ElMessage.success('重命名成功')
     } else {
@@ -2576,9 +2576,9 @@ const handleMove = (file) => {
       params: { newDir: value }
     })
     if (res.code === 1) {
-      await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+      getFilePage(filePageInfo.value.current, filePageInfo.value.size)
       if (searchTableVisible.value) {
-        await searchFile()
+        searchFile()
       }
       ElMessage.success('移动成功')
     } else {
@@ -2600,9 +2600,9 @@ const changeFileVisible = (row) => {
         params: { visible: !row.visible }
       })
       if (res.code === 1) {
-        await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+        getFilePage(filePageInfo.value.current, filePageInfo.value.size)
         if (searchTableVisible.value) {
-          await searchFile()
+          searchFile()
         }
         ElMessage.success('修改成功')
         return resolve(true)
@@ -3031,7 +3031,7 @@ const deleteInventory = async (inventory) => {
   })
   if (res.code === 1) {
     ElMessage.success(res.message)
-    await getInventoryList(inventory.ownerId)
+    getInventoryList(inventory.ownerId)
   } else {
     ElMessage.error(res.message)
   }
@@ -3051,7 +3051,7 @@ const handleInventorySettingSubmit = async () => {
   })
   if (res.code === 1) {
     ElMessage.success(res.message)
-    await getInventoryList(inventoryForm.value.ownerId)
+    getInventoryList(inventoryForm.value.ownerId)
     inventorySettingVisible.value = false
   } else {
     ElMessage.error(res.message)
@@ -3067,7 +3067,7 @@ const addInventory = async (userId, itemid) => {
   })
   if (res.code === 1) {
     ElMessage.success(res.message)
-    await getInventoryList(userId)
+    getInventoryList(userId)
   } else {
     ElMessage.error(res.message)
   }
@@ -3146,7 +3146,7 @@ const deleteAdmin = async () => {
   if (res.code === 1) {
     ElMessage.success(res.message)
     localStorage.clear()
-    await router.push('/login')
+    router.push('/login')
   } else {
     ElMessage.error(res.message)
   }
@@ -3183,7 +3183,7 @@ const handleAdminEditSubmit = async () => {
     headers: { token: localStorage.getItem("token") }
   })
   if (res.code === 1) {
-    await getInfo()
+    getInfo()
     ElMessage.success(res.message)
     adminEditVisible.value = false
   } else {
