@@ -415,10 +415,10 @@ onBeforeUnmount(() => {
   border-right: none;
   background-image: linear-gradient(
     to bottom,
-    transparent 12px,
-    var(--el-menu-border-color) 12px,
-    var(--el-menu-border-color) calc(100% - 12px),
-    transparent calc(100% - 12px)
+    transparent 15px,
+    var(--el-menu-border-color) 15px,
+    var(--el-menu-border-color) calc(100% - 15px),
+    transparent calc(100% - 15px)
   );
   background-size: 1px 100%;
   background-position: right center;

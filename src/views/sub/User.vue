@@ -43,7 +43,7 @@
         <el-table-column label="用户ID" min-width="120" align="center">
           <template v-slot="scope">{{ scope.row.id }}</template>
         </el-table-column>
-        <el-table-column label="昵称" min-width="200" show-overflow-tooltip>
+        <el-table-column label="昵称" min-width="200" align="center" show-overflow-tooltip>
           <template v-slot="scope">{{ scope.row.name }}</template>
         </el-table-column>
         <el-table-column label="限权" width="100" align="center">
