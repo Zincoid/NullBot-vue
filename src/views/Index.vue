@@ -33,35 +33,35 @@
             <h3 v-show="routePath === '/index/saying'" class="section-title">
               <el-icon>
                 <ChatDotSquare />
-              </el-icon>语录管理
+              </el-icon><span>语录管理</span>
             </h3>
 
             <!-- 数据统计 -->
             <h3 v-show="routePath === '/index/statistic'" class="section-title">
               <el-icon>
                 <Histogram />
-              </el-icon>数据统计
+              </el-icon><span>数据统计</span>
             </h3>
 
             <!-- 用户管理 -->
             <h3 v-show="routePath === '/index/user'" class="section-title">
               <el-icon>
                 <Cellphone />
-              </el-icon>用户管理
+              </el-icon><span>用户管理</span>
             </h3>
 
             <!-- 群组管理 -->
             <h3 v-show="routePath === '/index/group'" class="section-title">
               <el-icon>
                 <OfficeBuilding />
-              </el-icon>群组管理
+              </el-icon><span>群组管理</span>
             </h3>
 
             <!-- 物品管理 -->
             <h3 v-show="routePath === '/index/item'" class="section-title">
               <el-icon>
                 <Box />
-              </el-icon>物品管理
+              </el-icon><span>物品管理</span>
             </h3>
 
             <!-- 系统调用 -->
@@ -126,7 +126,7 @@
             <h3 align="center"><el-icon>
                 <Promotion />
               </el-icon>&nbsp;导航</h3>
-            <el-menu-item index="/index/file" class="nav-item">
+            <el-menu-item index="/index/file" class="menu-item">
               <el-icon>
                 <Files />
               </el-icon><span>文件存储</span>
@@ -137,38 +137,38 @@
                   <Setting />
                 </el-icon><span>信息管理</span>
               </template>
-              <el-menu-item index="/index/saying" class="nav-item">
+              <el-menu-item index="/index/saying" class="menu-item">
                 <el-icon>
                   <ChatDotSquare />
                 </el-icon><span>语录</span>
               </el-menu-item>
-              <el-menu-item index="/index/user" class="nav-item">
+              <el-menu-item index="/index/user" class="menu-item">
                 <el-icon>
                   <Cellphone />
                 </el-icon><span>用户</span>
               </el-menu-item>
-              <el-menu-item index="/index/group" class="nav-item">
+              <el-menu-item index="/index/group" class="menu-item">
                 <el-icon>
                   <OfficeBuilding />
                 </el-icon><span>群组</span>
               </el-menu-item>
-              <el-menu-item index="/index/item" class="nav-item">
+              <el-menu-item index="/index/item" class="menu-item">
                 <el-icon>
                   <Box />
                 </el-icon><span>物品</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="/index/statistic" class="nav-item">
+            <el-menu-item index="/index/statistic" class="menu-item">
               <el-icon>
                 <Histogram />
               </el-icon><span>数据统计</span>
             </el-menu-item>
-            <el-menu-item index="/index/center" class="nav-item">
+            <el-menu-item index="/index/center" class="menu-item">
               <el-icon>
                 <UserFilled />
               </el-icon><span>个人中心</span>
             </el-menu-item>
-            <el-menu-item index="/index/system" v-if="userType === 1" class="nav-item">
+            <el-menu-item index="/index/system" v-if="userType === 1" class="menu-item">
               <el-icon>
                 <Platform />
               </el-icon><span>系统调用</span>
@@ -315,7 +315,7 @@ onBeforeUnmount(() => {
 .header-menu {
   min-width: 100%;
   padding: 0 20px;
-  
+
 }
 
 .header-center {
@@ -398,12 +398,13 @@ onBeforeUnmount(() => {
 
 /* ===== 侧边导航 ===== */
 .aside {
-  width: 200px;
+  width: 175px;
 }
 
 .aside-menu {
   width: 100%;
   height: 100%;
+  padding: 0 10px;
 }
 
 .aside-menu h3 {
@@ -411,10 +412,16 @@ onBeforeUnmount(() => {
   padding-top: 1em;
 }
 
-.nav-item {
-  display: flex;
-  justify-content: center;
+.aside-menu .el-menu-item,
+.aside-menu .el-sub-menu__title {
+  border-radius: 8px;
+  margin-bottom: 4px;
 }
+
+.aside-menu .el-menu-item.is-active {
+  background-color: var(--el-menu-hover-bg-color);
+}
+
 
 .content-container {
   height: 100%;
@@ -497,7 +504,7 @@ onBeforeUnmount(() => {
   padding-top: 5px;
 }
 
-:deep(.el-sub-menu__title) {
+.header .el-sub-menu__title {
   justify-content: center;
 }
 </style>
