@@ -39,12 +39,12 @@
 </template>
 
 <script setup>
-import { Connection, User } from "@element-plus/icons-vue";
+import { Connection, User } from "@element-plus/icons-vue";  // 不可移除
 import FilingInfo from '@/components/FilingInfo.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
-import request from "@/utils/request";
+import { registApi } from "@/api/system";
 
 const router = useRouter()
 
@@ -56,7 +56,7 @@ const registForm = ref({
 })
 
 const regist = async () => {
-  const res = await request.post('/regist', registForm.value)
+  const res = await registApi(registForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     router.push('/login')

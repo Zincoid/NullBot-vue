@@ -10,10 +10,7 @@ import request from '@/utils/request';
 export const loginApi = (loginForm) => {
     return request.post({
         url: '/login',
-        data: {
-            id: loginForm.id,
-            password: loginForm.password
-        }
+        data: loginForm
     });
 }
 
@@ -25,5 +22,20 @@ export const loginApi = (loginForm) => {
 export const guestApi = () => {
     return request.post({
         url: '/guest',
+    });
+}
+
+/**
+ * 管理员注册接口
+ * @param {string} id - 用户ID
+ * @param {string} password - 用户密码
+ * @param {string} email - 用户邮箱
+ * @param {string} activationCode - 激活码
+ * @returns {Promise}
+ */
+export const registApi = (registForm) => {
+    return request.post({
+        url: '/regist',
+        data: registForm
     });
 }
