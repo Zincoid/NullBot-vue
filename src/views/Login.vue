@@ -74,12 +74,12 @@ export default {
       this.$axios.post('/login', this.loginForm)
           .then(res => {
             console.log(res.data)
-            if (res.data.code === 1){
+            if (res.data.code === 1) {
               this.$message.success(res.data.message)
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
             } else {
-              this.$message.warning(res.data.message)
+              this.$message.warning(`登录失败: ${res.data.message}`)
             }
           })
     },
@@ -93,7 +93,7 @@ export default {
               localStorage.setItem("token", res.data.data.token)
               this.$router.push('/index')
             } else {
-              this.$message.warning(res.data.message)
+              this.$message.warning(`登录失败: ${res.data.message}`)
             }
           })
     },
