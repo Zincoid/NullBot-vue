@@ -419,8 +419,7 @@ onBeforeUnmount(() => {
   padding-top: 1em;
 }
 
-.aside-menu .el-menu-item,
-.aside-menu .el-sub-menu__title {
+.aside-menu .el-menu-item {
   border-radius: 8px;
   margin-bottom: 4px;
 }
@@ -513,5 +512,13 @@ onBeforeUnmount(() => {
 
 .header .el-sub-menu__title {
   justify-content: center;
+}
+</style>
+
+<style>
+/* ===== 侧边导航子菜单样式 ===== */
+.aside-menu .el-sub-menu__title {
+  border-radius: 8px;
+  margin-bottom: 4px;
 }
 </style>
