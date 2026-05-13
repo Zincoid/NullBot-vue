@@ -177,7 +177,6 @@ const info = ref({ id: 0, username: '', email: '' })
 provide('userType', userType)
 provide('info', info)
 
-// 文件搜索（搜索栏在头部，通过 provide 传给 File.vue）
 const searchKey = ref('')
 const searchTrigger = ref(0)
 provide('searchKey', searchKey)

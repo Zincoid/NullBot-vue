@@ -40,9 +40,7 @@
         <el-table-column label="用户ID" min-width="120" align="center">
           <template v-slot="scope">{{ scope.row.userId }}</template>
         </el-table-column>
-        <el-table-column label="昵称" min-width="120">
-          <template v-slot="scope">{{ scope.row.userName }}</template>
-        </el-table-column>
+        <el-table-column label="昵称" min-width="120" prop="userName" show-overflow-tooltip />
         <el-table-column label="内容" min-width="750" prop="text" show-overflow-tooltip />
         <el-table-column label="时间" width="180" align="center">
           <template v-slot="scope">{{ scope.row.time.replace('T', ' ') }}</template>
