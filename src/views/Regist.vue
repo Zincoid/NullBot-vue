@@ -72,7 +72,7 @@ const regist = async () => {
   const res = await request.post('/regist', registForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
-    await router.push('/login')
+    router.push('/login')
   } else {
     ElMessage.warning(`管理员注册失败: ${res.message}`)
   }
