@@ -1909,6 +1909,12 @@ import {
   getGroupListApi, getGroupPageApi, deleteGroupApi, updateGroupApi, exportGroupCsvApi,
   getGroupSettingApi, updateGroupSettingApi, exportGroupSettingCsvApi
 } from '@/api/group'
+import {
+  getItemListApi, getItemPageApi, updateItemApi, addItemApi, deleteItemApi, exportItemCsvApi
+} from '@/api/item'
+import {
+  getInventoryListApi, deleteInventoryApi, updateInventoryApi, addInventoryApi, exportInventoryCsvApi
+} from '@/api/inventory'
 
 
 
@@ -2803,20 +2809,12 @@ const refreshItem = () => {
 }
 
 const getItemList = async () => {
-  const res = await request({
-    url: '/item/list',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getItemListApi()
   allItemTableData.value = JSON.parse(JSON.stringify(res.data.items))
 }
 
 const getItemPage = async (current, size) => {
-  const res = await request({
-    url: '/item/page/' + current + '/' + size,
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET'
-  })
+  const res = await getItemPageApi(current, size)
   itemTableData.value = JSON.parse(JSON.stringify(res.data.itemPage.data))
   itemPageInfo.value.total = res.data.itemPage.total
   itemPageInfo.value.size = res.data.itemPage.size
@@ -2830,12 +2828,7 @@ const handleItemSetting = (row) => {
 }
 
 const handleItemSettingSubmit = async () => {
-  const res = await request({
-    url: '/item/update',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: itemForm.value,
-    method: 'PUT'
-  })
+  const res = await updateItemApi(itemForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshItem()
@@ -2862,12 +2855,7 @@ const handleItemAdding = () => {
 }
 
 const handleItemAddingSubmit = async () => {
-  const res = await request({
-    url: '/item/add',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: itemForm.value,
-    method: 'POST'
-  })
+  const res = await addItemApi(itemForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshItem()
@@ -2878,9 +2866,7 @@ const handleItemAddingSubmit = async () => {
 }
 
 const deleteItem = async (item) => {
-  const res = await request.delete('/item/delete/' + item.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteItemApi(item.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     refreshItem()
@@ -2891,11 +2877,7 @@ const deleteItem = async (item) => {
 
 const exportItemCsv = async () => {
   try {
-    const res = await request({
-      url: '/item/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportItemCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Items_${new Date().toLocaleString()}.csv`
@@ -2922,19 +2904,12 @@ const handleInventories = (row) => {
 }
 
 const getInventoryList = async (id) => {
-  const res = await request({
-    url: '/inventory/list',
-    headers: { 'token': localStorage.getItem("token") },
-    method: 'GET',
-    params: { userId: id }
-  })
+  const res = await getInventoryListApi(id)
   inventoriesData.value = JSON.parse(JSON.stringify(res.data.inventories))
 }
 
 const deleteInventory = async (inventory) => {
-  const res = await request.delete('/inventory/delete/' + inventory.id, {
-    headers: { token: localStorage.getItem("token") }
-  })
+  const res = await deleteInventoryApi(inventory.id)
   if (res.code === 1) {
     ElMessage.success(res.message)
     getInventoryList(inventory.ownerId)
@@ -2949,12 +2924,7 @@ const handleInventorySetting = (row) => {
 }
 
 const handleInventorySettingSubmit = async () => {
-  const res = await request({
-    url: '/inventory/update',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    data: inventoryForm.value,
-    method: 'PUT'
-  })
+  const res = await updateInventoryApi(inventoryForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     getInventoryList(inventoryForm.value.ownerId)
@@ -2965,12 +2935,7 @@ const handleInventorySettingSubmit = async () => {
 }
 
 const addInventory = async (userId, itemid) => {
-  const res = await request({
-    url: '/inventory/add',
-    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
-    method: 'POST',
-    params: { userId: userId, itemId: itemid }
-  })
+  const res = await addInventoryApi(userId, itemid)
   if (res.code === 1) {
     ElMessage.success(res.message)
     getInventoryList(userId)
@@ -2981,11 +2946,7 @@ const addInventory = async (userId, itemid) => {
 
 const exportInventoryCsv = async () => {
   try {
-    const res = await request({
-      url: '/inventory/exportCsv',
-      headers: { 'token': localStorage.getItem("token") },
-      method: 'GET'
-    })
+    const res = await exportInventoryCsvApi()
     const blob = new Blob([res])
     const elink = document.createElement('a')
     elink.download = `Inventories_${new Date().toLocaleString()}.csv`
