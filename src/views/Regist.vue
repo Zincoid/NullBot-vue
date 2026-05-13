@@ -59,6 +59,7 @@
 <script>
 import { ElMessage } from "element-plus";
 import { Connection, User } from "@element-plus/icons-vue";
+import request from "@/utils/request";
 
 export default {
   name: "Regist",
@@ -77,7 +78,7 @@ export default {
 
   methods: {
     regist() {
-      this.$axios.post('/regist', this.registForm)
+      request.post('/regist', this.registForm)
         .then(res => {
           if (res.code === 1) {
             ElMessage.success(res.message)

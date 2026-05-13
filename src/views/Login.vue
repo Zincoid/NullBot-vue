@@ -49,6 +49,7 @@
 <script>
 import { ElMessage } from "element-plus";
 import { Connection, Key, Lock } from "@element-plus/icons-vue";
+import request from "@/utils/request";
 
 export default {
   name: "Login",
@@ -65,7 +66,7 @@ export default {
 
   methods: {
     login() {
-      this.$axios.post('/login', this.loginForm)
+      request.post('/login', this.loginForm)
         .then(res => {
           if (res.code === 1) {
             ElMessage.success(res.message)
@@ -78,7 +79,7 @@ export default {
     },
 
     guest() {
-      this.$axios.post('/guest')
+      request.post('/guest')
         .then(res => {
           console.log(res.data)
           if (res.code === 1) {

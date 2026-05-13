@@ -1909,7 +1909,8 @@ import {
 } from "@element-plus/icons-vue";
 import LineChart from "@/components/LineChart.vue";
 import BarChart from "@/components/BarChart.vue";
-import { ElLoading, ElMessage, ElNotification } from "element-plus";
+import { ElLoading, ElMessage } from "element-plus";
+import request from "@/utils/request";
 
 export default {
   components: {
@@ -2261,7 +2262,7 @@ export default {
   methods: {
 
     uploadAction(url) {
-      const baseURL = this.$axios?.defaults?.baseURL || ''
+      const baseURL = request?.defaults?.baseURL || ''
       return `${baseURL}${url}`
     },
 
@@ -2337,7 +2338,7 @@ export default {
     // 处理预览点击事件
     handlePreview(file) {
       // 1. 构造文件预览URL（需要后端的支持）
-      const baseUrl = this.$axios?.defaults?.baseURL || ''
+      const baseUrl = request?.defaults?.baseURL || ''
       this.previewUrl = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
 
       // 2. 判断文件类型
@@ -2354,7 +2355,7 @@ export default {
     },
 
     getStatistic() {
-      this.$axios.get('/statistic', {
+      request.get('/statistic', {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -2376,7 +2377,7 @@ export default {
     },
 
     getInfo() {
-      this.$axios.get('/info', {
+      request.get('/info', {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -2490,7 +2491,7 @@ export default {
     },
 
     getFilePage(current, size) {
-      this.$axios({
+      request({
         url: '/file/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
@@ -2509,7 +2510,7 @@ export default {
     },
 
     searchFile() {
-      this.$axios({
+      request({
         url: '/file/searchFile',
         headers: {
           'token': localStorage.getItem("token")
@@ -2528,7 +2529,7 @@ export default {
     },
 
     deleteFile(file) {
-      this.$axios.delete('/file/delete/' + file.id, {
+      request.delete('/file/delete/' + file.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -2560,7 +2561,7 @@ export default {
           formData.append("uploadFile", fileObj.raw)
           formData.append("curDir", this.curDir)
           // 等待当前文件上传完成
-          const res = await this.$axios.post("/file/upload", formData, {
+          const res = await request.post("/file/upload", formData, {
             headers: {
               // "Content-Type": "multipart/form-data;charset=utf-8",
               token: localStorage.getItem("token")
@@ -2599,7 +2600,7 @@ export default {
     },
 
     download(file) {
-      this.$axios.get("/file/download/" + file.id, {
+      request.get("/file/download/" + file.id, {
         responseType: "arraybuffer",
         headers: {
           token: localStorage.getItem("token")
@@ -2657,7 +2658,7 @@ export default {
             message: '目录名不能为空'
           });
         } else {
-          this.$axios.post('/file/createDir', {
+          request.post('/file/createDir', {
             curDir: this.curDir !== '' ? this.curDir : '/',
             dirName: value
           }, {
@@ -2703,7 +2704,7 @@ export default {
           ElMessage.warning('文件名未更改');
           return;
         }
-        this.$axios({
+        request({
           url: `/file/rename/${file.id}`,
           method: 'GET',
           headers: {
@@ -2745,7 +2746,7 @@ export default {
           ElMessage.warning('路径未更改');
           return;
         }
-        this.$axios({
+        request({
           url: `/file/move/${file.id}`,
           method: 'GET',
           headers: {
@@ -2775,7 +2776,7 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           row._loading = true
-          this.$axios({
+          request({
             url: `file/setVisible/${row.id}`,
             method: 'GET',
             headers: {
@@ -2814,7 +2815,7 @@ export default {
     },
 
     getSayingList() {
-      this.$axios({
+      request({
         url: '/saying/list',
         headers: {
           'token': localStorage.getItem("token")
@@ -2826,7 +2827,7 @@ export default {
     },
 
     getSayingPage(current, size) {
-      this.$axios({
+      request({
         url: '/saying/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
@@ -2842,7 +2843,7 @@ export default {
     },
 
     deleteSaying(saying) {
-      this.$axios.delete('/saying/delete/' + saying.id, {
+      request.delete('/saying/delete/' + saying.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -2857,7 +2858,7 @@ export default {
     },
 
     exportSayingCsv() {
-      this.$axios({
+      request({
         url: '/saying/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -2885,7 +2886,7 @@ export default {
     },
 
     getUserList() {
-      this.$axios({
+      request({
         url: '/user/list',
         headers: {
           'token': localStorage.getItem("token")
@@ -2897,7 +2898,7 @@ export default {
     },
 
     getUserPage(current, size) {
-      this.$axios({
+      request({
         url: '/user/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
@@ -2913,7 +2914,7 @@ export default {
     },
 
     deleteUser(user) {
-      this.$axios.delete('/user/delete/' + user.id, {
+      request.delete('/user/delete/' + user.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -2934,7 +2935,7 @@ export default {
     },
 
     handleUserSettingSubmit() {
-      this.$axios({
+      request({
         url: '/user/update',
         headers: {
           'token': localStorage.getItem("token"),
@@ -2954,7 +2955,7 @@ export default {
     },
 
     exportUserCsv() {
-      this.$axios({
+      request({
         url: '/user/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -2982,7 +2983,7 @@ export default {
     },
 
     getGroupList() {
-      this.$axios({
+      request({
         url: '/group/list',
         headers: {
           'token': localStorage.getItem("token")
@@ -2994,7 +2995,7 @@ export default {
     },
 
     getGroupPage(current, size) {
-      this.$axios({
+      request({
         url: '/group/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
@@ -3010,7 +3011,7 @@ export default {
     },
 
     deleteGroup(group) {
-      this.$axios.delete('/group/delete/' + group.id, {
+      request.delete('/group/delete/' + group.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3031,7 +3032,7 @@ export default {
     },
 
     handleGroupSettingSubmit() {
-      this.$axios({
+      request({
         url: '/group/update',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3051,7 +3052,7 @@ export default {
     },
 
     handleGroupFunc(row) {
-      this.$axios({
+      request({
         url: '/setting/' + row.id,
         headers: {
           'token': localStorage.getItem("token"),
@@ -3069,7 +3070,7 @@ export default {
     },
 
     handleGroupFuncSubmit() {
-      this.$axios({
+      request({
         url: '/setting/set',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3088,7 +3089,7 @@ export default {
     },
 
     exportGroupCsv() {
-      this.$axios({
+      request({
         url: '/group/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -3111,7 +3112,7 @@ export default {
     },
 
     exportFuncCsv() {
-      this.$axios({
+      request({
         url: '/setting/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -3139,7 +3140,7 @@ export default {
     },
 
     getItemList() {
-      this.$axios({
+      request({
         url: '/item/list',
         headers: {
           'token': localStorage.getItem("token")
@@ -3151,7 +3152,7 @@ export default {
     },
 
     getItemPage(current, size) {
-      this.$axios({
+      request({
         url: '/item/page/' + current + '/' + size,
         headers: {
           'token': localStorage.getItem("token")
@@ -3173,7 +3174,7 @@ export default {
     },
 
     handleItemSettingSubmit() {
-      this.$axios({
+      request({
         url: '/item/update',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3209,7 +3210,7 @@ export default {
     },
 
     handleItemAddingSubmit() {
-      this.$axios({
+      request({
         url: '/item/add',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3229,7 +3230,7 @@ export default {
     },
 
     deleteItem(item) {
-      this.$axios.delete('/item/delete/' + item.id, {
+      request.delete('/item/delete/' + item.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3244,7 +3245,7 @@ export default {
     },
 
     exportItemCsv() {
-      this.$axios({
+      request({
         url: '/item/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -3275,7 +3276,7 @@ export default {
     },
 
     getInventoryList(id) {
-      this.$axios({
+      request({
         url: '/inventory/list',
         headers: {
           'token': localStorage.getItem("token")
@@ -3290,7 +3291,7 @@ export default {
     },
 
     deleteInventory(inventory) {
-      this.$axios.delete('/inventory/delete/' + inventory.id, {
+      request.delete('/inventory/delete/' + inventory.id, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3311,7 +3312,7 @@ export default {
     },
 
     handleInventorySettingSubmit() {
-      this.$axios({
+      request({
         url: '/inventory/update',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3331,7 +3332,7 @@ export default {
     },
 
     addInventory(userId, itemid) {
-      this.$axios({
+      request({
         url: '/inventory/add',
         headers: {
           'token': localStorage.getItem("token"),
@@ -3353,7 +3354,7 @@ export default {
     },
 
     exportInventoryCsv() {
-      this.$axios({
+      request({
         url: '/inventory/exportCsv',
         headers: {
           'token': localStorage.getItem("token")
@@ -3376,7 +3377,7 @@ export default {
     },
 
     initRootFile() {
-      this.$axios.get('/file/init', {
+      request.get('/file/init', {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3406,7 +3407,7 @@ export default {
 
       // 根据参数决定是否执行文件同步
       const syncPromise = isFileSync
-        ? this.$axios.get('/file/sync', {
+        ? request.get('/file/sync', {
           headers: {
             token: localStorage.getItem("token")
           }
@@ -3455,7 +3456,7 @@ export default {
     },
 
     deleteAdmin() {
-      this.$axios.delete('/delete', {
+      request.delete('/delete', {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3480,7 +3481,7 @@ export default {
     },
 
     handlePasswordChangeSubmit() {
-      this.$axios.post('/changePwd', this.passwordChangeForm, {
+      request.post('/changePwd', this.passwordChangeForm, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3501,7 +3502,7 @@ export default {
     },
 
     handleAdminEditSubmit() {
-      this.$axios.post('/update', this.adminEditForm, {
+      request.post('/update', this.adminEditForm, {
         headers: {
           token: localStorage.getItem("token")
         }
@@ -3522,7 +3523,7 @@ export default {
     },
 
     invoke() {
-      this.$axios.get('/system/invoke', {
+      request.get('/system/invoke', {
         headers: {
           token: localStorage.getItem("token")
         },
