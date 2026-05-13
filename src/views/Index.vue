@@ -3,64 +3,75 @@
     <el-container>
       <!-- 头部区域 -->
       <el-header height="auto">
-        <el-menu
-            ref="menu"
-            class="el-menu-1"
-            mode="horizontal"
-            :ellipsis="false"
-            style="min-width: 100%;"
-        >
+        <el-menu ref="menu" class="el-menu-1" mode="horizontal" :ellipsis="false" style="min-width: 100%;">
           <!-- 左侧LOGO信息 -->
           <el-menu-item index="logo">
             <h1>NullBot <el-icon size="25">
-              <MostlyCloudy />
-            </el-icon></h1>
+                <MostlyCloudy />
+              </el-icon></h1>
           </el-menu-item>
 
           <!-- 中部功能相关 -->
-          <div class="header-center" style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
+          <div class="header-center"
+            style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
             <!-- op=1时 显示搜索功能 -->
-            <div v-show="op === 1" class="search-container" style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
-              <el-icon size="20"><Files /></el-icon>
-              <el-input
-                  placeholder="在此目录中搜索"
-                  v-model="searchKey"
-                  clearable
-                  style="flex: 1; min-width: 20px;"
-              >
+            <div v-show="op === 1" class="search-container"
+              style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
+              <el-icon size="20">
+                <Files />
+              </el-icon>
+              <el-input placeholder="在此目录中搜索" v-model="searchKey" clearable style="flex: 1; min-width: 20px;">
               </el-input>
 
               <el-button plain @click="searchFile">
-                <el-icon size="15"><Search /></el-icon>&nbsp;搜索
+                <el-icon size="15">
+                  <Search />
+                </el-icon>&nbsp;搜索
               </el-button>
             </div>
             <!-- op=2时 显示问候 -->
-            <h3 v-show="op === 2" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; white-space: nowrap">
+            <h3 v-show="op === 2"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; white-space: nowrap">
               <span>Ciallo～(∠・ω&lt; ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
             </h3>
             <!-- op=3时 显示语录管理 -->
-            <h3 v-show="op === 3" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><ChatDotSquare /></el-icon>语录管理
+            <h3 v-show="op === 3"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon>
+                <ChatDotSquare />
+              </el-icon>语录管理
             </h3>
 
             <!-- op=4时 显示数据统计 -->
-            <h3 v-show="op === 4" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Histogram /></el-icon>数据统计
+            <h3 v-show="op === 4"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon>
+                <Histogram />
+              </el-icon>数据统计
             </h3>
 
             <!-- op=5时 显示用户管理 -->
-            <h3 v-show="op === 5" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Cellphone /></el-icon>用户管理
+            <h3 v-show="op === 5"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon>
+                <Cellphone />
+              </el-icon>用户管理
             </h3>
 
             <!-- op=6时 显示群组管理 -->
-            <h3 v-show="op === 6" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><OfficeBuilding /></el-icon>群组管理
+            <h3 v-show="op === 6"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon>
+                <OfficeBuilding />
+              </el-icon>群组管理
             </h3>
 
             <!-- op=7时 显示物品管理 -->
-            <h3 v-show="op === 7" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Box /></el-icon>物品管理
+            <h3 v-show="op === 7"
+              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <el-icon>
+                <Box />
+              </el-icon>物品管理
             </h3>
           </div>
 
@@ -68,13 +79,11 @@
           <el-sub-menu index="user" style="margin-left: auto;">
             <div style="padding: 10px; margin-bottom: 2px">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <el-avatar
-                    :size="40"
-                    :src="info.avatar"
-                    style="background-color: #433d3d;"
-                >
+                <el-avatar :size="40" :src="info.avatar" style="background-color: #433d3d;">
                   <template #default>
-                    <el-icon size="20px"><User /></el-icon>
+                    <el-icon size="20px">
+                      <User />
+                    </el-icon>
                   </template>
                 </el-avatar>
                 <div style="flex: 1; min-width: 0;">
@@ -86,23 +95,35 @@
               </div>
             </div>
 
-            <el-menu-item index="init" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
-              <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;" @click="initRootFile">
-                <el-icon size="15"><Coin /></el-icon>根初始化
+            <el-menu-item index="init"
+              style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+              <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;"
+                @click="initRootFile">
+                <el-icon size="15">
+                  <Coin />
+                </el-icon>根初始化
               </el-button>
             </el-menu-item>
-            <el-menu-item index="sync" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+            <el-menu-item index="sync"
+              style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
-                <el-icon size="15"><Switch /></el-icon>数据同步
+                <el-icon size="15">
+                  <Switch />
+                </el-icon>数据同步
               </el-button>
             </el-menu-item>
-            <el-menu-item index="logout" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+            <el-menu-item index="logout"
+              style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
-                <el-icon size="15"><SwitchButton /></el-icon>退出登录
+                <el-icon size="15">
+                  <SwitchButton />
+                </el-icon>退出登录
               </el-button>
             </el-menu-item>
             <template #title>
-              <el-icon><User /></el-icon>
+              <el-icon>
+                <User />
+              </el-icon>
               <el-text size="large" tag="b">&nbsp;{{ info.username || '未设置' }}</el-text>
             </template>
           </el-sub-menu>
@@ -112,140 +133,129 @@
       <el-container>
         <!-- 左侧导航区域 -->
         <el-aside style="width: 10%; min-width: 150px;">
-          <el-menu
-              ref="menu"
-              default-active="1"
-              class="el-menu-2"
-              :ellipsis="false"
-              style="min-width: 100%;"
-          >
+          <el-menu ref="menu" default-active="1" class="el-menu-2" :ellipsis="false" style="min-width: 100%;">
             <h3 align="center"><el-icon>
-              <Promotion />
-            </el-icon>&nbsp;导航</h3>
-            <el-menu-item
-                index="1"
-                @click="shiftMenu(1)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><Files /></el-icon>文件管理</span>
+                <Promotion />
+              </el-icon>&nbsp;导航</h3>
+            <el-menu-item index="1" @click="shiftMenu(1)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <Files />
+                </el-icon>文件管理</span>
             </el-menu-item>
-            <el-menu-item
-                index="3"
-                @click="shiftMenu(3)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><ChatDotSquare /></el-icon>语录管理</span>
+            <el-menu-item index="3" @click="shiftMenu(3)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <ChatDotSquare />
+                </el-icon>语录管理</span>
             </el-menu-item>
-            <el-menu-item
-                index="5"
-                @click="shiftMenu(5)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><Cellphone /></el-icon>用户管理</span>
+            <el-menu-item index="5" @click="shiftMenu(5)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <Cellphone />
+                </el-icon>用户管理</span>
             </el-menu-item>
-            <el-menu-item
-                index="6"
-                @click="shiftMenu(6)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><OfficeBuilding /></el-icon>群组管理</span>
+            <el-menu-item index="6" @click="shiftMenu(6)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <OfficeBuilding />
+                </el-icon>群组管理</span>
             </el-menu-item>
-            <el-menu-item
-                index="7"
-                @click="shiftMenu(7)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><Box /></el-icon>物品管理</span>
+            <el-menu-item index="7" @click="shiftMenu(7)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <Box />
+                </el-icon>物品管理</span>
             </el-menu-item>
-            <el-menu-item
-                index="4"
-                @click="shiftMenu(4)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><Histogram /></el-icon>数据统计</span>
+            <el-menu-item index="4" @click="shiftMenu(4)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <Histogram />
+                </el-icon>数据统计</span>
             </el-menu-item>
-            <el-menu-item
-                index="2"
-                @click="shiftMenu(2)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><UserFilled /></el-icon>个人中心</span>
+            <el-menu-item index="2" @click="shiftMenu(2)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <UserFilled />
+                </el-icon>个人中心</span>
             </el-menu-item>
-            <el-menu-item
-                index="8"
-                v-if="userType === 1"
-                @click="shiftMenu(8)"
-                style="display: flex; justify-content: center; align-items: center;"
-            >
-              <span><el-icon><Platform /></el-icon>系统调用</span>
+            <el-menu-item index="8" v-if="userType === 1" @click="shiftMenu(8)"
+              style="display: flex; justify-content: center; align-items: center;">
+              <span><el-icon>
+                  <Platform />
+                </el-icon>系统调用</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
 
         <!-- 右侧内容区域 -->
         <el-container style="height: 100%;">
-            <!-- 文件管理头部 -->
-            <el-header v-show="op === 1" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-              <div style="display: flex; align-items: center; padding-right: 5px">
-                <el-icon size="20">
-                  <HomeFilled />
-                </el-icon>
-                <el-text size="large">{{ " "+curDir }}&nbsp;</el-text>
-                <el-button :link="true" title="复制路径" @click="copyCurDir"><el-icon size="15"><DocumentCopy /></el-icon></el-button>
-              </div>
+          <!-- 文件管理头部 -->
+          <el-header v-show="op === 1" height="20px"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; padding-right: 5px">
+              <el-icon size="20">
+                <HomeFilled />
+              </el-icon>
+              <el-text size="large">{{ " " + curDir }}&nbsp;</el-text>
+              <el-button :link="true" title="复制路径" @click="copyCurDir"><el-icon size="15">
+                  <DocumentCopy />
+                </el-icon></el-button>
+            </div>
 
-              <!-- 文件操作按钮 -->
-              <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
-              <div style="display: flex; align-items: center;">
-                <el-upload
-                    multiple
-                    ref="upload"
-                    class="upload"
-                    action=""
-                    :file-list="uploadFileList"
-                    :on-change="handleFileChange"
-                    :on-remove="handleFileChange"
-                    :auto-upload="false"
-                    style="display: inline-flex; padding-left: 5px"
-                >
-                  <template #trigger>
-                    <el-button type="primary" plain :disabled="uploading || userType === 0">
-                      <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;{{uploading ? uploadFilesTotal + "/" + uploadFileList.length : "添加文件"}}
-                    </el-button>
-                  </template>
-                </el-upload>
+            <!-- 文件操作按钮 -->
+            <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
+            <div style="display: flex; align-items: center;">
+              <el-upload multiple ref="upload" class="upload" action="" :file-list="uploadFileList"
+                :on-change="handleFileChange" :on-remove="handleFileChange" :auto-upload="false"
+                style="display: inline-flex; padding-left: 5px">
+                <template #trigger>
+                  <el-button type="primary" plain :disabled="uploading || userType === 0">
+                    <el-icon size="15">
+                      <DocumentAdd />
+                    </el-icon>&nbsp;{{ uploading ? uploadFilesTotal + "/" + uploadFileList.length : "添加文件" }}
+                  </el-button>
+                </template>
+              </el-upload>
 
-                <el-button class="ml-1" type="success" plain @click="upload" :loading="uploading" :disabled="userType === 0">
-                  <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{uploading ? "处理中..." : "上传"}}
+              <el-button class="ml-1" type="success" plain @click="upload" :loading="uploading"
+                :disabled="userType === 0">
+                <el-icon v-if="!uploading" size="15">
+                  <UploadFilled />
+                </el-icon>&nbsp;{{ uploading ? "处理中..." : "上传" }}
+              </el-button>
+
+              <el-button-group style="margin-left: 15px; margin-right: 1px;display: inline-flex;">
+                <el-button round plain @click="backDir">
+                  <el-icon size="15">
+                    <RefreshLeft />
+                  </el-icon>&nbsp;返回上级
                 </el-button>
-
-                <el-button-group style="margin-left: 15px; margin-right: 1px;display: inline-flex;">
-                  <el-button round plain @click="backDir">
-                    <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
-                  </el-button>
-                  <el-button round plain @click="createDir" :disabled="userType === 0">
-                    <el-icon size="15"><FolderAdd /></el-icon>&nbsp;新建目录
-                  </el-button>
-                </el-button-group>
-              </div>
-            </el-header>
+                <el-button round plain @click="createDir" :disabled="userType === 0">
+                  <el-icon size="15">
+                    <FolderAdd />
+                  </el-icon>&nbsp;新建目录
+                </el-button>
+              </el-button-group>
+            </div>
+          </el-header>
 
           <!-- 语录管理头部 -->
-          <el-header v-show="op === 3" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
-              <el-icon size="18px"><Filter /></el-icon>&nbsp;
-              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+          <el-header v-show="op === 3" height="20px"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px">
+                <Filter />
+              </el-icon>&nbsp;
+              <el-form :inline="true"
+                style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
                 <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
                 </el-form-item>
 
                 <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
-                  <el-input
-                      placeholder="请输入关键字..."
-                      :prefix-icon="Search"
-                      v-model="sayingSearchKey"
-                      clearable
-                      style="width: 100%"
-                  >
+                  <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="sayingSearchKey" clearable
+                    style="width: 100%">
                   </el-input>
                 </el-form-item>
               </el-form>
@@ -255,31 +265,35 @@
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
                 <el-button round plain @click="sayingImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入语录
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入语录
                 </el-button>
                 <el-button round plain @click="exportSayingCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出语录
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出语录
                 </el-button>
               </el-button-group>
             </div>
           </el-header>
 
           <!-- 用户管理头部 -->
-          <el-header v-show="op === 5" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
-              <el-icon size="18px"><Filter /></el-icon>&nbsp;
-              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+          <el-header v-show="op === 5" height="20px"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px">
+                <Filter />
+              </el-icon>&nbsp;
+              <el-form :inline="true"
+                style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
                 <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
                 </el-form-item>
 
                 <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
-                  <el-input
-                      placeholder="请输入关键字..."
-                      :prefix-icon="Search"
-                      v-model="userSearchKey"
-                      clearable
-                      style="width: 100%"
-                  >
+                  <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="userSearchKey" clearable
+                    style="width: 100%">
                   </el-input>
                 </el-form-item>
               </el-form>
@@ -289,37 +303,45 @@
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
                 <el-button round plain @click="inventoryImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入库存
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入库存
                 </el-button>
                 <el-button round plain @click="exportInventoryCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出库存
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出库存
                 </el-button>
                 <el-button round plain @click="userImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入用户
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入用户
                 </el-button>
                 <el-button round plain @click="exportUserCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出用户
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出用户
                 </el-button>
               </el-button-group>
             </div>
           </el-header>
 
           <!-- 群组管理头部 -->
-          <el-header v-show="op === 6" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
-              <el-icon size="18px"><Filter /></el-icon>&nbsp;
-              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+          <el-header v-show="op === 6" height="20px"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px">
+                <Filter />
+              </el-icon>&nbsp;
+              <el-form :inline="true"
+                style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
                 <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
                 </el-form-item>
 
                 <el-form-item style="margin: 0; flex: 2;  min-width: 310px; max-width: 740px">
-                  <el-input
-                      placeholder="请输入关键字..."
-                      :prefix-icon="Search"
-                      v-model="groupSearchKey"
-                      clearable
-                      style="width: 100%"
-                  >
+                  <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="groupSearchKey" clearable
+                    style="width: 100%">
                   </el-input>
                 </el-form-item>
               </el-form>
@@ -329,34 +351,43 @@
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
                 <el-button round plain @click="funcImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入配置
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入配置
                 </el-button>
                 <el-button round plain @click="exportFuncCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出配置
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出配置
                 </el-button>
                 <el-button round plain @click="groupImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入群组
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入群组
                 </el-button>
                 <el-button round plain @click="exportGroupCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出群组
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出群组
                 </el-button>
               </el-button-group>
             </div>
           </el-header>
 
           <!-- 物品管理头部 -->
-          <el-header v-show="op === 7" height="20px" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
-              <el-icon size="18px"><Filter /></el-icon>&nbsp;
-              <el-form :inline="true" style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
+          <el-header v-show="op === 7" height="20px"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+              <el-icon size="18px">
+                <Filter />
+              </el-icon>&nbsp;
+              <el-form :inline="true"
+                style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
                 <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;">
                 </el-form-item>
                 <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
-                  <el-select
-                      placeholder="All Types"
-                      v-model="itemSearchCategory"
-                      style="width: 100%"
-                  >
+                  <el-select placeholder="All Types" v-model="itemSearchCategory" style="width: 100%">
                     <el-option label="ALL" :value="''" />
                     <el-option label="COMMON" :value="'COMMON'" />
                     <el-option label="SPECIAL" :value="'SPECIAL'" />
@@ -366,11 +397,7 @@
                 </el-form-item>
 
                 <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
-                  <el-select
-                      placeholder="All Rarity"
-                      v-model="itemSearchRarity"
-                      style="width: 100%"
-                  >
+                  <el-select placeholder="All Rarity" v-model="itemSearchRarity" style="width: 100%">
                     <el-option label="ALL" :value="''" />
                     <el-option label="WHITE" :value="'WHITE'" />
                     <el-option label="GREEN" :value="'GREEN'" />
@@ -382,13 +409,8 @@
                 </el-form-item>
 
                 <el-form-item style="margin: 0; flex: 2;  min-width: 150px; max-width: 500px">
-                  <el-input
-                      placeholder="请输入关键字..."
-                      :prefix-icon="Search"
-                      v-model="itemSearchKey"
-                      clearable
-                      style="width: 100%"
-                  >
+                  <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="itemSearchKey" clearable
+                    style="width: 100%">
                   </el-input>
                 </el-form-item>
               </el-form>
@@ -398,13 +420,19 @@
             <div style="display: flex; align-items: center; flex-shrink: 0;">
               <el-button-group style="display: inline-flex; margin-right: 1px">
                 <el-button round plain @click="itemImportVisible = true" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
+                  <el-icon size="15">
+                    <DocumentAdd />
+                  </el-icon>&nbsp;导入物品
                 </el-button>
                 <el-button round plain @click="handleItemAdding()" :disabled="userType === 0">
-                  <el-icon size="15"><Plus /></el-icon>&nbsp;新增物品
+                  <el-icon size="15">
+                    <Plus />
+                  </el-icon>&nbsp;新增物品
                 </el-button>
                 <el-button round plain @click="exportItemCsv()" :disabled="userType === 0">
-                  <el-icon size="15"><DocumentCopy /></el-icon>&nbsp;导出物品
+                  <el-icon size="15">
+                    <DocumentCopy />
+                  </el-icon>&nbsp;导出物品
                 </el-button>
               </el-button-group>
             </div>
@@ -420,7 +448,7 @@
                 </template>
 
                 <el-table-column type="index" label="序号" width="80" align="center"
-                                 :index="(filePageInfo.current - 1) * filePageInfo.size + 1">
+                  :index="(filePageInfo.current - 1) * filePageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="文件名" min-width="300" show-overflow-tooltip>
@@ -434,23 +462,19 @@
                       </el-icon>
 
                       <!-- 文件名部分 -->
-                      <span v-if="scope.row.isDir === 1" class="file-name-clickable"
-                            @click="enterDir(scope.row)"
-                            :title="`进入文件夹: ${scope.row.fileName}`"
-                            style="cursor: pointer; color: #409eff; text-decoration: none;"
-                            @mouseenter="e => e.target.style.textDecoration = 'underline'"
-                            @mouseleave="e => e.target.style.textDecoration = 'none'"
-                      >
+                      <span v-if="scope.row.isDir === 1" class="file-name-clickable" @click="enterDir(scope.row)"
+                        :title="`进入文件夹: ${scope.row.fileName}`"
+                        style="cursor: pointer; color: #409eff; text-decoration: none;"
+                        @mouseenter="e => e.target.style.textDecoration = 'underline'"
+                        @mouseleave="e => e.target.style.textDecoration = 'none'">
                         {{ scope.row.fileName }}
                       </span>
 
                       <span v-else-if="isPreviewable(scope.row)" class="file-name-clickable"
-                            @click="handlePreview(scope.row)"
-                            :title="`预览文件: ${scope.row.fileName}`"
-                            style="cursor: pointer; color: #67c23a; text-decoration: none;"
-                            @mouseenter="e => e.target.style.textDecoration = 'underline'"
-                            @mouseleave="e => e.target.style.textDecoration = 'none'"
-                      >
+                        @click="handlePreview(scope.row)" :title="`预览文件: ${scope.row.fileName}`"
+                        style="cursor: pointer; color: #67c23a; text-decoration: none;"
+                        @mouseenter="e => e.target.style.textDecoration = 'underline'"
+                        @mouseleave="e => e.target.style.textDecoration = 'none'">
                         {{ scope.row.fileName }}
                       </span>
                       <span v-else style="color: #cdd1da;">
@@ -462,7 +486,8 @@
 
                 <el-table-column label="所有者" width="100" align="center" show-overflow-tooltip>
                   <template v-slot="scope">
-                    {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})` : `(${scope.row.ownerId})`) : '-' }}
+                    {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})`
+                      : `(${scope.row.ownerId})`) : '-' }}
                   </template>
                 </el-table-column>
 
@@ -480,7 +505,8 @@
 
                 <el-table-column label="文件类型" width="100" align="center">
                   <template v-slot="scope">
-                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
+                    <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain"
+                      round>
                       {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
                     </el-tag>
                   </template>
@@ -488,36 +514,51 @@
 
                 <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
                   <template v-slot="scope">
-                    <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(218,62,113,0.95)"
-                               :loading="scope.row._loading" :before-change="() => changeFileVisible(scope.row)"/>
+                    <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
+                      style="--el-switch-on-color: rgba(218,62,113,0.95)" :loading="scope.row._loading"
+                      :before-change="() => changeFileVisible(scope.row)" />
                   </template>
                 </el-table-column>
 
                 <el-table-column fixed="right" label="操作" width="275" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="info" plain @click="handlePreview(scope.row)"
-                                 v-if="isPreviewable(scope.row)" size="small" title="预览">
-                        <el-icon size="14"><Picture /></el-icon>
+                      <el-button type="info" plain @click="handlePreview(scope.row)" v-if="isPreviewable(scope.row)"
+                        size="small" title="预览">
+                        <el-icon size="14">
+                          <Picture />
+                        </el-icon>
                       </el-button>
                       <el-button type="info" plain size="small" @click="enterDir(scope.row)"
-                                 v-if="scope.row.isDir === 1" title="进入文件夹">
-                        <el-icon size="14"><FolderOpened /></el-icon>
+                        v-if="scope.row.isDir === 1" title="进入文件夹">
+                        <el-icon size="14">
+                          <FolderOpened />
+                        </el-icon>
                       </el-button>
                       <el-button type="success" plain size="small" @click="download(scope.row)"
-                                 v-if="scope.row.isDir === 0" title="下载">
-                        <el-icon size="14"><Download /></el-icon>
+                        v-if="scope.row.isDir === 0" title="下载">
+                        <el-icon size="14">
+                          <Download />
+                        </el-icon>
                       </el-button>
-                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
-                        <el-icon size="14"><Edit /></el-icon>
+                      <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <Edit />
+                        </el-icon>
                       </el-button>
-                      <el-button type="primary" plain size="small" @click="handleMove(scope.row)" title="移动" :disabled="userType === 0">
-                        <el-icon size="14"><CopyDocument /></el-icon>
+                      <el-button type="primary" plain size="small" @click="handleMove(scope.row)" title="移动"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <CopyDocument />
+                        </el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
                         <template #reference>
                           <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                            <el-icon size="14"><Delete /></el-icon>
+                            <el-icon size="14">
+                              <Delete />
+                            </el-icon>
                           </el-button>
                         </template>
                       </el-popconfirm>
@@ -529,7 +570,8 @@
 
             <!-- 语录管理 -->
             <div v-show="op === 3">
-              <el-table ref="sayingTableData" :data="filteredSayingTableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="sayingTableData" :data="filteredSayingTableData" style="width: 100%"
+                height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无语录"></el-empty>
                 </template>
@@ -538,7 +580,7 @@
                 </el-table-column>
 
                 <el-table-column v-if="!hasSayingFilter" type="index" label="序号" width="60" align="center"
-                                 :index="(sayingPageInfo.current - 1) * sayingPageInfo.size + 1">
+                  :index="(sayingPageInfo.current - 1) * sayingPageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="语录ID" width="90" align="center">
@@ -574,7 +616,9 @@
                     <el-popconfirm title="确认删除吗?" @confirm="deleteSaying(scope.row)">
                       <template #reference>
                         <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                          <el-icon size="14"><Delete /></el-icon>
+                          <el-icon size="14">
+                            <Delete />
+                          </el-icon>
                         </el-button>
                       </template>
                     </el-popconfirm>
@@ -585,7 +629,8 @@
 
             <!-- 用户管理 -->
             <div v-show="op === 5">
-              <el-table ref="userTableData" :data="filteredUserTableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="userTableData" :data="filteredUserTableData" style="width: 100%"
+                height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无用户"></el-empty>
                 </template>
@@ -594,7 +639,7 @@
                 </el-table-column>
 
                 <el-table-column v-if="!hasUserFilter" type="index" label="序号" width="60" align="center"
-                                 :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
+                  :index="(userPageInfo.current - 1) * userPageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="用户ID" min-width="120" align="center">
@@ -643,15 +688,22 @@
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
                       <el-button type="success" plain size="small" @click="handleInventories(scope.row)" title="库存">
-                        <el-icon size="14"><Box /></el-icon>
+                        <el-icon size="14">
+                          <Box />
+                        </el-icon>
                       </el-button>
-                      <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
-                        <el-icon size="14"><Setting /></el-icon>
+                      <el-button type="warning" plain @click="handleUserSetting(scope.row)" size="small" title="设置"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <Setting />
+                        </el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteUser(scope.row)">
                         <template #reference>
                           <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                            <el-icon size="14"><Delete /></el-icon>
+                            <el-icon size="14">
+                              <Delete />
+                            </el-icon>
                           </el-button>
                         </template>
                       </el-popconfirm>
@@ -663,7 +715,8 @@
 
             <!-- 群组管理 -->
             <div v-show="op === 6">
-              <el-table ref="groupTableData" :data="filteredGroupTableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="groupTableData" :data="filteredGroupTableData" style="width: 100%"
+                height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无群组"></el-empty>
                 </template>
@@ -672,7 +725,7 @@
                 </el-table-column>
 
                 <el-table-column v-if="!hasGroupFilter" type="index" label="序号" width="60" align="center"
-                                 :index="(groupPageInfo.current - 1) * groupPageInfo.size + 1">
+                  :index="(groupPageInfo.current - 1) * groupPageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="群组ID" min-width="120" align="center">
@@ -696,16 +749,24 @@
                 <el-table-column fixed="right" label="操作" width="216" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="primary" plain @click="handleGroupFunc(scope.row)" size="small" title="功能" :disabled="userType === 0">
-                        <el-icon size="14"><TurnOff /></el-icon>
+                      <el-button type="primary" plain @click="handleGroupFunc(scope.row)" size="small" title="功能"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <TurnOff />
+                        </el-icon>
                       </el-button>
-                      <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
-                        <el-icon size="14"><Setting /></el-icon>
+                      <el-button type="warning" plain @click="handleGroupSetting(scope.row)" size="small" title="设置"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <Setting />
+                        </el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteGroup(scope.row)">
                         <template #reference>
                           <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                            <el-icon size="14"><Delete /></el-icon>
+                            <el-icon size="14">
+                              <Delete />
+                            </el-icon>
                           </el-button>
                         </template>
                       </el-popconfirm>
@@ -717,7 +778,8 @@
 
             <!-- 物品管理 -->
             <div v-show="op === 7">
-              <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%"
+                height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无物品"></el-empty>
                 </template>
@@ -726,7 +788,7 @@
                 </el-table-column>
 
                 <el-table-column v-if="!hasItemFilter" type="index" label="序号" width="60" align="center"
-                                 :index="(itemPageInfo.current - 1) * itemPageInfo.size + 1">
+                  :index="(itemPageInfo.current - 1) * itemPageInfo.size + 1">
                 </el-table-column>
 
                 <el-table-column label="物品ID" width="90" align="center">
@@ -792,13 +854,18 @@
                 <el-table-column fixed="right" label="操作" width="150" align="center">
                   <template v-slot="scope">
                     <div style="display: flex; gap: 2px; justify-content: center;">
-                      <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
-                        <el-icon size="14"><Setting /></el-icon>
+                      <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置"
+                        :disabled="userType === 0">
+                        <el-icon size="14">
+                          <Setting />
+                        </el-icon>
                       </el-button>
                       <el-popconfirm title="确认删除吗?" @confirm="deleteItem(scope.row)">
                         <template #reference>
                           <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                            <el-icon size="14"><Delete /></el-icon>
+                            <el-icon size="14">
+                              <Delete />
+                            </el-icon>
                           </el-button>
                         </template>
                       </el-popconfirm>
@@ -811,70 +878,43 @@
             <!-- 数据统计 -->
             <div v-if="op === 4" style="margin-right: 40px; margin-top: 10px;">
               <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center">
-                  <div class="statistic-card" style="min-width: 110px">
-                    <el-statistic :value="totalVisits">
-                      <template #title>
-                        <div style="display: inline-flex; align-items: center">
-                          总调用次数
-                          <el-tooltip
-                              effect="dark"
-                              content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)"
-                              placement="top"
-                          >
-                            <el-icon style="margin-left: 4px" :size="12">
-                              <Warning />
-                            </el-icon>
-                          </el-tooltip>
-                        </div>
-                      </template>
-                    </el-statistic>
-<!--                    <div class="statistic-footer">-->
-<!--                      <div class="footer-item">-->
-<!--                        <span>than yesterday</span>-->
-<!--                        <span class="green">24%<el-icon><CaretTop /></el-icon></span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-                  </div>
-                <LineChart
-                    :title="'每日访问量 (近30日)'"
-                    :y_name="'调用次数'"
-                    :data="visitsData"
-                    :xAxis="visitsXAxis"
-                    :height="'400px'"
-                    :width="'90%'"
-                />
+                <div class="statistic-card" style="min-width: 110px">
+                  <el-statistic :value="totalVisits">
+                    <template #title>
+                      <div style="display: inline-flex; align-items: center">
+                        总调用次数
+                        <el-tooltip effect="dark" content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)" placement="top">
+                          <el-icon style="margin-left: 4px" :size="12">
+                            <Warning />
+                          </el-icon>
+                        </el-tooltip>
+                      </div>
+                    </template>
+                  </el-statistic>
+                  <!--                    <div class="statistic-footer">-->
+                  <!--                      <div class="footer-item">-->
+                  <!--                        <span>than yesterday</span>-->
+                  <!--                        <span class="green">24%<el-icon><CaretTop /></el-icon></span>-->
+                  <!--                      </div>-->
+                  <!--                    </div>-->
+                </div>
+                <LineChart :title="'每日访问量 (近30日)'" :y_name="'调用次数'" :data="visitsData" :xAxis="visitsXAxis"
+                  :height="'400px'" :width="'90%'" />
               </el-header>
               <el-scrollbar height="calc(100vh - 600px)">
-                <BarChart
-                    :title="'指令访问量 (Top20)'"
-                    :y_name="'调用次数'"
-                    :data="topCommandsData"
-                    :xAxis="topCommandsAxis"
-                    :height="'235px'"
-                    :width="'100%'"
-                />
-                <BarChart
-                    :title="'用户访问量 (Top20)'"
-                    :y_name="'调用次数'"
-                    :data="topUsersData"
-                    :xAxis="topUsersAxis"
-                    :height="'235px'"
-                    :width="'100%'"
-                />
-                <BarChart
-                    :title="'群聊访问量 (Top20)'"
-                    :y_name="'调用次数'"
-                    :data="topGroupsData"
-                    :xAxis="topGroupsAxis"
-                    :height="'235px'"
-                    :width="'100%'"
-                />
+                <BarChart :title="'指令访问量 (Top20)'" :y_name="'调用次数'" :data="topCommandsData" :xAxis="topCommandsAxis"
+                  :height="'235px'" :width="'100%'" />
+                <BarChart :title="'用户访问量 (Top20)'" :y_name="'调用次数'" :data="topUsersData" :xAxis="topUsersAxis"
+                  :height="'235px'" :width="'100%'" />
+                <BarChart :title="'群聊访问量 (Top20)'" :y_name="'调用次数'" :data="topGroupsData" :xAxis="topGroupsAxis"
+                  :height="'235px'" :width="'100%'" />
               </el-scrollbar>
             </div>
 
             <!-- 个人中心 -->
             <div v-show="op === 2" style="margin-right: 20px;">
-              <el-descriptions title="用户信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+              <el-descriptions title="用户信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1"
+                border>
                 <el-descriptions-item label="ID">
                   <el-tag type="danger">{{ info.id || '无' }}</el-tag>
                 </el-descriptions-item>
@@ -886,31 +926,42 @@
                 </el-descriptions-item>
               </el-descriptions>
 
-              <el-descriptions title="访问信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+              <el-descriptions title="访问信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1"
+                border>
                 <el-descriptions-item label="Type">
                   <el-tag type="warning">{{ userType }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="Token">
-                  <el-tag type="warning" style="white-space: normal; word-break: break-all; height: auto; padding-bottom: 5px; padding-top: 5px">{{ token }}</el-tag>
+                  <el-tag type="warning"
+                    style="white-space: normal; word-break: break-all; height: auto; padding-bottom: 5px; padding-top: 5px">{{
+                    token }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
               <div style="position: fixed; bottom: 75px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
                 <el-button type="success" round plain @click="handleAdminEdit" :disabled="userType === 0">
-                  <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
+                  <el-icon size="15">
+                    <Edit />
+                  </el-icon>&nbsp;修改信息
                 </el-button>
                 <el-button type="warning" round plain @click="handlePasswordChange" :disabled="userType === 0">
-                  <el-icon size="15"><Setting /></el-icon>&nbsp;修改密码
+                  <el-icon size="15">
+                    <Setting />
+                  </el-icon>&nbsp;修改密码
                 </el-button>
                 <el-popconfirm title="确认注销吗?" @confirm="deleteAdmin">
                   <template #reference>
                     <el-button type="primary" round plain :disabled="userType === 0">
-                      <el-icon size="15"><Delete /></el-icon>&nbsp;注销账号
+                      <el-icon size="15">
+                        <Delete />
+                      </el-icon>&nbsp;注销账号
                     </el-button>
                   </template>
                 </el-popconfirm>
                 <el-button type="danger" round plain @click="logout">
-                  <el-icon size="15"><SwitchButton /></el-icon>&nbsp;退出登录
+                  <el-icon size="15">
+                    <SwitchButton />
+                  </el-icon>&nbsp;退出登录
                 </el-button>
               </div>
             </div>
@@ -920,18 +971,25 @@
               <el-form>
                 <el-form-item label="调用指令" prop="invokeCommand">
                   <div style="display: flex; width: 100%">
-                    <el-input placeholder="请输入指令... 格式: [Bean名] [方法名] [参数...]" v-model="invokeCommand" style="flex: 1; min-width: 0;"/>
-                    <el-button type="danger" plain @click="this.invokeResult = ''" style="white-space: nowrap; margin-left: 0">
-                      <el-icon size="15"><Delete /></el-icon>&nbsp;清空
+                    <el-input placeholder="请输入指令... 格式: [Bean名] [方法名] [参数...]" v-model="invokeCommand"
+                      style="flex: 1; min-width: 0;" />
+                    <el-button type="danger" plain @click="this.invokeResult = ''"
+                      style="white-space: nowrap; margin-left: 0">
+                      <el-icon size="15">
+                        <Delete />
+                      </el-icon>&nbsp;清空
                     </el-button>
                     <el-button type="primary" plain @click="invoke" style="white-space: nowrap; margin-left: 0">
-                      <el-icon size="15"><Grid /></el-icon>&nbsp;调用
+                      <el-icon size="15">
+                        <Grid />
+                      </el-icon>&nbsp;调用
                     </el-button>
                   </div>
                 </el-form-item>
 
                 <el-form-item label="执行结果" prop="invokeResult">
-                  <el-input placeholder="无指令输出..." v-model="invokeResult" type="textarea" :autosize="{ minRows: 50, maxRows: 50 }" style="width: 100%"/>
+                  <el-input placeholder="无指令输出..." v-model="invokeResult" type="textarea"
+                    :autosize="{ minRows: 50, maxRows: 50 }" style="width: 100%" />
                 </el-form-item>
               </el-form>
             </div>
@@ -941,103 +999,95 @@
           <!-- 下部分页区域 -->
           <el-footer height="60px" style="padding: 10px 20px;">
             <div v-show="op === 1" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ filePageInfo.total }} 条记录
+              <el-text
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ filePageInfo.total }} 条记录
               </el-text>
-              <el-pagination
-                  background
-                  @size-change="handleFileSizeChange"
-                  @current-change="handleFileCurrentChange"
-                  layout="sizes, prev, pager, next"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="filePageInfo.size"
-                  :total="filePageInfo.total"
-                  :current-page="filePageInfo.current"
-                  :pager-count="7">
+              <el-pagination background @size-change="handleFileSizeChange" @current-change="handleFileCurrentChange"
+                layout="sizes, prev, pager, next" :page-sizes="[10, 20, 30, 40]" :page-size="filePageInfo.size"
+                :total="filePageInfo.total" :current-page="filePageInfo.current" :pager-count="7">
               </el-pagination>
             </div>
 
             <div v-show="op === 3" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasSayingFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ filteredSayingTableData.length }} 条记录
+              <el-text v-if="hasSayingFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ filteredSayingTableData.length }} 条记录
               </el-text>
-              <el-text v-if="!hasSayingFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录
+              <el-text v-if="!hasSayingFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ sayingPageInfo.total }} 条记录
               </el-text>
-              <el-pagination
-                  v-if="!hasSayingFilter"
-                  background
-                  @size-change="handleSayingSizeChange"
-                  @current-change="handleSayingCurrentChange"
-                  layout="sizes, prev, pager, next"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="sayingPageInfo.size"
-                  :total="sayingPageInfo.total"
-                  :current-page="sayingPageInfo.current"
-                  :pager-count="7">
+              <el-pagination v-if="!hasSayingFilter" background @size-change="handleSayingSizeChange"
+                @current-change="handleSayingCurrentChange" layout="sizes, prev, pager, next"
+                :page-sizes="[10, 20, 30, 40]" :page-size="sayingPageInfo.size" :total="sayingPageInfo.total"
+                :current-page="sayingPageInfo.current" :pager-count="7">
               </el-pagination>
             </div>
 
             <div v-show="op === 5" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasUserFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ filteredUserTableData.length }} 条记录
+              <el-text v-if="hasUserFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ filteredUserTableData.length }} 条记录
               </el-text>
-              <el-text v-if="!hasUserFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录
+              <el-text v-if="!hasUserFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ userPageInfo.total }} 条记录
               </el-text>
-              <el-pagination
-                  v-if="!hasUserFilter"
-                  background
-                  @size-change="handleUserSizeChange"
-                  @current-change="handleUserCurrentChange"
-                  layout="sizes, prev, pager, next"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="userPageInfo.size"
-                  :total="userPageInfo.total"
-                  :current-page="userPageInfo.current"
-                  :pager-count="7">
+              <el-pagination v-if="!hasUserFilter" background @size-change="handleUserSizeChange"
+                @current-change="handleUserCurrentChange" layout="sizes, prev, pager, next"
+                :page-sizes="[10, 20, 30, 40]" :page-size="userPageInfo.size" :total="userPageInfo.total"
+                :current-page="userPageInfo.current" :pager-count="7">
               </el-pagination>
             </div>
 
             <div v-show="op === 6" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasGroupFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ filteredGroupTableData.length }} 条记录
+              <el-text v-if="hasGroupFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ filteredGroupTableData.length }} 条记录
               </el-text>
-              <el-text v-if="!hasGroupFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录
+              <el-text v-if="!hasGroupFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ groupPageInfo.total }} 条记录
               </el-text>
-              <el-pagination
-                  v-if="!hasGroupFilter"
-                  background
-                  @size-change="handleGroupSizeChange"
-                  @current-change="handleGroupCurrentChange"
-                  layout="sizes, prev, pager, next"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="groupPageInfo.size"
-                  :total="groupPageInfo.total"
-                  :current-page="groupPageInfo.current"
-                  :pager-count="7">
+              <el-pagination v-if="!hasGroupFilter" background @size-change="handleGroupSizeChange"
+                @current-change="handleGroupCurrentChange" layout="sizes, prev, pager, next"
+                :page-sizes="[10, 20, 30, 40]" :page-size="groupPageInfo.size" :total="groupPageInfo.total"
+                :current-page="groupPageInfo.current" :pager-count="7">
               </el-pagination>
             </div>
 
             <div v-show="op === 7" style="display: flex; align-items: center; justify-content: space-between;">
-              <el-text v-if="hasItemFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录
+              <el-text v-if="hasItemFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ filteredItemTableData.length }} 条记录
               </el-text>
-              <el-text v-if="!hasItemFilter" style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
-                <el-icon><InfoFilled /></el-icon> 共 {{ itemPageInfo.total }} 条记录
+              <el-text v-if="!hasItemFilter"
+                style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+                <el-icon>
+                  <InfoFilled />
+                </el-icon> 共 {{ itemPageInfo.total }} 条记录
               </el-text>
-              <el-pagination
-                  v-if="!hasItemFilter"
-                  background
-                  @size-change="handleItemSizeChange"
-                  @current-change="handleItemCurrentChange"
-                  layout="sizes, prev, pager, next"
-                  :page-sizes="[10, 20, 30, 40]"
-                  :page-size="itemPageInfo.size"
-                  :total="itemPageInfo.total"
-                  :current-page="itemPageInfo.current"
-                  :pager-count="7">
+              <el-pagination v-if="!hasItemFilter" background @size-change="handleItemSizeChange"
+                @current-change="handleItemCurrentChange" layout="sizes, prev, pager, next"
+                :page-sizes="[10, 20, 30, 40]" :page-size="itemPageInfo.size" :total="itemPageInfo.total"
+                :current-page="itemPageInfo.current" :pager-count="7">
               </el-pagination>
             </div>
           </el-footer>
@@ -1064,7 +1114,8 @@
 
           <el-table-column label="所有者" width="100" align="center" show-overflow-tooltip>
             <template v-slot="scope">
-              {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})` : `(${scope.row.ownerId})`) : '-' }}
+              {{ scope.row.ownerId != null ? (scope.row.ownerName ? `${scope.row.ownerName}(${scope.row.ownerId})` :
+                `(${scope.row.ownerId})`) : '-' }}
             </template>
           </el-table-column>
 
@@ -1090,33 +1141,45 @@
 
           <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
             <template v-slot="scope">
-              <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close" style="--el-switch-on-color: rgba(102,192,58,0.81)"
-                         :loading="scope.row._loading" :before-change="() => changeFileVisible(scope.row)"/>
+              <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
+                style="--el-switch-on-color: rgba(102,192,58,0.81)" :loading="scope.row._loading"
+                :before-change="() => changeFileVisible(scope.row)" />
             </template>
           </el-table-column>
 
           <el-table-column fixed="right" label="操作" width="216" align="center">
             <template v-slot="scope">
               <div style="display: flex; gap: 2px; justify-content: center;">
-                <el-button type="info" plain @click="handlePreview(scope.row)"
-                           v-if="isPreviewable(scope.row)" size="small" title="预览">
-                  <el-icon size="14"><Picture /></el-icon>
+                <el-button type="info" plain @click="handlePreview(scope.row)" v-if="isPreviewable(scope.row)"
+                  size="small" title="预览">
+                  <el-icon size="14">
+                    <Picture />
+                  </el-icon>
                 </el-button>
-                <el-button type="primary" plain size="small" @click="enterDir(scope.row)"
-                           v-if="scope.row.isDir === 1" title="进入文件夹">
-                  <el-icon size="14"><FolderOpened /></el-icon>
+                <el-button type="primary" plain size="small" @click="enterDir(scope.row)" v-if="scope.row.isDir === 1"
+                  title="进入文件夹">
+                  <el-icon size="14">
+                    <FolderOpened />
+                  </el-icon>
                 </el-button>
-                <el-button type="success" plain size="small" @click="download(scope.row)"
-                           v-if="scope.row.isDir === 0" title="下载">
-                  <el-icon size="14"><Download /></el-icon>
+                <el-button type="success" plain size="small" @click="download(scope.row)" v-if="scope.row.isDir === 0"
+                  title="下载">
+                  <el-icon size="14">
+                    <Download />
+                  </el-icon>
                 </el-button>
-                <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名" :disabled="userType === 0">
-                  <el-icon size="14"><Edit /></el-icon>
+                <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名"
+                  :disabled="userType === 0">
+                  <el-icon size="14">
+                    <Edit />
+                  </el-icon>
                 </el-button>
                 <el-popconfirm title="确认删除吗?" @confirm="deleteFile(scope.row)">
                   <template #reference>
                     <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                      <el-icon size="14"><Delete /></el-icon>
+                      <el-icon size="14">
+                        <Delete />
+                      </el-icon>
                     </el-button>
                   </template>
                 </el-popconfirm>
@@ -1130,32 +1193,15 @@
       <el-dialog v-model="previewVisible" :title="previewTitle" :destroy-on-close="true" width="70%" top="5vh" center>
         <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
           <!-- 图片预览 -->
-          <el-image
-              v-if="previewType === 'image'"
-              :src="previewUrl"
-              :preview-src-list="[previewUrl]"
-              fit="contain"
-              style="width: 100%; display: flex; justify-content: center;"
-              :hide-on-click-modal="true"
-          />
+          <el-image v-if="previewType === 'image'" :src="previewUrl" :preview-src-list="[previewUrl]" fit="contain"
+            style="width: 100%; display: flex; justify-content: center;" :hide-on-click-modal="true" />
           <!-- 视频预览 -->
-          <video
-              v-else-if="previewType === 'video'"
-              :src="previewUrl"
-              controls
-              autoplay
-              style="max-width: 100%; max-height: 65vh;"
-          >
+          <video v-else-if="previewType === 'video'" :src="previewUrl" controls autoplay
+            style="max-width: 100%; max-height: 65vh;">
             您的浏览器不支持 video 标签。
           </video>
           <!-- 音频预览 -->
-          <audio
-              v-else-if="previewType === 'audio'"
-              :src="previewUrl"
-              controls
-              autoplay
-              style="width: 100%;"
-          >
+          <audio v-else-if="previewType === 'audio'" :src="previewUrl" controls autoplay style="width: 100%;">
             您的浏览器不支持 audio 标签。
           </audio>
           <!-- 可以在这里扩展 -->
@@ -1166,11 +1212,11 @@
       <el-dialog v-model="userSettingVisible" title="用户设置" width="500px">
         <el-form ref="userSettingFormRef" :model="userForm" label-width="100px">
           <el-form-item label="用户ID" prop="id">
-            <el-input v-model="userForm.id" :disabled="true" style="width: 90%"/>
+            <el-input v-model="userForm.id" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="昵称" prop="name">
-            <el-input v-model="userForm.name" :disabled="true" style="width: 90%"/>
+            <el-input v-model="userForm.name" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="权限" prop="access">
@@ -1184,19 +1230,19 @@
           </el-form-item>
 
           <el-form-item label="等级" prop="level">
-            <el-input v-model="userForm.level" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.level" oninput="value=value.replace(/\D/g,'')" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="现金" prop="cash">
-            <el-input v-model="userForm.cash" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.cash" oninput="value=value.replace(/\D/g,'')" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="抽数" prop="drawTimes">
-            <el-input v-model="userForm.drawTimes" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.drawTimes" oninput="value=value.replace(/\D/g,'')" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="仓库容量" prop="capacity">
-            <el-input v-model="userForm.capacity" oninput="value=value.replace(/\D/g,'')" style="width: 90%"/>
+            <el-input v-model="userForm.capacity" oninput="value=value.replace(/\D/g,'')" style="width: 90%" />
           </el-form-item>
         </el-form>
 
@@ -1211,23 +1257,23 @@
       <!-- 群组编辑对话框 -->
       <el-dialog v-model="groupSettingVisible" title="群组设置" width="500px">
         <el-form ref="groupSettingFormRef" :model="groupForm" label-width="100px">
-            <el-form-item label="群组ID" prop="id">
-              <el-input v-model="groupForm.id" :disabled="true" style="width: 90%"/>
-            </el-form-item>
+          <el-form-item label="群组ID" prop="id">
+            <el-input v-model="groupForm.id" :disabled="true" style="width: 90%" />
+          </el-form-item>
 
-            <el-form-item label="群名" prop="name">
-              <el-input v-model="groupForm.name" :disabled="true" style="width: 90%"/>
-            </el-form-item>
+          <el-form-item label="群名" prop="name">
+            <el-input v-model="groupForm.name" :disabled="true" style="width: 90%" />
+          </el-form-item>
 
-            <el-form-item label="权限" prop="access">
-              <el-select v-model="groupForm.access" style="width: 90%">
-                <el-option label="II级 (超级管理)" :value="2" />
-                <el-option label="I级 (管理)" :value="1" />
-                <el-option label="0级 (用户)" :value="0" />
-                <el-option label="-I级 (限制)" :value="-1" />
-                <el-option label="-II级 (禁用)" :value="-2" />
-              </el-select>
-            </el-form-item>
+          <el-form-item label="权限" prop="access">
+            <el-select v-model="groupForm.access" style="width: 90%">
+              <el-option label="II级 (超级管理)" :value="2" />
+              <el-option label="I级 (管理)" :value="1" />
+              <el-option label="0级 (用户)" :value="0" />
+              <el-option label="-I级 (限制)" :value="-1" />
+              <el-option label="-II级 (禁用)" :value="-2" />
+            </el-select>
+          </el-form-item>
         </el-form>
 
         <template #footer>
@@ -1244,7 +1290,9 @@
           <!-- Limit 功能模块 -->
           <div class="function-section">
             <div class="section-header">
-              <el-icon><Odometer /></el-icon>
+              <el-icon>
+                <Odometer />
+              </el-icon>
               <span class="section-title">Limit 设置</span>
             </div>
 
@@ -1258,15 +1306,15 @@
               </el-form-item>
 
               <el-form-item label="限速容量" prop="limitCapacity" :required="true">
-                <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." style="width: 250px" />
               </el-form-item>
 
               <el-form-item label="补充数量" prop="limitRefill" :required="true">
-                <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充数量..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充数量..." style="width: 250px" />
               </el-form-item>
 
               <el-form-item label="补充间隔" prop="limitInterval" :required="true">
-                <el-input v-model="groupFuncForm.limitInterval" placeholder="请输入补充间隔(单位:Min)..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.limitInterval" placeholder="请输入补充间隔(单位:Min)..." style="width: 250px" />
               </el-form-item>
             </el-form>
           </div>
@@ -1274,7 +1322,9 @@
           <!-- AIChat 功能模块 -->
           <div class="function-section">
             <div class="section-header">
-              <el-icon><Promotion /></el-icon>
+              <el-icon>
+                <Promotion />
+              </el-icon>
               <span class="section-title">AIChat 设置</span>
             </div>
 
@@ -1288,77 +1338,42 @@
               </el-form-item>
 
               <el-form-item label="发言频率" prop="replyFrequency" :required="true">
-                <el-input v-model="groupFuncForm.replyFrequency" placeholder="请输入频率(0~1)..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.replyFrequency" placeholder="请输入频率(0~1)..." style="width: 250px" />
               </el-form-item>
 
               <el-form-item label="思考模式" prop="thinking" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.thinking"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.thinking" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="语音模式" prop="voice">
-                <el-switch
-                    v-model="groupFuncForm.voice"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.voice" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="指令模式" prop="embedding" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.embedding"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.embedding" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="防注模式" prop="antiInjection">
-                <el-switch
-                    v-model="groupFuncForm.antiInjection"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.antiInjection" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="自定模式" prop="custom" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.custom"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.custom" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="指令校验" prop="embeddingAuth">
-                <el-switch
-                    v-model="groupFuncForm.embeddingAuth"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.embeddingAuth" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="自动发言" prop="autoReply" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.autoReply"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.autoReply" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
             </el-form>
           </div>
@@ -1366,59 +1381,36 @@
           <!-- Monitor 功能模块 -->
           <div class="function-section">
             <div class="section-header">
-              <el-icon><Monitor /></el-icon>
+              <el-icon>
+                <Monitor />
+              </el-icon>
               <span class="section-title">Monitor 设置</span>
             </div>
 
             <el-form ref="groupFuncMonitorFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
               <el-form-item label="图片收集" prop="imageCollect" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.imageCollect"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.imageCollect" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="消息收集" prop="messageCollect">
-                <el-switch
-                    v-model="groupFuncForm.messageCollect"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.messageCollect" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="词语检测" prop="keywordDetect" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.keywordDetect"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.keywordDetect" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="戳戳检测" prop="pokeDetect">
-                <el-switch
-                    v-model="groupFuncForm.pokeDetect"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.pokeDetect" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
 
               <el-form-item label="撤回检测" prop="recallDetect" style="margin-left: 15px">
-                <el-switch
-                    v-model="groupFuncForm.recallDetect"
-                    inline-prompt
-                    style="--el-switch-on-color: rgba(19,206,102,0.75)"
-                    :active-icon="Check"
-                    :inactive-icon="Close"
-                />
+                <el-switch v-model="groupFuncForm.recallDetect" inline-prompt
+                  style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
               </el-form-item>
             </el-form>
           </div>
@@ -1426,21 +1418,24 @@
           <!-- Guess 功能模块 -->
           <div class="function-section">
             <div class="section-header">
-              <el-icon><Grid /></el-icon>
+              <el-icon>
+                <Grid />
+              </el-icon>
               <span class="section-title">Guess 设置</span>
             </div>
 
             <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
               <el-form-item label="切割比例" prop="guessCropRatio" :required="true">
-                <el-input v-model="groupFuncForm.guessCropRatio" placeholder="请输入切割比例..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.guessCropRatio" placeholder="请输入切割比例..." style="width: 250px" />
               </el-form-item>
 
               <el-form-item label="透明比例" prop="guessTransparentRatio" :required="true">
-                <el-input v-model="groupFuncForm.guessTransparentRatio" placeholder="请输入透明比例(最大)..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.guessTransparentRatio" placeholder="请输入透明比例(最大)..."
+                  style="width: 250px" />
               </el-form-item>
 
               <el-form-item label="切割边距" prop="guessPadding" :required="true">
-                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入切割边距..." style="width: 250px"/>
+                <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入切割边距..." style="width: 250px" />
               </el-form-item>
             </el-form>
           </div>
@@ -1458,11 +1453,11 @@
       <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
         <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
           <el-form-item label="物品ID" prop="id">
-            <el-input v-model="itemForm.id" :disabled="true" style="width: 90%"/>
+            <el-input v-model="itemForm.id" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="名称" prop="name" :required="true">
-            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="类别" prop="category" :required="true">
@@ -1486,33 +1481,32 @@
           </el-form-item>
 
           <el-form-item label="可获得" prop="available" :required="true">
-            <el-switch
-                v-model="itemForm.available"
-                inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
-                :active-icon="Check"
-                :inactive-icon="Close"
-            />
+            <el-switch v-model="itemForm.available" inline-prompt
+              style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
+              :active-icon="Check" :inactive-icon="Close" />
           </el-form-item>
 
           <el-form-item label="价格" prop="price" :required="true">
-            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..." style="width: 90%"/>
+            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..."
+              style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="重量" prop="weight" :required="true">
-            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..." style="width: 90%"/>
+            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..."
+              style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="介绍" prop="description">
-            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%"/>
+            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea"
+              :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="指令" prop="command">
-            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%"/>
+            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="图路径" prop="imagePath">
-            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%"/>
+            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%" />
           </el-form-item>
         </el-form>
 
@@ -1528,7 +1522,7 @@
       <el-dialog v-model="itemAddingVisible" title="新增物品" width="500px">
         <el-form ref="itemAddingFormRef" :model="itemForm" label-width="100px">
           <el-form-item label="名称" prop="name" :required="true">
-            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%"/>
+            <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="类别" prop="category" :required="true">
@@ -1552,33 +1546,32 @@
           </el-form-item>
 
           <el-form-item label="可获得" prop="available" :required="true">
-            <el-switch
-                v-model="itemForm.available"
-                inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
-                :active-icon="Check"
-                :inactive-icon="Close"
-            />
+            <el-switch v-model="itemForm.available" inline-prompt
+              style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
+              :active-icon="Check" :inactive-icon="Close" />
           </el-form-item>
 
           <el-form-item label="价格" prop="price" :required="true">
-            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..." style="width: 90%"/>
+            <el-input v-model="itemForm.price" oninput="value=value.replace(/\D/g,'')" placeholder="请输入价格..."
+              style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="重量" prop="weight" :required="true">
-            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..." style="width: 90%"/>
+            <el-input v-model="itemForm.weight" oninput="value=value.replace(/\D/g,'')" placeholder="请输入重量..."
+              style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="介绍" prop="description">
-            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea" :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%"/>
+            <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea"
+              :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="指令" prop="command">
-            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%"/>
+            <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="图路径" prop="imagePath">
-            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%"/>
+            <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%" />
           </el-form-item>
         </el-form>
 
@@ -1592,19 +1585,11 @@
 
       <!-- 语录导入对话框 -->
       <el-dialog v-model="sayingImportVisible" title="导入 - 语录 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-saying"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/saying/importCsv')"
-            :on-success="refreshSaying"
-            :on-error="(error, file, fileList) => {
-              refreshSaying()
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-saying" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/saying/importCsv')" :on-success="refreshSaying" :on-error="(error, file, fileList) => {
+            refreshSaying()
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1614,19 +1599,11 @@
 
       <!-- 用户导入对话框 -->
       <el-dialog v-model="userImportVisible" title="导入 - 用户 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-user"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/user/importCsv')"
-            :on-success="refreshUser"
-            :on-error="(error, file, fileList) => {
-              refreshUser()
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-user" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/user/importCsv')" :on-success="refreshUser" :on-error="(error, file, fileList) => {
+            refreshUser()
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1636,19 +1613,11 @@
 
       <!-- 群组导入对话框 -->
       <el-dialog v-model="groupImportVisible" title="导入 - 群组 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-group"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/group/importCsv')"
-            :on-success="refreshGroup"
-            :on-error="(error, file, fileList) => {
-              refreshGroup()
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-group" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/group/importCsv')" :on-success="refreshGroup" :on-error="(error, file, fileList) => {
+            refreshGroup()
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1658,18 +1627,10 @@
 
       <!-- 功能导入对话框 -->
       <el-dialog v-model="funcImportVisible" title="导入 - 配置 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-func"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/setting/importCsv')"
-            :on-success="refreshSaying"
-            :on-error="(error, file, fileList) => {
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-func" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/setting/importCsv')" :on-success="refreshSaying" :on-error="(error, file, fileList) => {
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1679,19 +1640,11 @@
 
       <!-- 物品导入对话框 -->
       <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-item"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/item/importCsv')"
-            :on-success="refreshItem"
-            :on-error="(error, file, fileList) => {
-              refreshItem()
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-item" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/item/importCsv')" :on-success="refreshItem" :on-error="(error, file, fileList) => {
+            refreshItem()
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1701,17 +1654,10 @@
 
       <!-- 库存导入对话框 -->
       <el-dialog v-model="inventoryImportVisible" title="导入 - 库存 CSV 文件" width="500px">
-        <el-upload
-            class="upload-import-inventory"
-            drag
-            :before-upload="isCsv"
-            :headers="uploadHeaders"
-            :action="uploadAction('/inventory/importCsv')"
-            :on-error="(error, file, fileList) => {
-              this.$message.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
-            }"
-            multiple
-        >
+        <el-upload class="upload-import-inventory" drag :before-upload="isCsv" :headers="uploadHeaders"
+          :action="uploadAction('/inventory/importCsv')" :on-error="(error, file, fileList) => {
+            ElMessage.warning(`CSV 文件存在数据结构或约束问题 - 可用数据已导入`)
+          }" multiple>
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">
             Drop csv file here or <em>click to import</em>
@@ -1774,13 +1720,18 @@
           <el-table-column fixed="right" label="操作" width="150" align="center">
             <template v-slot="scope">
               <div style="display: flex; gap: 2px; justify-content: center;">
-                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置" :disabled="userType === 0">
-                  <el-icon size="14"><Setting /></el-icon>
+                <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置"
+                  :disabled="userType === 0">
+                  <el-icon size="14">
+                    <Setting />
+                  </el-icon>
                 </el-button>
                 <el-popconfirm title="确认删除吗?" @confirm="deleteInventory(scope.row)">
                   <template #reference>
                     <el-button type="danger" plain size="small" title="删除" :disabled="userType === 0">
-                      <el-icon size="14"><Delete /></el-icon>
+                      <el-icon size="14">
+                        <Delete />
+                      </el-icon>
                     </el-button>
                   </template>
                 </el-popconfirm>
@@ -1793,10 +1744,13 @@
           <div class="inventories-dialog-footer">
             <el-form-item prop="newItemId" style="margin-bottom: 0; margin-right: 16px;">
               <el-input :prefix-icon="Box" v-model="newItemId" oninput="value=value.replace(/\D/g,'')"
-                        placeholder="请输入新增库存物品ID..." style="width: 100%"/>
+                placeholder="请输入新增库存物品ID..." style="width: 100%" />
             </el-form-item>
-            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px" :disabled="userType === 0">
-              <el-icon size="15px"><Plus /></el-icon>&nbsp;新增库存
+            <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px"
+              :disabled="userType === 0">
+              <el-icon size="15px">
+                <Plus />
+              </el-icon>&nbsp;新增库存
             </el-button>
           </div>
         </template>
@@ -1806,15 +1760,15 @@
       <el-dialog v-model="inventorySettingVisible" title="库存设置" width="500px">
         <el-form ref="inventorySettingFormRef" :model="inventoryForm" label-width="100px">
           <el-form-item label="库存ID" prop="id">
-            <el-input v-model="inventoryForm.id" :disabled="true" style="width: 90%"/>
+            <el-input v-model="inventoryForm.id" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="物品ID" prop="itemId">
-            <el-input v-model="inventoryForm.itemId" :disabled="true" style="width: 90%"/>
+            <el-input v-model="inventoryForm.itemId" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="名称" prop="itemName">
-            <el-input v-model="inventoryForm.itemName" :disabled="true" style="width: 90%"/>
+            <el-input v-model="inventoryForm.itemName" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="类别" prop="category">
@@ -1828,11 +1782,12 @@
           </el-form-item>
 
           <el-form-item label="价格" prop="price">
-            <el-input v-model="inventoryForm.price" :disabled="true" style="width: 90%"/>
+            <el-input v-model="inventoryForm.price" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="数量" prop="amount" :required="true">
-            <el-input v-model="inventoryForm.amount" oninput="value=value.replace(/\D/g,'')" placeholder="请输入数量..." style="width: 90%"/>
+            <el-input v-model="inventoryForm.amount" oninput="value=value.replace(/\D/g,'')" placeholder="请输入数量..."
+              style="width: 90%" />
           </el-form-item>
         </el-form>
 
@@ -1848,11 +1803,11 @@
       <el-dialog v-model="adminEditVisible" title="个人信息修改" width="500px">
         <el-form ref="adminEditFormRef" :model="adminEditForm" label-width="100px">
           <el-form-item label="ID" prop="id">
-            <el-input v-model="adminEditForm.id" :disabled="true" style="width: 90%"/>
+            <el-input v-model="adminEditForm.id" :disabled="true" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="名称" prop="username">
-            <el-input v-model="adminEditForm.username" style="width: 90%"/>
+            <el-input v-model="adminEditForm.username" style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="邮箱" prop="email">
@@ -1873,11 +1828,11 @@
       <el-dialog v-model="passwordChangeVisible" title="密码修改" width="500px">
         <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" label-width="100px">
           <el-form-item label="旧密码" prop="oldPassword" :required="true">
-            <el-input v-model="passwordChangeForm.oldPassword" show-password style="width: 90%"/>
+            <el-input v-model="passwordChangeForm.oldPassword" show-password style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="新密码" prop="newPassword" :required="true">
-            <el-input v-model="passwordChangeForm.newPassword" show-password style="width: 90%"/>
+            <el-input v-model="passwordChangeForm.newPassword" show-password style="width: 90%" />
           </el-form-item>
 
           <el-form-item label="确认密码" prop="confirmPassword" :required="true">
@@ -1898,20 +1853,18 @@
   </div>
 
   <!--  备案信息-->
-  <div style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; padding: 10px; background-color: #000;">
+  <div
+    style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; padding: 10px; background-color: #000;">
     <span style="display: inline-block;">
       <img src="../assets/备案图标.png" alt="" style="width: 14px; vertical-align: middle">
-      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=21021702000850"
-         rel="noreferrer"
-         target="_blank"
-         style="font-size:13px; margin-left: 6px; text-decoration: none; color: white;"
-         onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
-         onmouseout="this.style.textDecoration='none';this.style.color='white'">辽公网安备21021702000850号</a>
-      <a href="https://beian.miit.gov.cn/"
-         target="_blank"
-         style="font-size:13px; margin-left: 20px; text-decoration: none; color: white;"
-         onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
-         onmouseout="this.style.textDecoration='none';this.style.color='white'">辽ICP备2026000475号-1</a>
+      <a href="https://beian.mps.gov.cn/#/query/webSearch?code=21021702000850" rel="noreferrer" target="_blank"
+        style="font-size:13px; margin-left: 6px; text-decoration: none; color: white;"
+        onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
+        onmouseout="this.style.textDecoration='none';this.style.color='white'">辽公网安备21021702000850号</a>
+      <a href="https://beian.miit.gov.cn/" target="_blank"
+        style="font-size:13px; margin-left: 20px; text-decoration: none; color: white;"
+        onmouseover="this.style.textDecoration='underline';this.style.color='#007bff'"
+        onmouseout="this.style.textDecoration='none';this.style.color='white'">辽ICP备2026000475号-1</a>
     </span>
   </div>
 </template>
@@ -1954,10 +1907,9 @@ import {
   UserFilled,
   Warning
 } from "@element-plus/icons-vue";
-import axios from "axios";
 import LineChart from "@/components/LineChart.vue";
 import BarChart from "@/components/BarChart.vue";
-import {ElLoading, ElMessage, ElNotification} from "element-plus";
+import { ElLoading, ElMessage, ElNotification } from "element-plus";
 
 export default {
   components: {
@@ -1995,7 +1947,8 @@ export default {
     UploadFilled,
     Search,
     MostlyCloudy,
-    SwitchButton, FolderOpened, Download, Delete, HomeFilled, ChatDotSquare, Files, User, Promotion},
+    SwitchButton, FolderOpened, Download, Delete, HomeFilled, ChatDotSquare, Files, User, Promotion
+  },
 
   data() {
     return {
@@ -2195,7 +2148,7 @@ export default {
       totalVisits: 0,
       visitsData: [],
       visitsXAxis: [],
-      topGroupsData:[],
+      topGroupsData: [],
       topGroupsAxis: [],
       topUsersData: [],
       topUsersAxis: [],
@@ -2230,7 +2183,7 @@ export default {
     },
 
     filteredItemTableData() {
-      if(this.hasItemFilter) {
+      if (this.hasItemFilter) {
         return this.allItemTableData.filter(item => {
           // 类别过滤
           const categoryMatch = this.itemSearchCategory === '' || item.category === this.itemSearchCategory
@@ -2250,11 +2203,11 @@ export default {
     },
 
     filteredSayingTableData() {
-      if(this.hasSayingFilter) {
+      if (this.hasSayingFilter) {
         return this.allSayingTableData.filter(saying => {
           // 关键词过滤
           return this.sayingSearchKey === '' ||
-              String(saying.userId).includes(this.sayingSearchKey) || saying.userName.includes(this.sayingSearchKey) || saying.text.includes(this.sayingSearchKey)
+            String(saying.userId).includes(this.sayingSearchKey) || saying.userName.includes(this.sayingSearchKey) || saying.text.includes(this.sayingSearchKey)
         });
       } else {
         return this.sayingTableData
@@ -2266,11 +2219,11 @@ export default {
     },
 
     filteredUserTableData() {
-      if(this.hasUserFilter) {
+      if (this.hasUserFilter) {
         return this.allUserTableData.filter(user => {
           // 关键词过滤
           return this.userSearchKey === '' ||
-              String(user.id).includes(this.userSearchKey) || user.name.includes(this.userSearchKey)
+            String(user.id).includes(this.userSearchKey) || user.name.includes(this.userSearchKey)
         });
       } else {
         return this.userTableData
@@ -2282,11 +2235,11 @@ export default {
     },
 
     filteredGroupTableData() {
-      if(this.hasGroupFilter) {
+      if (this.hasGroupFilter) {
         return this.allGroupTableData.filter(group => {
           // 关键词过滤
           return this.groupSearchKey === '' ||
-              String(group.id).includes(this.groupSearchKey) || group.name.includes(this.groupSearchKey)
+            String(group.id).includes(this.groupSearchKey) || group.name.includes(this.groupSearchKey)
         });
       } else {
         return this.groupTableData
@@ -2327,7 +2280,7 @@ export default {
       // const isCSVByMime = allowedMimeTypes.includes(file.type)
       // // 方法3：结合扩展名和MIME类型
       // if (!isCSVByExt) {
-      //   this.$message.error('只能上传 CSV 格式的文件！')
+      //   ElMessage.error('只能上传 CSV 格式的文件！')
       //   return false
       // }
       // // 如果扩展名通过但MIME类型不符合，给出警告但允许上传
@@ -2338,7 +2291,7 @@ export default {
 
       const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
       if (!isCSVByExt) {
-        this.$message.error('仅支持 CSV 文件')
+        ElMessage.error('仅支持 CSV 文件')
         return false
       }
       return true
@@ -2377,8 +2330,8 @@ export default {
       const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
       const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.m4a', '.wma', '.opus'];
       return imageExtensions.some(ext => fileName.endsWith(ext)) ||
-          videoExtensions.some(ext => fileName.endsWith(ext)) ||
-          audioExtensions.some(ext => fileName.endsWith(ext));
+        videoExtensions.some(ext => fileName.endsWith(ext)) ||
+        audioExtensions.some(ext => fileName.endsWith(ext));
     },
 
     // 处理预览点击事件
@@ -2417,7 +2370,7 @@ export default {
           this.topCommandsAxis = res.data.statistic.topCommandsAxis
           this.topCommandsData = res.data.statistic.topCommandsData
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -2433,7 +2386,7 @@ export default {
           this.info = JSON.parse(JSON.stringify(info))
           this.userType = res.data.userType
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -2454,16 +2407,16 @@ export default {
       try {
         if (navigator.clipboard && window.isSecureContext) {
           navigator.clipboard.writeText(text)
-              .then(() => {
+            .then(() => {
+              ElMessage.success("路径已复制");
+            })
+            .catch(() => {
+              if (document.execCommand('copy')) {
                 ElMessage.success("路径已复制");
-              })
-              .catch(() => {
-                if (document.execCommand('copy')) {
-                  ElMessage.success("路径已复制");
-                } else {
-                  throw new Error('复制失败');
-                }
-              });
+              } else {
+                throw new Error('复制失败');
+              }
+            });
         } else if (document.execCommand('copy')) {
           ElMessage.success("路径已复制");
         } else {
@@ -2581,20 +2534,20 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
           }
         } else {
-          this.$message.error(`${file.fileName} - ${res.message}`)
+          ElMessage.error(`${file.fileName} - ${res.message}`)
         }
       })
     },
 
     async upload() {
       if (this.uploadFileList.length === 0) {
-        this.$message.warning("未选择文件")
+        ElMessage.warning("未选择文件")
         return
       }
 
@@ -2616,13 +2569,13 @@ export default {
             maxContentLength: Infinity,
           })
           if (res.code === 1) {
-            this.$message.success(`${fileObj.name} - 上传成功`)
+            ElMessage.success(`${fileObj.name} - 上传成功`)
           } else {
-            this.$message.error(`${fileObj.name} - ${res.message}`)
+            ElMessage.error(`${fileObj.name} - ${res.message}`)
           }
         } catch (err) {
           console.error("上传失败:", err)
-          this.$message.error( `${fileObj.name} - Exception: ${err}`)
+          ElMessage.error(`${fileObj.name} - Exception: ${err}`)
         }
         this.uploadFilesTotal++
       }
@@ -2631,7 +2584,7 @@ export default {
       this.uploadFileList = []
       this.$refs.upload.clearFiles()
       // 刷新页面数据
-      if(this.curDir === this.uploadDir){
+      if (this.curDir === this.uploadDir) {
         if (this.filePageInfo.pages === 0) {
           this.getFilePage(1, this.filePageInfo.size)
         } else {
@@ -2661,9 +2614,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放URL 对象
         document.body.removeChild(elink);
-        this.$message.success('下载成功');
+        ElMessage.success('下载成功');
       }).catch(err => {
-        this.$message.error('下载失败');
+        ElMessage.error('下载失败');
       })
     },
 
@@ -2679,7 +2632,7 @@ export default {
 
     backDir() {
       if (this.curDir === "/") {
-        this.$message.error("已在根目录")
+        ElMessage.error("已在根目录")
       } else {
         let index = this.curDir.lastIndexOf('/')
         if (index === 0) {
@@ -2699,7 +2652,7 @@ export default {
         inputErrorMessage: "目录名不能包含斜杠"
       }).then(({ value }) => {
         if (!value) {
-          this.$message({
+          ElMessage({
             type: 'error',
             message: '目录名不能为空'
           });
@@ -2713,13 +2666,13 @@ export default {
             }
           }).then(res => {
             if (res.code === 1) {
-              this.$message({
+              ElMessage({
                 type: 'success',
                 message: value + '创建成功!'
               })
               this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
             } else {
-              this.$message({
+              ElMessage({
                 type: 'error',
                 message: res.message
               });
@@ -2727,7 +2680,7 @@ export default {
           })
         }
       }).catch(() => {
-        this.$message({
+        ElMessage({
           type: 'info',
           message: '取消创建'
         });
@@ -2743,11 +2696,11 @@ export default {
         inputErrorMessage: '名称非法：文件名不能包含 \\ / : * ? " < > | 等字符'
       }).then(({ value }) => {
         if (!value || value.trim() === '') {
-          this.$message.error('文件名不能为空');
+          ElMessage.error('文件名不能为空');
           return;
         }
         if (value === file.fileName) {
-          this.$message.warning('文件名未更改');
+          ElMessage.warning('文件名未更改');
           return;
         }
         this.$axios({
@@ -2766,13 +2719,13 @@ export default {
             if (this.searchTableVisible) {
               this.searchFile();
             }
-            this.$message.success('重命名成功');
+            ElMessage.success('重命名成功');
           } else {
-            this.$message.error(`${file.fileName} - ${res.message}`);
+            ElMessage.error(`${file.fileName} - ${res.message}`);
           }
         })
       }).catch(() => {
-        this.$message.info('已取消重命名');
+        ElMessage.info('已取消重命名');
       });
     },
 
@@ -2785,11 +2738,11 @@ export default {
         inputErrorMessage: '路径非法：非空且不能有连续 / 且除根外不能以 / 结尾'
       }).then(({ value }) => {
         if (!value || value.trim() === '') {
-          this.$message.error('路径不能为空');
+          ElMessage.error('路径不能为空');
           return;
         }
         if (value === this.curDir) {
-          this.$message.warning('路径未更改');
+          ElMessage.warning('路径未更改');
           return;
         }
         this.$axios({
@@ -2808,13 +2761,13 @@ export default {
             if (this.searchTableVisible) {
               this.searchFile();
             }
-            this.$message.success('移动成功');
+            ElMessage.success('移动成功');
           } else {
-            this.$message.error(`${res.message}`);
+            ElMessage.error(`${res.message}`);
           }
         })
       }).catch(() => {
-        this.$message.info('已取消移动');
+        ElMessage.info('已取消移动');
       });
     },
 
@@ -2839,17 +2792,17 @@ export default {
                 this.searchFile();
               }
               // row._loading = false
-              this.$message.success('修改成功');
+              ElMessage.success('修改成功');
               return resolve(true)
             } else {
               // row._loading = false
-              this.$message.error('修改失败');
+              ElMessage.error('修改失败');
               return reject(false)
             }
           })
-        } catch(err) {
+        } catch (err) {
           // row._loading = false
-          this.$message.error('请求失败');
+          ElMessage.error('请求失败');
           reject(false)
         }
       })
@@ -2895,10 +2848,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshSaying()
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -2920,9 +2873,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -2966,10 +2919,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshUser()
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -2991,11 +2944,11 @@ export default {
         method: 'PUT'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshUser()
           this.userSettingVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3017,9 +2970,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -3063,10 +3016,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshGroup()
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3088,11 +3041,11 @@ export default {
         method: 'PUT'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshGroup()
           this.groupSettingVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3110,7 +3063,7 @@ export default {
           this.groupFuncForm = JSON.parse(JSON.stringify(res.data.setting));
           this.groupFuncVisible = true
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3126,10 +3079,10 @@ export default {
         method: 'PUT'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.groupFuncVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3151,9 +3104,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -3174,9 +3127,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -3230,11 +3183,11 @@ export default {
         method: 'PUT'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshItem()
           this.itemSettingVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3266,11 +3219,11 @@ export default {
         method: 'POST'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshItem()
           this.itemAddingVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3282,10 +3235,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.refreshItem()
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3307,9 +3260,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -3343,10 +3296,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.getInventoryList(inventory.ownerId)
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3368,11 +3321,11 @@ export default {
         method: 'PUT'
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.getInventoryList(this.inventoryForm.ownerId)
           this.inventorySettingVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3391,10 +3344,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.getInventoryList(userId)
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3416,9 +3369,9 @@ export default {
         elink.click();
         URL.revokeObjectURL(elink.href); // 释放 URL 对象
         document.body.removeChild(elink);
-        this.$message.success("导出成功")
+        ElMessage.success("导出成功")
       }).catch(error => {
-        this.$message.error("导出失败")
+        ElMessage.error("导出失败")
       });
     },
 
@@ -3453,52 +3406,52 @@ export default {
 
       // 根据参数决定是否执行文件同步
       const syncPromise = isFileSync
-          ? this.$axios.get('/file/sync', {
-            headers: {
-              token: localStorage.getItem("token")
-            }
-          }).then(res => {
-            if (res.code === 1) {
-              ElMessage({
-                message: '本地与数据库 - 已同步',
-                type: 'success',
-                placement: 'bottom-left',
-              })
-            } else {
-              ElMessage({
-                message: '本地与数据库 - 同步失败',
-                type: 'error',
-                placement: 'bottom-left',
-              })
-            }
-          })
-          : Promise.resolve()
-
-      // 后续操作链
-      syncPromise
-          .then(() => this.getInfo())
-          .then(() => this.getStatistic())
-          .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
-          .then(() => this.refreshSaying())
-          .then(() => this.refreshUser())
-          .then(() => this.refreshGroup())
-          .then(() => this.refreshItem())
-          .then(() => {
-            loading.close()
+        ? this.$axios.get('/file/sync', {
+          headers: {
+            token: localStorage.getItem("token")
+          }
+        }).then(res => {
+          if (res.code === 1) {
             ElMessage({
-              message: '全部浏览数据 - 已更新',
+              message: '本地与数据库 - 已同步',
               type: 'success',
               placement: 'bottom-left',
             })
-          })
-          .catch(error => {
-            loading.close()
+          } else {
             ElMessage({
-              message: "同步更新异常: " + (error.message || '未知错误'),
+              message: '本地与数据库 - 同步失败',
               type: 'error',
               placement: 'bottom-left',
             })
+          }
+        })
+        : Promise.resolve()
+
+      // 后续操作链
+      syncPromise
+        .then(() => this.getInfo())
+        .then(() => this.getStatistic())
+        .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
+        .then(() => this.refreshSaying())
+        .then(() => this.refreshUser())
+        .then(() => this.refreshGroup())
+        .then(() => this.refreshItem())
+        .then(() => {
+          loading.close()
+          ElMessage({
+            message: '全部浏览数据 - 已更新',
+            type: 'success',
+            placement: 'bottom-left',
           })
+        })
+        .catch(error => {
+          loading.close()
+          ElMessage({
+            message: "同步更新异常: " + (error.message || '未知错误'),
+            type: 'error',
+            placement: 'bottom-left',
+          })
+        })
     },
 
     deleteAdmin() {
@@ -3508,11 +3461,11 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           localStorage.clear()
           this.$router.push('/login')
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3533,10 +3486,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.passwordChangeVisible = false
         } else {
-          this.$message.error(`更改失败: ${res.message}`)
+          ElMessage.error(`更改失败: ${res.message}`)
         }
       })
     },
@@ -3555,10 +3508,10 @@ export default {
       }).then(res => {
         if (res.code === 1) {
           this.getInfo()
-          this.$message.success(res.message)
+          ElMessage.success(res.message)
           this.adminEditVisible = false
         } else {
-          this.$message.error(res.message)
+          ElMessage.error(res.message)
         }
       })
     },
@@ -3578,11 +3531,11 @@ export default {
         }
       }).then(res => {
         if (res.code === 1) {
-          this.$message.success('调用成功')
-          this.invokeResult = this.invokeResult + res.data.result  + '\n'
+          ElMessage.success('调用成功')
+          this.invokeResult = this.invokeResult + res.data.result + '\n'
         } else {
-          this.$message.error('调用失败')
-          this.invokeResult = this.invokeResult + res.message  + '\n'
+          ElMessage.error('调用失败')
+          this.invokeResult = this.invokeResult + res.message + '\n'
         }
       })
     }
@@ -3613,15 +3566,15 @@ export default {
     op(newVal) {
       if (newVal === 4) {
         this.getStatistic()
-      } else if (newVal === 1){
+      } else if (newVal === 1) {
         this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-      } else if (newVal === 3){
+      } else if (newVal === 3) {
         this.refreshSaying()
-      } else if (newVal === 5){
+      } else if (newVal === 5) {
         this.refreshUser()
-      } else if (newVal === 6){
+      } else if (newVal === 6) {
         this.refreshGroup()
-      } else if (newVal === 7){
+      } else if (newVal === 7) {
         this.refreshItem()
       }
     }
@@ -3695,29 +3648,35 @@ export default {
 .green {
   color: var(--el-color-success);
 }
+
 .red {
   color: var(--el-color-error);
 }
 
 /* 自定义滚动条样式 (暂弃) */
 .custom-scrollbar {
-  scrollbar-width: thin; /* Firefox 细滚动条 */
-  scrollbar-color: #333333 #121212; /* Firefox 滑块颜色和轨道颜色 */
+  scrollbar-width: thin;
+  /* Firefox 细滚动条 */
+  scrollbar-color: #333333 #121212;
+  /* Firefox 滑块颜色和轨道颜色 */
 }
 
 
 /* 自定义库存对话框Footer样式 */
 .inventories-dialog-footer {
   display: flex;
-  align-items: flex-end; /* 或 center 根据垂直对齐需求 */
+  align-items: flex-end;
+  /* 或 center 根据垂直对齐需求 */
   justify-content: flex-start;
-  gap: 16px; /* 元素间距 */
+  gap: 16px;
+  /* 元素间距 */
 }
 
 /* 如果需要让表单项和按钮在底部对齐 */
 .inventories-dialog-footer ::v-deep .el-form-item {
   margin-bottom: 0;
-  flex: 1; /* 让表单项占据剩余空间 */
+  flex: 1;
+  /* 让表单项占据剩余空间 */
 }
 
 /* 自定义功能设置对话框样式 */
