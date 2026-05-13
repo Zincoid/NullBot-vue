@@ -40,7 +40,7 @@
             <h3 v-show="routePath === '/index/statistic'" class="section-title">
               <el-icon>
                 <Histogram />
-              </el-icon><span>数据统计</span>
+              </el-icon><span>访问统计</span>
             </h3>
 
             <!-- 用户管理 -->
@@ -135,7 +135,7 @@
               <template #title>
                 <el-icon>
                   <Setting />
-                </el-icon><span>信息管理</span>
+                </el-icon><span>数据管理</span>
               </template>
               <el-menu-item index="/index/saying" class="menu-item">
                 <el-icon>
@@ -161,7 +161,7 @@
             <el-menu-item index="/index/statistic" class="menu-item">
               <el-icon>
                 <Histogram />
-              </el-icon><span>数据统计</span>
+              </el-icon><span>访问统计</span>
             </el-menu-item>
             <el-menu-item index="/index/center" class="menu-item">
               <el-icon>
@@ -315,14 +315,10 @@ onBeforeUnmount(() => {
 }
 
 .header-menu {
-  min-width: 100%;
-  padding: 0 20px;
+  width: 100%;
   --el-menu-horizontal-height: 70px;
-}
-
-.header-menu {
   min-width: 100%;
-  padding: 0 20px;
+  padding: 0 20px 0 10px;
 }
 
 .header-center {
