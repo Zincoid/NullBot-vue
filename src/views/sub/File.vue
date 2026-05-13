@@ -6,7 +6,7 @@
       <div style="display: flex; align-items: center; padding-right: 5px">
         <el-icon size="20"><HomeFilled /></el-icon>
         <el-text size="large">{{ " " + curDir }}&nbsp;</el-text>
-        <el-button :link="true" title="复制路径" @click="copyCurDir">
+        <el-button type="primary" :link="true" title="复制路径" @click="copyCurDir">
           <el-icon size="15"><DocumentCopy /></el-icon>
         </el-button>
       </div>

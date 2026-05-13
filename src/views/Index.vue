@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-container>
-      <!-- 头部 -->
+      <!-- 头部区域 -->
       <el-header height="auto">
         <el-menu class="el-menu-1" mode="horizontal" :ellipsis="false" style="min-width: 100%;">
-          <el-menu-item index="logo">
+          <el-menu-item index="logo" class="logo-item" :default-active="''">
             <h1>NullBot <el-icon size="25"><MostlyCloudy /></el-icon></h1>
           </el-menu-item>
 
@@ -319,4 +319,9 @@ onBeforeUnmount(() => {
 
 .green { color: var(--el-color-success); }
 .red { color: var(--el-color-error); }
+
+.logo-item {
+  pointer-events: none;
+  user-select: none;
+}
 </style>
