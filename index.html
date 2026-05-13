@@ -10,8 +10,10 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: var(--el-bg-color);  /* EL 暗色模式 背景色 */
-      color: var(--el-text-color-primary);  /* EL 暗色模式 文本颜色 */
+      /* EL 暗色模式 背景色 */
+      background-color: var(--el-bg-color);
+      /* EL 暗色模式 文本颜色 */
+      color: var(--el-text-color-primary);
     }
 
     html {
@@ -35,6 +37,18 @@
 
     ::-webkit-scrollbar-track {
       background: transparent;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 1000px var(--el-bg-color) inset !important;
+      box-shadow: 0 0 0 1000px var(--el-bg-color) inset !important;
+    }
+
+    input:-webkit-autofill {
+      -webkit-text-fill-color: var(--el-text-color-primary) !important;
     }
 
     #app {
