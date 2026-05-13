@@ -310,12 +310,19 @@ onBeforeUnmount(() => {
 /* ===== 头部区域 ===== */
 .header {
   --el-header-padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 .header-menu {
   min-width: 100%;
   padding: 0 20px;
+  --el-menu-horizontal-height: 70px;
+}
 
+.header-menu {
+  min-width: 100%;
+  padding: 0 20px;
 }
 
 .header-center {
