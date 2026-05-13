@@ -1,100 +1,117 @@
 <template>
-  <div>
+  <div class="app-root">
     <el-container>
       <!-- 头部区域 -->
-      <el-header height="auto">
-        <el-menu class="el-menu-1" mode="horizontal" :ellipsis="false" style="min-width: 100%;">
-          <el-menu-item index="logo" class="logo-item" :default-active="''">
-            <h1>NullBot <el-icon size="25"><MostlyCloudy /></el-icon></h1>
+      <el-header class="header" height="auto">
+        <el-menu class="header-menu" mode="horizontal" :ellipsis="false">
+          <el-menu-item index="logo" class="header-menu-logo" :default-active="''">
+            <h1>NullBot <el-icon size="25">
+                <MostlyCloudy />
+              </el-icon></h1>
           </el-menu-item>
 
-          <div class="header-center"
-            style="margin-bottom: 8px; flex: 1; display: flex; align-items: center; justify-content: center;">
+          <div class="header-center">
             <!-- 文件管理：搜索栏 -->
-            <div v-show="routePath === '/index/file'" class="search-container"
-              style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 700px; padding: 0 0;">
-              <el-icon size="20"><Files /></el-icon>
-              <el-input placeholder="在此目录中搜索" v-model="searchKey" clearable style="flex: 1; min-width: 20px;" />
+            <div v-show="routePath === '/index/file'" class="search-container">
+              <el-icon size="20">
+                <Files />
+              </el-icon>
+              <el-input class="search-input" placeholder="在此目录中搜索" v-model="searchKey" clearable />
               <el-button plain @click="searchTrigger++">
-                <el-icon size="15"><Search /></el-icon>&nbsp;搜索
+                <el-icon size="15">
+                  <Search />
+                </el-icon>&nbsp;搜索
               </el-button>
             </div>
 
             <!-- 个人中心：问候语 -->
-            <h3 v-show="routePath === '/index/center'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; white-space: nowrap">
-              <span>Ciallo～(∠・ω&lt; ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
+            <h3 v-show="routePath === '/index/center'" class="section-title nowrap">
+              <span style="font-weight: bold;">{{ currentTime }}</span>
             </h3>
 
             <!-- 语录管理 -->
-            <h3 v-show="routePath === '/index/saying'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><ChatDotSquare /></el-icon>语录管理
+            <h3 v-show="routePath === '/index/saying'" class="section-title">
+              <el-icon>
+                <ChatDotSquare />
+              </el-icon>语录管理
             </h3>
 
             <!-- 数据统计 -->
-            <h3 v-show="routePath === '/index/statistic'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Histogram /></el-icon>数据统计
+            <h3 v-show="routePath === '/index/statistic'" class="section-title">
+              <el-icon>
+                <Histogram />
+              </el-icon>数据统计
             </h3>
 
             <!-- 用户管理 -->
-            <h3 v-show="routePath === '/index/user'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Cellphone /></el-icon>用户管理
+            <h3 v-show="routePath === '/index/user'" class="section-title">
+              <el-icon>
+                <Cellphone />
+              </el-icon>用户管理
             </h3>
 
             <!-- 群组管理 -->
-            <h3 v-show="routePath === '/index/group'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><OfficeBuilding /></el-icon>群组管理
+            <h3 v-show="routePath === '/index/group'" class="section-title">
+              <el-icon>
+                <OfficeBuilding />
+              </el-icon>群组管理
             </h3>
 
             <!-- 物品管理 -->
-            <h3 v-show="routePath === '/index/item'"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
-              <el-icon><Box /></el-icon>物品管理
+            <h3 v-show="routePath === '/index/item'" class="section-title">
+              <el-icon>
+                <Box />
+              </el-icon>物品管理
             </h3>
 
-            <!-- 系统调用、其他 -->
-            <h3 v-show="!['/index/file', '/index/center', '/index/saying', '/index/statistic', '/index/user', '/index/group', '/index/item'].includes(routePath)"
-              style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <!-- 系统调用 -->
+            <h3 v-show="routePath === '/index/system'" class="section-title">
               <span>{{ currentTime }}</span>
             </h3>
           </div>
 
           <!-- 右侧用户信息 -->
-          <el-sub-menu index="user" style="margin-left: auto;">
-            <div style="padding: 10px; margin-bottom: 2px">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <el-avatar :size="40" :src="info.avatar" style="background-color: #433d3d;">
+          <el-sub-menu index="user" class="header-menu-user">
+            <div class="user-dropdown-info">
+              <div class="user-dropdown-row">
+                <el-avatar :size="40" :src="info.avatar" class="user-avatar">
                   <template #default>
-                    <el-icon size="20px"><User /></el-icon>
+                    <el-icon size="20px">
+                      <User />
+                    </el-icon>
                   </template>
                 </el-avatar>
-                <div style="flex: 1; min-width: 0;">
-                  <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">{{ info.username || '未设置' }}</div>
-                  <div style="font-size: 12px">{{ userType === 0 ? '访客' : '管理员' }}</div>
+                <div class="user-dropdown-text">
+                  <div class="user-dropdown-name">{{ info.username || '未设置' }}</div>
+                  <div class="user-dropdown-role">{{ userType === 0 ? '访客' : '管理员' }}</div>
                 </div>
               </div>
             </div>
-            <el-menu-item index="init" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
-              <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;" @click="initRootFile">
-                <el-icon size="15"><Coin /></el-icon>根初始化
+            <el-menu-item index="init" class="menu-action-item">
+              <el-button :disabled="userType === 0" type="warning" plain class="menu-action-btn" @click="initRootFile">
+                <el-icon size="15">
+                  <Coin />
+                </el-icon>根初始化
               </el-button>
             </el-menu-item>
-            <el-menu-item index="sync" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
-              <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
-                <el-icon size="15"><Switch /></el-icon>数据同步
+            <el-menu-item index="sync" class="menu-action-item">
+              <el-button type="primary" plain class="menu-action-btn" @click="sync">
+                <el-icon size="15">
+                  <Switch />
+                </el-icon>数据同步
               </el-button>
             </el-menu-item>
-            <el-menu-item index="logout" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
-              <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
-                <el-icon size="15"><SwitchButton /></el-icon>退出登录
+            <el-menu-item index="logout" class="menu-action-item">
+              <el-button type="danger" plain class="menu-action-btn" @click="logout">
+                <el-icon size="15">
+                  <SwitchButton />
+                </el-icon>退出登录
               </el-button>
             </el-menu-item>
             <template #title>
-              <el-icon><User /></el-icon>
+              <el-icon>
+                <User />
+              </el-icon>
               <el-text size="large" tag="b">&nbsp;{{ info.username || '未设置' }}</el-text>
             </template>
           </el-sub-menu>
@@ -103,38 +120,64 @@
 
       <el-container>
         <!-- 左侧导航 -->
-        <el-aside style="width: 10%; min-width: 150px;">
-          <el-menu :default-active="activeMenu" class="el-menu-2" :ellipsis="false" style="min-width: 100%;" @select="handleMenuSelect">
-            <h3 align="center"><el-icon><Promotion /></el-icon>&nbsp;导航</h3>
-            <el-menu-item index="/index/file" style="display: flex; justify-content: center;">
-              <span><el-icon><Files /></el-icon>文件管理</span>
+        <el-aside class="aside">
+          <el-menu :default-active="activeMenu" :default-openeds="defaultOpeneds" class="aside-menu" :ellipsis="false"
+            @select="handleMenuSelect">
+            <h3 align="center"><el-icon>
+                <Promotion />
+              </el-icon>&nbsp;导航</h3>
+            <el-menu-item index="/index/file" class="nav-item">
+              <el-icon>
+                <Files />
+              </el-icon><span>文件存储</span>
             </el-menu-item>
-            <el-menu-item index="/index/saying" style="display: flex; justify-content: center;">
-              <span><el-icon><ChatDotSquare /></el-icon>语录管理</span>
+            <el-sub-menu index="management">
+              <template #title>
+                <el-icon>
+                  <Setting />
+                </el-icon><span>信息管理</span>
+              </template>
+              <el-menu-item index="/index/saying" class="nav-item">
+                <el-icon>
+                  <ChatDotSquare />
+                </el-icon><span>语录</span>
+              </el-menu-item>
+              <el-menu-item index="/index/user" class="nav-item">
+                <el-icon>
+                  <Cellphone />
+                </el-icon><span>用户</span>
+              </el-menu-item>
+              <el-menu-item index="/index/group" class="nav-item">
+                <el-icon>
+                  <OfficeBuilding />
+                </el-icon><span>群组</span>
+              </el-menu-item>
+              <el-menu-item index="/index/item" class="nav-item">
+                <el-icon>
+                  <Box />
+                </el-icon><span>物品</span>
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item index="/index/statistic" class="nav-item">
+              <el-icon>
+                <Histogram />
+              </el-icon><span>数据统计</span>
             </el-menu-item>
-            <el-menu-item index="/index/user" style="display: flex; justify-content: center;">
-              <span><el-icon><Cellphone /></el-icon>用户管理</span>
+            <el-menu-item index="/index/center" class="nav-item">
+              <el-icon>
+                <UserFilled />
+              </el-icon><span>个人中心</span>
             </el-menu-item>
-            <el-menu-item index="/index/group" style="display: flex; justify-content: center;">
-              <span><el-icon><OfficeBuilding /></el-icon>群组管理</span>
-            </el-menu-item>
-            <el-menu-item index="/index/item" style="display: flex; justify-content: center;">
-              <span><el-icon><Box /></el-icon>物品管理</span>
-            </el-menu-item>
-            <el-menu-item index="/index/statistic" style="display: flex; justify-content: center;">
-              <span><el-icon><Histogram /></el-icon>数据统计</span>
-            </el-menu-item>
-            <el-menu-item index="/index/center" style="display: flex; justify-content: center;">
-              <span><el-icon><UserFilled /></el-icon>个人中心</span>
-            </el-menu-item>
-            <el-menu-item index="/index/system" v-if="userType === 1" style="display: flex; justify-content: center;">
-              <span><el-icon><Platform /></el-icon>系统调用</span>
+            <el-menu-item index="/index/system" v-if="userType === 1" class="nav-item">
+              <el-icon>
+                <Platform />
+              </el-icon><span>系统调用</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
 
         <!-- 右侧内容区域 -->
-        <el-container style="height: 100%;">
+        <el-container class="content-container">
           <router-view />
         </el-container>
       </el-container>
@@ -151,7 +194,7 @@ import { ElMessage, ElLoading } from 'element-plus'
 import {
   MostlyCloudy, User, Coin, Switch, SwitchButton, Promotion,
   Files, ChatDotSquare, Cellphone, OfficeBuilding, Box,
-  Histogram, UserFilled, Platform, Search
+  Histogram, UserFilled, Platform, Search, Setting
 } from '@element-plus/icons-vue'
 import FilingInfo from '@/components/FilingInfo.vue'
 import { getInfoApi } from '@/api/system'
@@ -162,6 +205,9 @@ const route = useRoute()
 
 const routePath = computed(() => route.path)
 const activeMenu = computed(() => route.path)
+
+const managementRoutes = ['/index/saying', '/index/user', '/index/group', '/index/item']
+const defaultOpeneds = computed(() => managementRoutes.includes(route.path) ? ['management'] : [])
 
 const handleMenuSelect = (index) => {
   router.push(index)
@@ -255,6 +301,126 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ===== 头部区域 ===== */
+.header {
+  --el-header-padding: 0;
+}
+
+.header-menu {
+  min-width: 100%;
+  padding: 0 20px;
+  
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 700px;
+  padding: 0;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.section-title.nowrap {
+  white-space: nowrap;
+}
+
+/* ===== 用户子菜单 ===== */
+.header-menu-user {
+  margin-top: 5px;
+}
+
+.user-dropdown-info {
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.user-dropdown-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  background-color: #433d3d;
+}
+
+.user-dropdown-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-dropdown-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.user-dropdown-role {
+  font-size: 12px;
+}
+
+.menu-action-item {
+  background-color: transparent !important;
+  --el-menu-hover-bg-color: transparent;
+}
+
+.menu-action-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ===== 侧边导航 ===== */
+.aside {
+  width: 200px;
+}
+
+.aside-menu {
+  width: 100%;
+  height: 100%;
+}
+
+.aside-menu h3 {
+  margin-top: 0;
+  padding-top: 1em;
+}
+
+.nav-item {
+  display: flex;
+  justify-content: center;
+}
+
+.content-container {
+  height: 100%;
+}
+
+/* ===== File.vue 上传样式 ===== */
 ::v-deep .upload .el-upload-list {
   position: absolute;
   top: 100%;
@@ -279,6 +445,7 @@ onBeforeUnmount(() => {
   background-color: var(--el-fill-color) !important;
 }
 
+/* ===== Statistic.vue 统计卡片样式 ===== */
 .el-statistic {
   --el-statistic-content-font-size: 28px;
 }
@@ -316,11 +483,21 @@ onBeforeUnmount(() => {
   margin-left: 4px;
 }
 
-.green { color: var(--el-color-success); }
-.red { color: var(--el-color-error); }
+.green {
+  color: var(--el-color-success);
+}
 
-.logo-item {
+.red {
+  color: var(--el-color-error);
+}
+
+.header-menu-logo {
   pointer-events: none;
   user-select: none;
+  padding-top: 5px;
+}
+
+:deep(.el-sub-menu__title) {
+  justify-content: center;
 }
 </style>

@@ -17,7 +17,7 @@
 
         <el-form-item label="执行结果" prop="invokeResult">
           <el-input placeholder="无指令输出..." v-model="invokeResult" type="textarea"
-            :autosize="{ minRows: 50, maxRows: 50 }" style="width: 100%" />
+            :autosize="{ minRows: 25, maxRows: 50 }" style="width: 100%" />
         </el-form-item>
       </el-form>
     </div>

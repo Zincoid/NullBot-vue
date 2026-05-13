@@ -7,10 +7,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NullBot</title>
   <style>
-    /* body {
-            margin: 0;
-            padding: 0;
-        } */
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--el-border-color) transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--el-border-color);
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--el-text-color-secondary);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
     #app {
       font-family: 'Avenir', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
