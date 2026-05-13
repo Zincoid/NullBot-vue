@@ -3,21 +3,17 @@
     <div>
       <h1 align="center" style="margin-bottom: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
     </div>
-    <el-form :model="registForm" ref="registForm" label-width="40px" class="demo-ruleForm">
+    <el-form :model="registForm" label-width="40px" class="demo-ruleForm">
       <el-form-item label="账号">
-        <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id" oninput="value=value.replace(/\D/g,'')"
-          style="width: 100%"></el-input>
+        <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id"
+          @input="registForm.id = registForm.id.replace(/\D/g, '')" style="width: 100%"></el-input>
       </el-form-item>
       <el-form-item label="密码">
         <el-input placeholder="请输入密码..." v-model="registForm.password" show-password style="width: 100%"></el-input>
       </el-form-item>
-      <!--      <el-form-item label="确认">-->
-      <!--        <el-input placeholder="请确认密码"-->
-      <!--                  v-model="registForm.password"-->
-      <!--                  show-password-->
-      <!--                  style="width: 100%"-->
-      <!--        ></el-input>-->
-      <!--      </el-form-item>-->
+      <!-- <el-form-item label="确认">
+        <el-input placeholder="请确认密码" v-model="registForm.password" show-password style="width: 100%"></el-input>
+      </el-form-item> -->
       <el-form-item label="邮箱">
         <el-input placeholder="请输入邮箱..." v-model="registForm.email" style="width: 100%"></el-input>
       </el-form-item>
@@ -56,43 +52,34 @@
   </div>
 </template>
 
-<script>
-import { ElMessage } from "element-plus";
+<script setup>
 import { Connection, User } from "@element-plus/icons-vue";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from "element-plus";
 import request from "@/utils/request";
 
-export default {
-  name: "Regist",
-  components: { User, Connection },
+const router = useRouter()
 
-  data() {
-    return {
-      registForm: {
-        id: '',
-        password: '',
-        email: '',
-        activationCode: ''
-      },
-    }
-  },
+const registForm = ref({
+  id: '',
+  password: '',
+  email: '',
+  activationCode: ''
+})
 
-  methods: {
-    regist() {
-      request.post('/regist', this.registForm)
-        .then(res => {
-          if (res.code === 1) {
-            ElMessage.success(res.message)
-            this.$router.push('/login')
-          } else {
-            ElMessage.warning(`管理员注册失败: ${res.message}`)
-          }
-        })
-    },
-
-    toLogin() {
-      this.$router.push('/login')
-    }
+const regist = async () => {
+  const res = await request.post('/regist', registForm.value)
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    await router.push('/login')
+  } else {
+    ElMessage.warning(`管理员注册失败: ${res.message}`)
   }
+}
+
+const toLogin = () => {
+  router.push('/login')
 }
 </script>
 

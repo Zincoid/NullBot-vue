@@ -3,9 +3,9 @@
     <div>
       <h1 align="center" style="margin-bottom: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
     </div>
-    <el-form :model="loginForm" ref="loginForm" label-width="40px" class="demo-ruleForm">
+    <el-form :model="loginForm" label-width="40px" class="demo-ruleForm">
       <el-form-item label="账号">
-        <el-input placeholder="请输入账号..." v-model="loginForm.id" oninput="value=value.replace(/\D/g,'')"
+        <el-input placeholder="请输入账号..." v-model="loginForm.id" @input="loginForm.id = loginForm.id.replace(/\D/g, '')"
           style="width: 100%"></el-input>
       </el-form-item>
       <el-form-item label="密码">
@@ -46,61 +46,47 @@
   </div>
 </template>
 
-<script>
-import { ElMessage } from "element-plus";
+<script setup>
 import { Connection, Key, Lock } from "@element-plus/icons-vue";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from "element-plus";
 import request from "@/utils/request";
 
-export default {
-  name: "Login",
-  components: { Lock, Key, Connection },
+const router = useRouter()
 
-  data() {
-    return {
-      loginForm: {
-        id: '',
-        password: ''
-      },
-    }
-  },
+const loginForm = ref({
+  id: '',
+  password: ''
+})
 
-  methods: {
-    login() {
-      request.post('/login', this.loginForm)
-        .then(res => {
-          if (res.code === 1) {
-            ElMessage.success(res.message)
-            localStorage.setItem("token", res.data.token)
-            this.$router.push('/index')
-          } else {
-            ElMessage.warning(`登录失败: ${res.message}`)
-          }
-        })
-    },
-
-    guest() {
-      request.post('/guest')
-        .then(res => {
-          console.log(res.data)
-          if (res.code === 1) {
-            ElMessage.success(res.message)
-            localStorage.setItem("token", res.data.token)
-            this.$router.push('/index')
-          } else {
-            ElMessage.warning(`登录失败: ${res.message}`)
-          }
-        })
-    },
-
-    toRegist() {
-      this.$router.push('/regist')
-    }
-  },
-
-  created() {
-    localStorage.clear();
+const login = async () => {
+  const res = await request.post('/login', loginForm.value)
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    localStorage.setItem("token", res.data.token)
+    router.push('/index')
+  } else {
+    ElMessage.warning(`登录失败: ${res.message}`)
   }
 }
+
+const guest = async () => {
+  const res = await request.post('/guest')
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    localStorage.setItem("token", res.data.token)
+    router.push('/index')
+  } else {
+    ElMessage.warning(`登录失败: ${res.message}`)
+  }
+}
+
+const toRegist = () => {
+  router.push('/regist')
+}
+
+localStorage.clear()
 </script>
 
 <style scoped></style>

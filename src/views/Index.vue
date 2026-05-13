@@ -89,7 +89,7 @@
                 <div style="flex: 1; min-width: 0;">
                   <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">{{ info.username || '未设置' }}</div>
                   <div style="font-size: 12px">
-                    {{ this.userType === 0 ? '访客' : '管理员' }}
+                    {{ userType === 0 ? '访客' : '管理员' }}
                   </div>
                 </div>
               </div>
@@ -206,7 +206,7 @@
             <!-- 文件操作按钮 -->
             <!--<div class="custom-scrollbar" style="display: flex; align-items: center; overflow-x: auto; overflow-y: visible">-->
             <div style="display: flex; align-items: center;">
-              <el-upload multiple ref="upload" class="upload" action="" :file-list="uploadFileList"
+              <el-upload multiple ref="uploadRef" class="upload" action="" :file-list="uploadFileList"
                 :on-change="handleFileChange" :on-remove="handleFileChange" :auto-upload="false"
                 style="display: inline-flex; padding-left: 5px">
                 <template #trigger>
@@ -442,7 +442,7 @@
           <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
             <!-- 文件管理 -->
             <div v-show="op === 1">
-              <el-table ref="fileTableData" :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
+              <el-table :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无文件"></el-empty>
                 </template>
@@ -570,8 +570,7 @@
 
             <!-- 语录管理 -->
             <div v-show="op === 3">
-              <el-table ref="sayingTableData" :data="filteredSayingTableData" style="width: 100%"
-                height="calc(100vh - 250px)">
+              <el-table :data="filteredSayingTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无语录"></el-empty>
                 </template>
@@ -629,8 +628,7 @@
 
             <!-- 用户管理 -->
             <div v-show="op === 5">
-              <el-table ref="userTableData" :data="filteredUserTableData" style="width: 100%"
-                height="calc(100vh - 250px)">
+              <el-table :data="filteredUserTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无用户"></el-empty>
                 </template>
@@ -715,8 +713,7 @@
 
             <!-- 群组管理 -->
             <div v-show="op === 6">
-              <el-table ref="groupTableData" :data="filteredGroupTableData" style="width: 100%"
-                height="calc(100vh - 250px)">
+              <el-table :data="filteredGroupTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无群组"></el-empty>
                 </template>
@@ -778,8 +775,7 @@
 
             <!-- 物品管理 -->
             <div v-show="op === 7">
-              <el-table ref="itemTableData" :data="filteredItemTableData" style="width: 100%"
-                height="calc(100vh - 250px)">
+              <el-table :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
                 <template #empty>
                   <el-empty description="暂无物品"></el-empty>
                 </template>
@@ -934,7 +930,7 @@
                 <el-descriptions-item label="Token">
                   <el-tag type="warning"
                     style="white-space: normal; word-break: break-all; height: auto; padding-bottom: 5px; padding-top: 5px">{{
-                    token }}</el-tag>
+                      token }}</el-tag>
                 </el-descriptions-item>
               </el-descriptions>
 
@@ -973,7 +969,7 @@
                   <div style="display: flex; width: 100%">
                     <el-input placeholder="请输入指令... 格式: [Bean名] [方法名] [参数...]" v-model="invokeCommand"
                       style="flex: 1; min-width: 0;" />
-                    <el-button type="danger" plain @click="this.invokeResult = ''"
+                    <el-button type="danger" plain @click="invokeResult = ''"
                       style="white-space: nowrap; margin-left: 0">
                       <el-icon size="15">
                         <Delete />
@@ -1096,7 +1092,7 @@
 
       <!-- 搜索对话框 -->
       <el-dialog title="搜索结果" v-model="searchTableVisible" width="75%">
-        <el-table ref="searchData" :data="searchData" style="width: 100%" stripe>
+        <el-table :data="searchData" style="width: 100%" stripe>
           <template #empty>
             <el-empty description="无搜索结果"></el-empty>
           </template>
@@ -1667,7 +1663,7 @@
 
       <!-- 用户库存对话框 -->
       <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
-        <el-table ref="inventoriesData" :data="inventoriesData" style="width: 100%" stripe>
+        <el-table :data="inventoriesData" style="width: 100%" stripe>
           <template #empty>
             <el-empty description="暂无库存"></el-empty>
           </template>
@@ -1869,7 +1865,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {
   Box,
   Cellphone,
@@ -1907,1680 +1903,1350 @@ import {
   UserFilled,
   Warning
 } from "@element-plus/icons-vue";
-import LineChart from "@/components/LineChart.vue";
-import BarChart from "@/components/BarChart.vue";
-import { ElLoading, ElMessage } from "element-plus";
-import request from "@/utils/request";
-
-export default {
-  components: {
-    Odometer,
-    Grid,
-    Platform,
-    CopyDocument,
-    TurnOff,
-    Coin,
-    Filter,
-    InfoFilled,
-    Plus,
-    DocumentCopy,
-    Box,
-    UserFilled,
-    Setting,
-    Tools,
-    Cellphone,
-    Monitor,
-    OfficeBuilding,
-    Operation,
-    Switch,
-    Warning,
-    BarChart,
-    LineChart,
-    Histogram,
-    Edit,
-    DocumentAdd,
-    Picture,
-    Comment,
-    Document,
-    Folder,
-    FolderAdd,
-    RefreshLeft,
-    UploadFilled,
-    Search,
-    MostlyCloudy,
-    SwitchButton, FolderOpened, Download, Delete, HomeFilled, ChatDotSquare, Files, User, Promotion
-  },
-
-  data() {
-    return {
-      currentTime: '',
-      timer: null,
-
-      token: '',
-      info: {
-        id: 0,
-        // avatar: '',  // 暂无
-        username: '',
-        email: ''
-      },
-
-      adminEditVisible: false,
-      adminEditForm: {
-        id: 0,
-        username: '',
-        email: ''
-      },
-
-      passwordChangeVisible: false,
-      passwordChangeForm: {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      },
-
-      userType: 0,
-      op: 1,
-
-      curDir: '/',
-
-      moveFileId: 0,
-
-      fileTableData: [],
-      filePageInfo: {
-        total: 0,
-        size: 20,
-        current: 1,
-        pages: 0
-      },
-
-      searchTableVisible: false,
-      searchData: [],
-      searchKey: '',
-
-      uploadDir: '',
-      uploadFileList: [],
-      uploadFilesTotal: 0,
-      uploading: false,
-
-      sayingTableData: [],
-      allSayingTableData: [],
-      sayingPageInfo: {
-        total: 0,
-        size: 20,
-        current: 1,
-        pages: 0
-      },
-
-      sayingSearchKey: '',
-
-      sayingImportVisible: false,
-
-      userTableData: [],
-      allUserTableData: [],
-      userPageInfo: {
-        total: 0,
-        size: 20,
-        current: 1,
-        pages: 0
-      },
-
-      userSearchKey: '',
-
-      userImportVisible: false,
-
-      userSettingVisible: false,
-      userForm: {
-        id: '',
-        name: '',
-        access: 0,
-        level: 0,
-        cash: 0,
-        capacity: 100,
-        drawTimes: 50
-      },
-
-      groupTableData: [],
-      allGroupTableData: [],
-      groupPageInfo: {
-        total: 0,
-        size: 20,
-        current: 1,
-        pages: 0
-      },
-
-      groupSearchKey: '',
-
-      groupImportVisible: false,
-
-      groupSettingVisible: false,
-      groupForm: {
-        id: '',
-        name: '',
-        access: 0,
-      },
-
-      groupFuncVisible: false,
-      groupFuncForm: {
-        groupId: '',
-
-        limitScope: null,
-        limitCapacity: 25,
-        limitRefill: 10,
-        limitInterval: 1,
-
-        chatScope: null,
-        antiInjection: false,
-        thinking: false,
-        voice: false,
-        embedding: false,
-        embeddingAuth: false,
-        custom: false,
-        autoReply: false,
-        replyFrequency: 0.01,
-
-        imageCollect: false,
-        messageCollect: false,
-        keywordDetect: false,
-        pokeDetect: false,
-        recallDetect: false,
-
-        guessCropRatio: 0.1,
-        guessTransparentRatio: 0.75,
-        guessPadding: 250
-      },
-
-      funcImportVisible: false,
-
-      itemTableData: [],
-      allItemTableData: [],
-      itemPageInfo: {
-        total: 0,
-        size: 20,
-        current: 1,
-        pages: 0
-      },
-
-      itemSearchRarity: '',
-      itemSearchCategory: '',
-      itemSearchKey: '',
-
-      itemImportVisible: false,
-
-      itemSettingVisible: false,
-      itemAddingVisible: false,
-      itemForm: {
-        id: '',
-        name: '',
-        rarity: null,
-        category: null,
-        price: '',
-        weight: '',
-        description: '',
-        command: '',
-        imagePath: '',
-        available: false,
-      },
-
-      inventoriesVisible: false,
-      inventoriesData: [],
-      inventoriesUserId: '',
-      inventoriesTitle: '',
-
-      inventorySettingVisible: false,
-      newItemId: '',
-      inventoryForm: {
-        id: '',
-        ownerId: '',
-        itemId: '',
-        itemName: '',
-        category: null,
-        rarity: null,
-        price: '',
-        amount: ''
-      },
-
-      inventoryImportVisible: false,
-
-      previewVisible: false, // 控制预览对话框显示
-      previewUrl: '', // 预览文件的完整URL
-      previewType: '', // 'image' 或 'video' 或 'audio'
-      previewTitle: '', // 预览对话框标题
-
-      totalVisits: 0,
-      visitsData: [],
-      visitsXAxis: [],
-      topGroupsData: [],
-      topGroupsAxis: [],
-      topUsersData: [],
-      topUsersAxis: [],
-      topCommandsData: [],
-      topCommandsAxis: [],
-
-      invokeCommand: '',
-      invokeResult: ''
-    }
-  },
-
-  computed: {
-
-    Check() {
-      return Check
-    },
-
-    Close() {
-      return Close
-    },
-
-    Box() {
-      return Box
-    },
-
-    Search() {
-      return Search
-    },
-
-    hasItemFilter() {
-      return this.itemSearchCategory !== '' || this.itemSearchRarity !== '' || this.itemSearchKey !== ''
-    },
-
-    filteredItemTableData() {
-      if (this.hasItemFilter) {
-        return this.allItemTableData.filter(item => {
-          // 类别过滤
-          const categoryMatch = this.itemSearchCategory === '' || item.category === this.itemSearchCategory
-          // 品质过滤
-          const rarityMatch = this.itemSearchRarity === '' || item.rarity === this.itemSearchRarity
-          // 关键词过滤
-          const keyMatch = this.itemSearchKey === '' || item.name.includes(this.itemSearchKey)
-          return categoryMatch && rarityMatch && keyMatch
-        });
-      } else {
-        return this.itemTableData
-      }
-    },
-
-    hasSayingFilter() {
-      return this.sayingSearchKey !== ''
-    },
-
-    filteredSayingTableData() {
-      if (this.hasSayingFilter) {
-        return this.allSayingTableData.filter(saying => {
-          // 关键词过滤
-          return this.sayingSearchKey === '' ||
-            String(saying.userId).includes(this.sayingSearchKey) || saying.userName.includes(this.sayingSearchKey) || saying.text.includes(this.sayingSearchKey)
-        });
-      } else {
-        return this.sayingTableData
-      }
-    },
-
-    hasUserFilter() {
-      return this.userSearchKey !== ''
-    },
-
-    filteredUserTableData() {
-      if (this.hasUserFilter) {
-        return this.allUserTableData.filter(user => {
-          // 关键词过滤
-          return this.userSearchKey === '' ||
-            String(user.id).includes(this.userSearchKey) || user.name.includes(this.userSearchKey)
-        });
-      } else {
-        return this.userTableData
-      }
-    },
-
-    hasGroupFilter() {
-      return this.groupSearchKey !== ''
-    },
-
-    filteredGroupTableData() {
-      if (this.hasGroupFilter) {
-        return this.allGroupTableData.filter(group => {
-          // 关键词过滤
-          return this.groupSearchKey === '' ||
-            String(group.id).includes(this.groupSearchKey) || group.name.includes(this.groupSearchKey)
-        });
-      } else {
-        return this.groupTableData
-      }
-    },
-
-    uploadHeaders() {
-      const token = localStorage.getItem('token') || ''
-      return {
-        token: `${token}`
-        // 或者根据后端要求使用其他格式：
-        // 'Authorization': token
-        // 'X-Auth-Token': token
-        // 'token': token
-      }
-    }
-  },
-
-  methods: {
-
-    uploadAction(url) {
-      const baseURL = request?.defaults?.baseURL || ''
-      return `${baseURL}${url}`
-    },
-
-    isCsv(file) {
-      // // 方法1：通过文件扩展名验证
-      // const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
-      // // 方法2：通过MIME类型验证（注意：不同浏览器可能返回不同的MIME类型）
-      // const allowedMimeTypes = [
-      //   'text/csv',
-      //   'application/vnd.ms-excel', // 一些旧版Excel
-      //   'application/csv',
-      //   'text/x-csv',
-      //   'text/comma-separated-values',
-      //   'text/plain' // 有些CSV文件可能被识别为text/plain
-      // ]
-      // const isCSVByMime = allowedMimeTypes.includes(file.type)
-      // // 方法3：结合扩展名和MIME类型
-      // if (!isCSVByExt) {
-      //   ElMessage.error('只能上传 CSV 格式的文件！')
-      //   return false
-      // }
-      // // 如果扩展名通过但MIME类型不符合，给出警告但允许上传
-      // if (!isCSVByMime) {
-      //   console.warn(`文件 ${file.name} 的MIME类型为 ${file.type}，不是标准的CSV类型`)
-      // }
-      // return true
-
-      const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
-      if (!isCSVByExt) {
-        ElMessage.error('仅支持 CSV 文件')
-        return false
-      }
-      return true
-    },
-
-    // 时钟更新
-    updateTime() {
-      const now = new Date()
-      this.currentTime = now.toLocaleTimeString('zh-CN', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      })
-    },
-
-    // 从文件名获取文件扩展名
-    getFileExtension(fileName) {
-      if (!fileName) return '未知类型'
-      // 获取最后一个点之后的部分作为文件扩展名
-      const lastDotIndex = fileName.lastIndexOf('.')
-      if (lastDotIndex === -1 || lastDotIndex === fileName.length - 1) {
-        return '未知类型'
-      }
-      // 获取后缀并转为小写
-      const extension = fileName.substring(lastDotIndex + 1).toLowerCase()
-      // 如果后缀太长，可以截断显示
-      return extension.length > 8 ? extension.substring(0, 8) + '...' : extension
-    },
-
-    // 判断文件是否可预览（根据扩展名）
-    isPreviewable(file) {
-      if (file.isDir === 1) return false; // 文件夹不可预览
-      const fileName = file.fileName.toLowerCase();
-      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-      const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
-      const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.m4a', '.wma', '.opus'];
-      return imageExtensions.some(ext => fileName.endsWith(ext)) ||
-        videoExtensions.some(ext => fileName.endsWith(ext)) ||
-        audioExtensions.some(ext => fileName.endsWith(ext));
-    },
-
-    // 处理预览点击事件
-    handlePreview(file) {
-      // 1. 构造文件预览URL（需要后端的支持）
-      const baseUrl = request?.defaults?.baseURL || ''
-      this.previewUrl = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
-
-      // 2. 判断文件类型
-      const fileName = file.fileName.toLowerCase();
-      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-      const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
-      this.previewType = imageExtensions.some(ext => fileName.endsWith(ext)) ? 'image' : (videoExtensions.some(ext => fileName.endsWith(ext)) ? 'video' : 'audio');
-
-      // 3. 设置对话框标题
-      this.previewTitle = `预览 - ${file.fileName}`;
-
-      // 4. 打开对话框
-      this.previewVisible = true;
-    },
-
-    getStatistic() {
-      request.get('/statistic', {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          this.totalVisits = res.data.statistic.totalVisits
-          this.visitsXAxis = res.data.statistic.visitsXAxis
-          this.visitsData = res.data.statistic.visitsData
-          this.topGroupsAxis = res.data.statistic.topGroupsAxis
-          this.topGroupsData = res.data.statistic.topGroupsData
-          this.topUsersAxis = res.data.statistic.topUsersAxis
-          this.topUsersData = res.data.statistic.topUsersData
-          this.topCommandsAxis = res.data.statistic.topCommandsAxis
-          this.topCommandsData = res.data.statistic.topCommandsData
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    getInfo() {
-      request.get('/info', {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          let info = res.data.info
-          this.info = JSON.parse(JSON.stringify(info))
-          this.userType = res.data.userType
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    copyCurDir() {
-      const text = this.curDir;
-
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999px";
-      textArea.style.top = "-999px";
-      document.body.appendChild(textArea);
-
-      textArea.focus();
-      textArea.select();
-
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(text)
-            .then(() => {
-              ElMessage.success("路径已复制");
-            })
-            .catch(() => {
-              if (document.execCommand('copy')) {
-                ElMessage.success("路径已复制");
-              } else {
-                throw new Error('复制失败');
-              }
-            });
-        } else if (document.execCommand('copy')) {
-          ElMessage.success("路径已复制");
-        } else {
-          prompt("请手动复制以下路径：", text);
-        }
-      } catch (err) {
-        ElMessage.warning("复制失败");
-      } finally {
-        document.body.removeChild(textArea);
-      }
-    },
-
-    handleFileCurrentChange(current) {
-      this.getFilePage(current, this.filePageInfo.size)
-    },
-
-    handleFileSizeChange(size) {
-      this.getFilePage(1, size)
-    },
-
-    handleSayingCurrentChange(current) {
-      this.getSayingPage(current, this.sayingPageInfo.size)
-      this.getSayingList()
-    },
-
-    handleSayingSizeChange(size) {
-      this.getSayingPage(1, size)
-      this.getSayingList()
-    },
-
-    handleUserCurrentChange(current) {
-      this.getUserPage(current, this.userPageInfo.size)
-      this.getUserList()
-    },
-
-    handleUserSizeChange(size) {
-      this.getUserPage(1, size)
-      this.getUserList()
-    },
-
-    handleGroupCurrentChange(current) {
-      this.getGroupPage(current, this.groupPageInfo.size)
-      this.getGroupList()
-    },
-
-    handleGroupSizeChange(size) {
-      this.getGroupPage(1, size)
-      this.getGroupList()
-    },
-
-    handleItemCurrentChange(current) {
-      this.getItemPage(current, this.itemPageInfo.size)
-      this.getItemList()
-    },
-
-    handleItemSizeChange(size) {
-      this.getItemPage(1, size)
-      this.getItemList()
-    },
-
-    shiftMenu(op) {
-      this.op = op
-    },
-
-    formatFileSize(bytes) {
-      if (bytes === 0) return '0 B';
-      const k = 1024;
-      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    },
-
-    getFilePage(current, size) {
-      request({
-        url: '/file/page/' + current + '/' + size,
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET',
-        params: {
-          curDir: this.curDir,
-        }
-      }).then(res => {
-        this.fileTableData = JSON.parse(JSON.stringify(res.data.filePage.data))
-        this.filePageInfo.total = res.data.filePage.total
-        this.filePageInfo.size = res.data.filePage.size
-        this.filePageInfo.current = res.data.filePage.current
-        this.filePageInfo.pages = res.data.filePage.pages
-      })
-    },
-
-    searchFile() {
-      request({
-        url: '/file/searchFile',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET',
-        params: {
-          key: this.searchKey,
-          curDir: this.curDir,
-        }
-      }).then(res => {
-        this.searchData = JSON.parse(JSON.stringify(res.data.filePage.data))
-        this.searchTableVisible = true
-        console.log('searchData:')
-        console.log(this.searchData)
-      })
-    },
-
-    deleteFile(file) {
-      request.delete('/file/delete/' + file.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-          if (this.searchTableVisible === true) {
-            this.searchFile(this.searchKey, this.curDir)
-          }
-        } else {
-          ElMessage.error(`${file.fileName} - ${res.message}`)
-        }
-      })
-    },
-
-    async upload() {
-      if (this.uploadFileList.length === 0) {
-        ElMessage.warning("未选择文件")
-        return
-      }
-
-      this.uploadDir = this.curDir
-      this.uploadFilesTotal = 0
-      this.uploading = true
-      for (let fileObj of this.uploadFileList) {
-        try {
-          let formData = new FormData()
-          formData.append("uploadFile", fileObj.raw)
-          formData.append("curDir", this.curDir)
-          // 等待当前文件上传完成
-          const res = await request.post("/file/upload", formData, {
-            headers: {
-              // "Content-Type": "multipart/form-data;charset=utf-8",
-              token: localStorage.getItem("token")
-            },
-            timeout: 300000, // 5分钟超时
-            maxContentLength: Infinity,
-          })
-          if (res.code === 1) {
-            ElMessage.success(`${fileObj.name} - 上传成功`)
-          } else {
-            ElMessage.error(`${fileObj.name} - ${res.message}`)
-          }
-        } catch (err) {
-          console.error("上传失败:", err)
-          ElMessage.error(`${fileObj.name} - Exception: ${err}`)
-        }
-        this.uploadFilesTotal++
-      }
-
-      // 所有文件上传后清空文件列表
-      this.uploadFileList = []
-      this.$refs.upload.clearFiles()
-      // 刷新页面数据
-      if (this.curDir === this.uploadDir) {
-        if (this.filePageInfo.pages === 0) {
-          this.getFilePage(1, this.filePageInfo.size)
-        } else {
-          this.getFilePage(this.filePageInfo.pages, this.filePageInfo.size)
-        }
-      }
-      this.uploading = false
-    },
-
-    handleFileChange(file, fileList) {
-      this.uploadFileList = fileList;
-    },
-
-    download(file) {
-      request.get("/file/download/" + file.id, {
-        responseType: "arraybuffer",
-        headers: {
-          token: localStorage.getItem("token")
-        },
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = file.fileName;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success('下载成功');
-      }).catch(err => {
-        ElMessage.error('下载失败');
-      })
-    },
-
-    enterDir(dir) {
-      if (this.curDir === "/") {
-        this.curDir += dir.fileName
-      } else {
-        this.curDir += "/" + dir.fileName
-      }
-      this.getFilePage(1, this.filePageInfo.size)
-      this.searchTableVisible = false
-    },
-
-    backDir() {
-      if (this.curDir === "/") {
-        ElMessage.error("已在根目录")
-      } else {
-        let index = this.curDir.lastIndexOf('/')
-        if (index === 0) {
-          this.curDir = "/"
-        } else {
-          this.curDir = this.curDir.substring(0, index)
-        }
-      }
-      this.getFilePage(1, this.filePageInfo.size)
-    },
-
-    createDir() {
-      this.$prompt('请输入目录名', '新建目录', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^(?!.*(\/)|(\\))/,
-        inputErrorMessage: "目录名不能包含斜杠"
-      }).then(({ value }) => {
-        if (!value) {
-          ElMessage({
-            type: 'error',
-            message: '目录名不能为空'
-          });
-        } else {
-          request.post('/file/createDir', {
-            curDir: this.curDir !== '' ? this.curDir : '/',
-            dirName: value
-          }, {
-            headers: {
-              token: localStorage.getItem("token")
-            }
-          }).then(res => {
-            if (res.code === 1) {
-              ElMessage({
-                type: 'success',
-                message: value + '创建成功!'
-              })
-              this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-            } else {
-              ElMessage({
-                type: 'error',
-                message: res.message
-              });
-            }
-          })
-        }
-      }).catch(() => {
-        ElMessage({
-          type: 'info',
-          message: '取消创建'
-        });
-      });
-    },
-
-    handleRename(file) {
-      this.$prompt('请输入新的文件名', '重命名', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputValue: file.fileName,
-        inputPattern: /^[^\\\/:*?"<>|]+$/,
-        inputErrorMessage: '名称非法：文件名不能包含 \\ / : * ? " < > | 等字符'
-      }).then(({ value }) => {
-        if (!value || value.trim() === '') {
-          ElMessage.error('文件名不能为空');
-          return;
-        }
-        if (value === file.fileName) {
-          ElMessage.warning('文件名未更改');
-          return;
-        }
-        request({
-          url: `/file/rename/${file.id}`,
-          method: 'GET',
-          headers: {
-            'token': localStorage.getItem("token")
-          },
-          params: {
-            newFileName: value
-          }
-        }).then(res => {
-          if (res.code === 1) {
-            // 刷新当前视图
-            this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
-            if (this.searchTableVisible) {
-              this.searchFile();
-            }
-            ElMessage.success('重命名成功');
-          } else {
-            ElMessage.error(`${file.fileName} - ${res.message}`);
-          }
-        })
-      }).catch(() => {
-        ElMessage.info('已取消重命名');
-      });
-    },
-
-    handleMove(file) {
-      this.$prompt('请输入移动至的目录路径', '移动文件', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputValue: this.curDir,
-        inputPattern: /^\/$|^\/([^\/]+\/)*[^\/]+$/,
-        inputErrorMessage: '路径非法：非空且不能有连续 / 且除根外不能以 / 结尾'
-      }).then(({ value }) => {
-        if (!value || value.trim() === '') {
-          ElMessage.error('路径不能为空');
-          return;
-        }
-        if (value === this.curDir) {
-          ElMessage.warning('路径未更改');
-          return;
-        }
-        request({
-          url: `/file/move/${file.id}`,
-          method: 'GET',
-          headers: {
-            'token': localStorage.getItem("token")
-          },
-          params: {
-            newDir: value
-          }
-        }).then(res => {
-          if (res.code === 1) {
-            // 刷新当前视图
-            this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
-            if (this.searchTableVisible) {
-              this.searchFile();
-            }
-            ElMessage.success('移动成功');
-          } else {
-            ElMessage.error(`${res.message}`);
-          }
-        })
-      }).catch(() => {
-        ElMessage.info('已取消移动');
-      });
-    },
-
-    changeFileVisible(row) {
-      return new Promise((resolve, reject) => {
-        try {
-          row._loading = true
-          request({
-            url: `file/setVisible/${row.id}`,
-            method: 'GET',
-            headers: {
-              'token': localStorage.getItem("token")
-            },
-            params: {
-              visible: !row.visible
-            }
-          }).then(res => {
-            if (res.code === 1) {
-              // 刷新当前视图
-              this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
-              if (this.searchTableVisible) {
-                this.searchFile();
-              }
-              // row._loading = false
-              ElMessage.success('修改成功');
-              return resolve(true)
-            } else {
-              // row._loading = false
-              ElMessage.error('修改失败');
-              return reject(false)
-            }
-          })
-        } catch (err) {
-          // row._loading = false
-          ElMessage.error('请求失败');
-          reject(false)
-        }
-      })
-    },
-
-    refreshSaying() {
-      this.getSayingList()
-      this.getSayingPage(this.sayingPageInfo.current, this.sayingPageInfo.size)
-    },
-
-    getSayingList() {
-      request({
-        url: '/saying/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.allSayingTableData = JSON.parse(JSON.stringify(res.data.sayings))
-      })
-    },
-
-    getSayingPage(current, size) {
-      request({
-        url: '/saying/page/' + current + '/' + size,
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.sayingTableData = JSON.parse(JSON.stringify(res.data.sayingPage.data))
-        this.sayingPageInfo.total = res.data.sayingPage.total
-        this.sayingPageInfo.size = res.data.sayingPage.size
-        this.sayingPageInfo.current = res.data.sayingPage.current
-        this.sayingPageInfo.pages = res.data.sayingPage.pages
-      })
-    },
-
-    deleteSaying(saying) {
-      request.delete('/saying/delete/' + saying.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshSaying()
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    exportSayingCsv() {
-      request({
-        url: '/saying/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Sayings_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    refreshUser() {
-      this.getUserList()
-      this.getUserPage(this.userPageInfo.current, this.userPageInfo.size)
-    },
-
-    getUserList() {
-      request({
-        url: '/user/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.allUserTableData = JSON.parse(JSON.stringify(res.data.users))
-      })
-    },
-
-    getUserPage(current, size) {
-      request({
-        url: '/user/page/' + current + '/' + size,
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.userTableData = JSON.parse(JSON.stringify(res.data.userPage.data))
-        this.userPageInfo.total = res.data.userPage.total
-        this.userPageInfo.size = res.data.userPage.size
-        this.userPageInfo.current = res.data.userPage.current
-        this.userPageInfo.pages = res.data.userPage.pages
-      })
-    },
-
-    deleteUser(user) {
-      request.delete('/user/delete/' + user.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshUser()
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleUserSetting(row) {
-      // 深拷贝row对象，避免修改原数据
-      this.userForm = JSON.parse(JSON.stringify(row))
-      this.userSettingVisible = true
-    },
-
-    handleUserSettingSubmit() {
-      request({
-        url: '/user/update',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.userForm,
-        method: 'PUT'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshUser()
-          this.userSettingVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    exportUserCsv() {
-      request({
-        url: '/user/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Users_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    refreshGroup() {
-      this.getGroupList()
-      this.getGroupPage(this.groupPageInfo.current, this.groupPageInfo.size)
-    },
-
-    getGroupList() {
-      request({
-        url: '/group/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.allGroupTableData = JSON.parse(JSON.stringify(res.data.groups))
-      })
-    },
-
-    getGroupPage(current, size) {
-      request({
-        url: '/group/page/' + current + '/' + size,
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.groupTableData = JSON.parse(JSON.stringify(res.data.groupPage.data))
-        this.groupPageInfo.total = res.data.groupPage.total
-        this.groupPageInfo.size = res.data.groupPage.size
-        this.groupPageInfo.current = res.data.groupPage.current
-        this.groupPageInfo.pages = res.data.groupPage.pages
-      })
-    },
-
-    deleteGroup(group) {
-      request.delete('/group/delete/' + group.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshGroup()
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleGroupSetting(row) {
-      // 深拷贝row对象，避免修改原数据
-      this.groupForm = JSON.parse(JSON.stringify(row))
-      this.groupSettingVisible = true
-    },
-
-    handleGroupSettingSubmit() {
-      request({
-        url: '/group/update',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.groupForm,
-        method: 'PUT'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshGroup()
-          this.groupSettingVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleGroupFunc(row) {
-      request({
-        url: '/setting/' + row.id,
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        method: 'GET'
-      }).then(res => {
-        if (res.code === 1) {
-          this.groupFuncForm = JSON.parse(JSON.stringify(res.data.setting));
-          this.groupFuncVisible = true
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleGroupFuncSubmit() {
-      request({
-        url: '/setting/set',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.groupFuncForm,
-        method: 'PUT'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.groupFuncVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    exportGroupCsv() {
-      request({
-        url: '/group/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Groups_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    exportFuncCsv() {
-      request({
-        url: '/setting/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Settings_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    refreshItem() {
-      this.getItemList()
-      this.getItemPage(this.itemPageInfo.current, this.itemPageInfo.size)
-    },
-
-    getItemList() {
-      request({
-        url: '/item/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.allItemTableData = JSON.parse(JSON.stringify(res.data.items))
-      })
-    },
-
-    getItemPage(current, size) {
-      request({
-        url: '/item/page/' + current + '/' + size,
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        this.itemTableData = JSON.parse(JSON.stringify(res.data.itemPage.data))
-        this.itemPageInfo.total = res.data.itemPage.total
-        this.itemPageInfo.size = res.data.itemPage.size
-        this.itemPageInfo.current = res.data.itemPage.current
-        this.itemPageInfo.pages = res.data.itemPage.pages
-      })
-    },
-
-    handleItemSetting(row) {
-      // 深拷贝row对象，避免修改原数据
-      this.itemForm = JSON.parse(JSON.stringify(row))
-      this.itemSettingVisible = true
-    },
-
-    handleItemSettingSubmit() {
-      request({
-        url: '/item/update',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.itemForm,
-        method: 'PUT'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshItem()
-          this.itemSettingVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleItemAdding() {
-      this.itemForm = {
-        id: '',
-        name: '',
-        rarity: null,
-        category: null,
-        price: '',
-        weight: '',
-        description: '',
-        command: '',
-        imagePath: '',
-        available: false,
-      }
-      this.itemAddingVisible = true
-    },
-
-    handleItemAddingSubmit() {
-      request({
-        url: '/item/add',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.itemForm,
-        method: 'POST'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshItem()
-          this.itemAddingVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    deleteItem(item) {
-      request.delete('/item/delete/' + item.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.refreshItem()
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    exportItemCsv() {
-      request({
-        url: '/item/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Items_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    handleInventories(row) {
-      this.inventoriesUserId = row.id
-      this.inventoriesTitle = `库存 - ${row.name}`
-      this.newItemId = ''
-      this.getInventoryList(row.id)
-      this.inventoriesVisible = true
-    },
-
-    getInventoryList(id) {
-      request({
-        url: '/inventory/list',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET',
-        params: {
-          userId: id
-        }
-      }).then(res => {
-        this.inventoriesData = JSON.parse(JSON.stringify(res.data.inventories))
-      })
-    },
-
-    deleteInventory(inventory) {
-      request.delete('/inventory/delete/' + inventory.id, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.getInventoryList(inventory.ownerId)
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handleInventorySetting(row) {
-      // 深拷贝row对象，避免修改原数据
-      this.inventoryForm = JSON.parse(JSON.stringify(row))
-      this.inventorySettingVisible = true
-    },
-
-    handleInventorySettingSubmit() {
-      request({
-        url: '/inventory/update',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        data: this.inventoryForm,
-        method: 'PUT'
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.getInventoryList(this.inventoryForm.ownerId)
-          this.inventorySettingVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    addInventory(userId, itemid) {
-      request({
-        url: '/inventory/add',
-        headers: {
-          'token': localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        params: {
-          userId: userId,
-          itemId: itemid
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.getInventoryList(userId)
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    exportInventoryCsv() {
-      request({
-        url: '/inventory/exportCsv',
-        headers: {
-          'token': localStorage.getItem("token")
-        },
-        method: 'GET'
-      }).then(res => {
-        const blob = new Blob([res]);
-        const elink = document.createElement('a');
-        elink.download = `Inventories_${new Date().toLocaleString()}.csv`;
-        elink.style.display = 'none';
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        URL.revokeObjectURL(elink.href); // 释放 URL 对象
-        document.body.removeChild(elink);
-        ElMessage.success("导出成功")
-      }).catch(error => {
-        ElMessage.error("导出失败")
-      });
-    },
-
-    initRootFile() {
-      request.get('/file/init', {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage({
-            message: `Root 文件 - ${res.message}`,
-            type: 'success',
-            placement: 'bottom-left',
-          })
-        } else {
-          ElMessage({
-            message: `Root 文件 - ${res.message}`,
-            type: 'warning',
-            placement: 'bottom-left',
-          })
-        }
-      })
-    },
-
-    sync(isFileSync = true) {
-      const loading = ElLoading.service({
-        lock: true,
-        text: '同步中...',
-        background: 'rgba(0, 0, 0, 0.7)',
-      })
-
-      // 根据参数决定是否执行文件同步
-      const syncPromise = isFileSync
-        ? request.get('/file/sync', {
-          headers: {
-            token: localStorage.getItem("token")
-          }
-        }).then(res => {
-          if (res.code === 1) {
-            ElMessage({
-              message: '本地与数据库 - 已同步',
-              type: 'success',
-              placement: 'bottom-left',
-            })
-          } else {
-            ElMessage({
-              message: '本地与数据库 - 同步失败',
-              type: 'error',
-              placement: 'bottom-left',
-            })
-          }
-        })
-        : Promise.resolve()
-
-      // 后续操作链
-      syncPromise
-        .then(() => this.getInfo())
-        .then(() => this.getStatistic())
-        .then(() => this.getFilePage(this.filePageInfo.current, this.filePageInfo.size))
-        .then(() => this.refreshSaying())
-        .then(() => this.refreshUser())
-        .then(() => this.refreshGroup())
-        .then(() => this.refreshItem())
-        .then(() => {
-          loading.close()
-          ElMessage({
-            message: '全部浏览数据 - 已更新',
-            type: 'success',
-            placement: 'bottom-left',
-          })
-        })
-        .catch(error => {
-          loading.close()
-          ElMessage({
-            message: "同步更新异常: " + (error.message || '未知错误'),
-            type: 'error',
-            placement: 'bottom-left',
-          })
-        })
-    },
-
-    deleteAdmin() {
-      request.delete('/delete', {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          localStorage.clear()
-          this.$router.push('/login')
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    handlePasswordChange() {
-      this.passwordChangeForm = {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      }
-      this.passwordChangeVisible = true
-    },
-
-    handlePasswordChangeSubmit() {
-      request.post('/changePwd', this.passwordChangeForm, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success(res.message)
-          this.passwordChangeVisible = false
-        } else {
-          ElMessage.error(`更改失败: ${res.message}`)
-        }
-      })
-    },
-
-    handleAdminEdit() {
-      // 深拷贝info对象，避免修改原数据
-      this.adminEditForm = JSON.parse(JSON.stringify(this.info))
-      this.adminEditVisible = true
-    },
-
-    handleAdminEditSubmit() {
-      request.post('/update', this.adminEditForm, {
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          this.getInfo()
-          ElMessage.success(res.message)
-          this.adminEditVisible = false
-        } else {
-          ElMessage.error(res.message)
-        }
-      })
-    },
-
-    logout() {
-      localStorage.clear()
-      this.$router.push('/login')
-    },
-
-    invoke() {
-      request.get('/system/invoke', {
-        headers: {
-          token: localStorage.getItem("token")
-        },
-        params: {
-          command: this.invokeCommand
-        }
-      }).then(res => {
-        if (res.code === 1) {
-          ElMessage.success('调用成功')
-          this.invokeResult = this.invokeResult + res.data.result + '\n'
-        } else {
-          ElMessage.error('调用失败')
-          this.invokeResult = this.invokeResult + res.message + '\n'
-        }
-      })
-    }
-  },
-
-  created() {
-    this.token = localStorage.getItem("token");
-    if (this.token === null) {
-      this.$router.push('/login')
-      return
-    }
-    this.sync(false)
-  },
-
-  mounted() {
-    this.updateTime()
-    this.timer = setInterval(this.updateTime, 1000)
-  },
-
-  beforeUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer)
-    }
-  },
-
-  watch: {
-    // 监听op变化
-    op(newVal) {
-      if (newVal === 4) {
-        this.getStatistic()
-      } else if (newVal === 1) {
-        this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
-      } else if (newVal === 3) {
-        this.refreshSaying()
-      } else if (newVal === 5) {
-        this.refreshUser()
-      } else if (newVal === 6) {
-        this.refreshGroup()
-      } else if (newVal === 7) {
-        this.refreshItem()
-      }
-    }
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
+import LineChart from '@/components/LineChart.vue'
+import BarChart from '@/components/BarChart.vue'
+import request from '@/utils/request'
+
+const router = useRouter()
+
+const uploadRef = ref(null)
+
+const currentTime = ref('')
+const timer = ref(null)
+
+const token = ref('')
+const info = ref({
+  id: 0,
+  username: '',
+  email: ''
+})
+
+const adminEditVisible = ref(false)
+const adminEditForm = ref({
+  id: 0,
+  username: '',
+  email: ''
+})
+
+const passwordChangeVisible = ref(false)
+const passwordChangeForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+})
+
+const userType = ref(0)
+const op = ref(1)
+
+const curDir = ref('/')
+
+const fileTableData = ref([])
+const filePageInfo = ref({
+  total: 0,
+  size: 20,
+  current: 1,
+  pages: 0
+})
+
+const searchTableVisible = ref(false)
+const searchData = ref([])
+const searchKey = ref('')
+
+const uploadDir = ref('')
+const uploadFileList = ref([])
+const uploadFilesTotal = ref(0)
+const uploading = ref(false)
+
+const sayingTableData = ref([])
+const allSayingTableData = ref([])
+const sayingPageInfo = ref({
+  total: 0,
+  size: 20,
+  current: 1,
+  pages: 0
+})
+
+const sayingSearchKey = ref('')
+
+const sayingImportVisible = ref(false)
+
+const userTableData = ref([])
+const allUserTableData = ref([])
+const userPageInfo = ref({
+  total: 0,
+  size: 20,
+  current: 1,
+  pages: 0
+})
+
+const userSearchKey = ref('')
+
+const userImportVisible = ref(false)
+
+const userSettingVisible = ref(false)
+const userForm = ref({
+  id: '',
+  name: '',
+  access: 0,
+  level: 0,
+  cash: 0,
+  capacity: 100,
+  drawTimes: 50
+})
+
+const groupTableData = ref([])
+const allGroupTableData = ref([])
+const groupPageInfo = ref({
+  total: 0,
+  size: 20,
+  current: 1,
+  pages: 0
+})
+
+const groupSearchKey = ref('')
+
+const groupImportVisible = ref(false)
+
+const groupSettingVisible = ref(false)
+const groupForm = ref({
+  id: '',
+  name: '',
+  access: 0,
+})
+
+const groupFuncVisible = ref(false)
+const groupFuncForm = ref({
+  groupId: '',
+
+  limitScope: null,
+  limitCapacity: 25,
+  limitRefill: 10,
+  limitInterval: 1,
+
+  chatScope: null,
+  antiInjection: false,
+  thinking: false,
+  voice: false,
+  embedding: false,
+  embeddingAuth: false,
+  custom: false,
+  autoReply: false,
+  replyFrequency: 0.01,
+
+  imageCollect: false,
+  messageCollect: false,
+  keywordDetect: false,
+  pokeDetect: false,
+  recallDetect: false,
+
+  guessCropRatio: 0.1,
+  guessTransparentRatio: 0.75,
+  guessPadding: 250
+})
+
+const funcImportVisible = ref(false)
+
+const itemTableData = ref([])
+const allItemTableData = ref([])
+const itemPageInfo = ref({
+  total: 0,
+  size: 20,
+  current: 1,
+  pages: 0
+})
+
+const itemSearchRarity = ref('')
+const itemSearchCategory = ref('')
+const itemSearchKey = ref('')
+
+const itemImportVisible = ref(false)
+
+const itemSettingVisible = ref(false)
+const itemAddingVisible = ref(false)
+const itemForm = ref({
+  id: '',
+  name: '',
+  rarity: null,
+  category: null,
+  price: '',
+  weight: '',
+  description: '',
+  command: '',
+  imagePath: '',
+  available: false,
+})
+
+const inventoriesVisible = ref(false)
+const inventoriesData = ref([])
+const inventoriesUserId = ref('')
+const inventoriesTitle = ref('')
+
+const inventorySettingVisible = ref(false)
+const newItemId = ref('')
+const inventoryForm = ref({
+  id: '',
+  ownerId: '',
+  itemId: '',
+  itemName: '',
+  category: null,
+  rarity: null,
+  price: '',
+  amount: ''
+})
+
+const inventoryImportVisible = ref(false)
+
+const previewVisible = ref(false)
+const previewUrl = ref('')
+const previewType = ref('')
+const previewTitle = ref('')
+
+const totalVisits = ref(0)
+const visitsData = ref([])
+const visitsXAxis = ref([])
+const topGroupsData = ref([])
+const topGroupsAxis = ref([])
+const topUsersData = ref([])
+const topUsersAxis = ref([])
+const topCommandsData = ref([])
+const topCommandsAxis = ref([])
+
+const invokeCommand = ref('')
+const invokeResult = ref('')
+
+const hasItemFilter = computed(() => {
+  return itemSearchCategory.value !== '' || itemSearchRarity.value !== '' || itemSearchKey.value !== ''
+})
+
+const filteredItemTableData = computed(() => {
+  if (hasItemFilter.value) {
+    return allItemTableData.value.filter(item => {
+      const categoryMatch = itemSearchCategory.value === '' || item.category === itemSearchCategory.value
+      const rarityMatch = itemSearchRarity.value === '' || item.rarity === itemSearchRarity.value
+      const keyMatch = itemSearchKey.value === '' || item.name.includes(itemSearchKey.value)
+      return categoryMatch && rarityMatch && keyMatch
+    })
+  } else {
+    return itemTableData.value
+  }
+})
+
+const hasSayingFilter = computed(() => sayingSearchKey.value !== '')
+
+const filteredSayingTableData = computed(() => {
+  if (hasSayingFilter.value) {
+    return allSayingTableData.value.filter(saying => {
+      return sayingSearchKey.value === '' ||
+        String(saying.userId).includes(sayingSearchKey.value) || saying.userName.includes(sayingSearchKey.value) || saying.text.includes(sayingSearchKey.value)
+    })
+  } else {
+    return sayingTableData.value
+  }
+})
+
+const hasUserFilter = computed(() => userSearchKey.value !== '')
+
+const filteredUserTableData = computed(() => {
+  if (hasUserFilter.value) {
+    return allUserTableData.value.filter(user => {
+      return userSearchKey.value === '' ||
+        String(user.id).includes(userSearchKey.value) || user.name.includes(userSearchKey.value)
+    })
+  } else {
+    return userTableData.value
+  }
+})
+
+const hasGroupFilter = computed(() => groupSearchKey.value !== '')
+
+const filteredGroupTableData = computed(() => {
+  if (hasGroupFilter.value) {
+    return allGroupTableData.value.filter(group => {
+      return groupSearchKey.value === '' ||
+        String(group.id).includes(groupSearchKey.value) || group.name.includes(groupSearchKey.value)
+    })
+  } else {
+    return groupTableData.value
+  }
+})
+
+const uploadHeaders = computed(() => {
+  const t = localStorage.getItem('token') || ''
+  return { token: `${t}` }
+})
+
+const uploadAction = (url) => {
+  const baseURL = request?.defaults?.baseURL || ''
+  return `${baseURL}${url}`
+}
+
+const isCsv = (file) => {
+  const isCSVByExt = file.name.toLowerCase().endsWith('.csv')
+  if (!isCSVByExt) {
+    ElMessage.error('仅支持 CSV 文件')
+    return false
+  }
+  return true
+}
+
+const updateTime = () => {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('zh-CN', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+
+const getFileExtension = (fileName) => {
+  if (!fileName) return '未知类型'
+  const lastDotIndex = fileName.lastIndexOf('.')
+  if (lastDotIndex === -1 || lastDotIndex === fileName.length - 1) {
+    return '未知类型'
+  }
+  const extension = fileName.substring(lastDotIndex + 1).toLowerCase()
+  return extension.length > 8 ? extension.substring(0, 8) + '...' : extension
+}
+
+const isPreviewable = (file) => {
+  if (file.isDir === 1) return false
+  const fileName = file.fileName.toLowerCase()
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
+  const audioExtensions = ['.mp3', '.wav', '.flac', '.aac', '.ogg', '.m4a', '.wma', '.opus']
+  return imageExtensions.some(ext => fileName.endsWith(ext)) ||
+    videoExtensions.some(ext => fileName.endsWith(ext)) ||
+    audioExtensions.some(ext => fileName.endsWith(ext))
+}
+
+const handlePreview = (file) => {
+  const baseUrl = request?.defaults?.baseURL || ''
+  previewUrl.value = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
+
+  const fileName = file.fileName.toLowerCase()
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
+  previewType.value = imageExtensions.some(ext => fileName.endsWith(ext)) ? 'image' : (videoExtensions.some(ext => fileName.endsWith(ext)) ? 'video' : 'audio')
+
+  previewTitle.value = `预览 - ${file.fileName}`
+  previewVisible.value = true
+}
+
+const getStatistic = async () => {
+  const res = await request.get('/statistic', {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    totalVisits.value = res.data.statistic.totalVisits
+    visitsXAxis.value = res.data.statistic.visitsXAxis
+    visitsData.value = res.data.statistic.visitsData
+    topGroupsAxis.value = res.data.statistic.topGroupsAxis
+    topGroupsData.value = res.data.statistic.topGroupsData
+    topUsersAxis.value = res.data.statistic.topUsersAxis
+    topUsersData.value = res.data.statistic.topUsersData
+    topCommandsAxis.value = res.data.statistic.topCommandsAxis
+    topCommandsData.value = res.data.statistic.topCommandsData
+  } else {
+    ElMessage.error(res.message)
   }
 }
+
+const getInfo = async () => {
+  const res = await request.get('/info', {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    let infoData = res.data.info
+    info.value = JSON.parse(JSON.stringify(infoData))
+    userType.value = res.data.userType
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const copyCurDir = async () => {
+  const text = curDir.value
+
+  const textArea = document.createElement("textarea")
+  textArea.value = text
+  textArea.style.position = "fixed"
+  textArea.style.left = "-999px"
+  textArea.style.top = "-999px"
+  document.body.appendChild(textArea)
+
+  textArea.focus()
+  textArea.select()
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+      ElMessage.success("路径已复制")
+    } else if (document.execCommand('copy')) {
+      ElMessage.success("路径已复制")
+    } else {
+      prompt("请手动复制以下路径：", text)
+    }
+  } catch (err) {
+    ElMessage.warning("复制失败")
+  } finally {
+    document.body.removeChild(textArea)
+  }
+}
+
+const handleFileCurrentChange = (current) => {
+  getFilePage(current, filePageInfo.value.size)
+}
+
+const handleFileSizeChange = (size) => {
+  getFilePage(1, size)
+}
+
+const handleSayingCurrentChange = (current) => {
+  getSayingPage(current, sayingPageInfo.value.size)
+  getSayingList()
+}
+
+const handleSayingSizeChange = (size) => {
+  getSayingPage(1, size)
+  getSayingList()
+}
+
+const handleUserCurrentChange = (current) => {
+  getUserPage(current, userPageInfo.value.size)
+  getUserList()
+}
+
+const handleUserSizeChange = (size) => {
+  getUserPage(1, size)
+  getUserList()
+}
+
+const handleGroupCurrentChange = (current) => {
+  getGroupPage(current, groupPageInfo.value.size)
+  getGroupList()
+}
+
+const handleGroupSizeChange = (size) => {
+  getGroupPage(1, size)
+  getGroupList()
+}
+
+const handleItemCurrentChange = (current) => {
+  getItemPage(current, itemPageInfo.value.size)
+  getItemList()
+}
+
+const handleItemSizeChange = (size) => {
+  getItemPage(1, size)
+  getItemList()
+}
+
+const shiftMenu = (menuOp) => {
+  op.value = menuOp
+}
+
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+const getFilePage = async (current, size) => {
+  const res = await request({
+    url: '/file/page/' + current + '/' + size,
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET',
+    params: { curDir: curDir.value }
+  })
+  fileTableData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
+  filePageInfo.value.total = res.data.filePage.total
+  filePageInfo.value.size = res.data.filePage.size
+  filePageInfo.value.current = res.data.filePage.current
+  filePageInfo.value.pages = res.data.filePage.pages
+}
+
+const searchFile = async () => {
+  const res = await request({
+    url: '/file/searchFile',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET',
+    params: { key: searchKey.value, curDir: curDir.value }
+  })
+  searchData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
+  searchTableVisible.value = true
+}
+
+const deleteFile = async (file) => {
+  const res = await request.delete('/file/delete/' + file.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+    if (searchTableVisible.value === true) {
+      await searchFile(searchKey.value, curDir.value)
+    }
+  } else {
+    ElMessage.error(`${file.fileName} - ${res.message}`)
+  }
+}
+
+const upload = async () => {
+  if (uploadFileList.value.length === 0) {
+    ElMessage.warning("未选择文件")
+    return
+  }
+
+  uploadDir.value = curDir.value
+  uploadFilesTotal.value = 0
+  uploading.value = true
+  for (let fileObj of uploadFileList.value) {
+    try {
+      let formData = new FormData()
+      formData.append("uploadFile", fileObj.raw)
+      formData.append("curDir", curDir.value)
+      const res = await request.post("/file/upload", formData, {
+        headers: { token: localStorage.getItem("token") },
+        timeout: 300000,
+        maxContentLength: Infinity,
+      })
+      if (res.code === 1) {
+        ElMessage.success(`${fileObj.name} - 上传成功`)
+      } else {
+        ElMessage.error(`${fileObj.name} - ${res.message}`)
+      }
+    } catch (err) {
+      console.error("上传失败:", err)
+      ElMessage.error(`${fileObj.name} - Exception: ${err}`)
+    }
+    uploadFilesTotal.value++
+  }
+
+  uploadFileList.value = []
+  uploadRef.value.clearFiles()
+  if (curDir.value === uploadDir.value) {
+    if (filePageInfo.value.pages === 0) {
+      await getFilePage(1, filePageInfo.value.size)
+    } else {
+      await getFilePage(filePageInfo.value.pages, filePageInfo.value.size)
+    }
+  }
+  uploading.value = false
+}
+
+const handleFileChange = (file, fileList) => {
+  uploadFileList.value = fileList
+}
+
+const download = async (file) => {
+  try {
+    const res = await request.get("/file/download/" + file.id, {
+      responseType: "arraybuffer",
+      headers: { token: localStorage.getItem("token") },
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = file.fileName
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success('下载成功')
+  } catch (err) {
+    ElMessage.error('下载失败')
+  }
+}
+
+const enterDir = (dir) => {
+  if (curDir.value === "/") {
+    curDir.value += dir.fileName
+  } else {
+    curDir.value += "/" + dir.fileName
+  }
+  getFilePage(1, filePageInfo.value.size)
+  searchTableVisible.value = false
+}
+
+const backDir = () => {
+  if (curDir.value === "/") {
+    ElMessage.error("已在根目录")
+  } else {
+    let index = curDir.value.lastIndexOf('/')
+    if (index === 0) {
+      curDir.value = "/"
+    } else {
+      curDir.value = curDir.value.substring(0, index)
+    }
+  }
+  getFilePage(1, filePageInfo.value.size)
+}
+
+const createDir = () => {
+  ElMessageBox.prompt('请输入目录名', '新建目录', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: /^(?!.*(\/)|(\\))/,
+    inputErrorMessage: "目录名不能包含斜杠"
+  }).then(async ({ value }) => {
+    if (!value) {
+      ElMessage({ type: 'error', message: '目录名不能为空' })
+    } else {
+      const res = await request.post('/file/createDir', {
+        curDir: curDir.value !== '' ? curDir.value : '/',
+        dirName: value
+      }, {
+        headers: { token: localStorage.getItem("token") }
+      })
+      if (res.code === 1) {
+        ElMessage({ type: 'success', message: value + '创建成功!' })
+        await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+      } else {
+        ElMessage({ type: 'error', message: res.message })
+      }
+    }
+  }).catch(() => {
+    ElMessage({ type: 'info', message: '取消创建' })
+  })
+}
+
+const handleRename = (file) => {
+  ElMessageBox.prompt('请输入新的文件名', '重命名', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputValue: file.fileName,
+    inputPattern: /^[^\\\/:*?"<>|]+$/,
+    inputErrorMessage: '名称非法：文件名不能包含 \\ / : * ? " < > | 等字符'
+  }).then(async ({ value }) => {
+    if (!value || value.trim() === '') {
+      ElMessage.error('文件名不能为空')
+      return
+    }
+    if (value === file.fileName) {
+      ElMessage.warning('文件名未更改')
+      return
+    }
+    const res = await request({
+      url: `/file/rename/${file.id}`,
+      method: 'GET',
+      headers: { 'token': localStorage.getItem("token") },
+      params: { newFileName: value }
+    })
+    if (res.code === 1) {
+      await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+      if (searchTableVisible.value) {
+        await searchFile()
+      }
+      ElMessage.success('重命名成功')
+    } else {
+      ElMessage.error(`${file.fileName} - ${res.message}`)
+    }
+  }).catch(() => {
+    ElMessage.info('已取消重命名')
+  })
+}
+
+const handleMove = (file) => {
+  ElMessageBox.prompt('请输入移动至的目录路径', '移动文件', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputValue: curDir.value,
+    inputPattern: /^\/$|^\/([^\/]+\/)*[^\/]+$/,
+    inputErrorMessage: '路径非法：非空且不能有连续 / 且除根外不能以 / 结尾'
+  }).then(async ({ value }) => {
+    if (!value || value.trim() === '') {
+      ElMessage.error('路径不能为空')
+      return
+    }
+    if (value === curDir.value) {
+      ElMessage.warning('路径未更改')
+      return
+    }
+    const res = await request({
+      url: `/file/move/${file.id}`,
+      method: 'GET',
+      headers: { 'token': localStorage.getItem("token") },
+      params: { newDir: value }
+    })
+    if (res.code === 1) {
+      await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+      if (searchTableVisible.value) {
+        await searchFile()
+      }
+      ElMessage.success('移动成功')
+    } else {
+      ElMessage.error(`${res.message}`)
+    }
+  }).catch(() => {
+    ElMessage.info('已取消移动')
+  })
+}
+
+const changeFileVisible = (row) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      row._loading = true
+      const res = await request({
+        url: `file/setVisible/${row.id}`,
+        method: 'GET',
+        headers: { 'token': localStorage.getItem("token") },
+        params: { visible: !row.visible }
+      })
+      if (res.code === 1) {
+        await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+        if (searchTableVisible.value) {
+          await searchFile()
+        }
+        ElMessage.success('修改成功')
+        return resolve(true)
+      } else {
+        ElMessage.error('修改失败')
+        return reject(false)
+      }
+    } catch (err) {
+      ElMessage.error('请求失败')
+      reject(false)
+    }
+  })
+}
+
+const refreshSaying = () => {
+  getSayingList()
+  getSayingPage(sayingPageInfo.value.current, sayingPageInfo.value.size)
+}
+
+const getSayingList = async () => {
+  const res = await request({
+    url: '/saying/list',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  allSayingTableData.value = JSON.parse(JSON.stringify(res.data.sayings))
+}
+
+const getSayingPage = async (current, size) => {
+  const res = await request({
+    url: '/saying/page/' + current + '/' + size,
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  sayingTableData.value = JSON.parse(JSON.stringify(res.data.sayingPage.data))
+  sayingPageInfo.value.total = res.data.sayingPage.total
+  sayingPageInfo.value.size = res.data.sayingPage.size
+  sayingPageInfo.value.current = res.data.sayingPage.current
+  sayingPageInfo.value.pages = res.data.sayingPage.pages
+}
+
+const deleteSaying = async (saying) => {
+  const res = await request.delete('/saying/delete/' + saying.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshSaying()
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const exportSayingCsv = async () => {
+  try {
+    const res = await request({
+      url: '/saying/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Sayings_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const refreshUser = () => {
+  getUserList()
+  getUserPage(userPageInfo.value.current, userPageInfo.value.size)
+}
+
+const getUserList = async () => {
+  const res = await request({
+    url: '/user/list',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  allUserTableData.value = JSON.parse(JSON.stringify(res.data.users))
+}
+
+const getUserPage = async (current, size) => {
+  const res = await request({
+    url: '/user/page/' + current + '/' + size,
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  userTableData.value = JSON.parse(JSON.stringify(res.data.userPage.data))
+  userPageInfo.value.total = res.data.userPage.total
+  userPageInfo.value.size = res.data.userPage.size
+  userPageInfo.value.current = res.data.userPage.current
+  userPageInfo.value.pages = res.data.userPage.pages
+}
+
+const deleteUser = async (user) => {
+  const res = await request.delete('/user/delete/' + user.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshUser()
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleUserSetting = (row) => {
+  userForm.value = JSON.parse(JSON.stringify(row))
+  userSettingVisible.value = true
+}
+
+const handleUserSettingSubmit = async () => {
+  const res = await request({
+    url: '/user/update',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: userForm.value,
+    method: 'PUT'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshUser()
+    userSettingVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const exportUserCsv = async () => {
+  try {
+    const res = await request({
+      url: '/user/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Users_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const refreshGroup = () => {
+  getGroupList()
+  getGroupPage(groupPageInfo.value.current, groupPageInfo.value.size)
+}
+
+const getGroupList = async () => {
+  const res = await request({
+    url: '/group/list',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  allGroupTableData.value = JSON.parse(JSON.stringify(res.data.groups))
+}
+
+const getGroupPage = async (current, size) => {
+  const res = await request({
+    url: '/group/page/' + current + '/' + size,
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  groupTableData.value = JSON.parse(JSON.stringify(res.data.groupPage.data))
+  groupPageInfo.value.total = res.data.groupPage.total
+  groupPageInfo.value.size = res.data.groupPage.size
+  groupPageInfo.value.current = res.data.groupPage.current
+  groupPageInfo.value.pages = res.data.groupPage.pages
+}
+
+const deleteGroup = async (group) => {
+  const res = await request.delete('/group/delete/' + group.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshGroup()
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleGroupSetting = (row) => {
+  groupForm.value = JSON.parse(JSON.stringify(row))
+  groupSettingVisible.value = true
+}
+
+const handleGroupSettingSubmit = async () => {
+  const res = await request({
+    url: '/group/update',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: groupForm.value,
+    method: 'PUT'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshGroup()
+    groupSettingVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleGroupFunc = async (row) => {
+  const res = await request({
+    url: '/setting/' + row.id,
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    method: 'GET'
+  })
+  if (res.code === 1) {
+    groupFuncForm.value = JSON.parse(JSON.stringify(res.data.setting))
+    groupFuncVisible.value = true
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleGroupFuncSubmit = async () => {
+  const res = await request({
+    url: '/setting/set',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: groupFuncForm.value,
+    method: 'PUT'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    groupFuncVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const exportGroupCsv = async () => {
+  try {
+    const res = await request({
+      url: '/group/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Groups_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const exportFuncCsv = async () => {
+  try {
+    const res = await request({
+      url: '/setting/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Settings_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const refreshItem = () => {
+  getItemList()
+  getItemPage(itemPageInfo.value.current, itemPageInfo.value.size)
+}
+
+const getItemList = async () => {
+  const res = await request({
+    url: '/item/list',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  allItemTableData.value = JSON.parse(JSON.stringify(res.data.items))
+}
+
+const getItemPage = async (current, size) => {
+  const res = await request({
+    url: '/item/page/' + current + '/' + size,
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET'
+  })
+  itemTableData.value = JSON.parse(JSON.stringify(res.data.itemPage.data))
+  itemPageInfo.value.total = res.data.itemPage.total
+  itemPageInfo.value.size = res.data.itemPage.size
+  itemPageInfo.value.current = res.data.itemPage.current
+  itemPageInfo.value.pages = res.data.itemPage.pages
+}
+
+const handleItemSetting = (row) => {
+  itemForm.value = JSON.parse(JSON.stringify(row))
+  itemSettingVisible.value = true
+}
+
+const handleItemSettingSubmit = async () => {
+  const res = await request({
+    url: '/item/update',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: itemForm.value,
+    method: 'PUT'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshItem()
+    itemSettingVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleItemAdding = () => {
+  itemForm.value = {
+    id: '',
+    name: '',
+    rarity: null,
+    category: null,
+    price: '',
+    weight: '',
+    description: '',
+    command: '',
+    imagePath: '',
+    available: false,
+  }
+  itemAddingVisible.value = true
+}
+
+const handleItemAddingSubmit = async () => {
+  const res = await request({
+    url: '/item/add',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: itemForm.value,
+    method: 'POST'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshItem()
+    itemAddingVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const deleteItem = async (item) => {
+  const res = await request.delete('/item/delete/' + item.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    refreshItem()
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const exportItemCsv = async () => {
+  try {
+    const res = await request({
+      url: '/item/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Items_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const handleInventories = (row) => {
+  inventoriesUserId.value = row.id
+  inventoriesTitle.value = `库存 - ${row.name}`
+  newItemId.value = ''
+  getInventoryList(row.id)
+  inventoriesVisible.value = true
+}
+
+const getInventoryList = async (id) => {
+  const res = await request({
+    url: '/inventory/list',
+    headers: { 'token': localStorage.getItem("token") },
+    method: 'GET',
+    params: { userId: id }
+  })
+  inventoriesData.value = JSON.parse(JSON.stringify(res.data.inventories))
+}
+
+const deleteInventory = async (inventory) => {
+  const res = await request.delete('/inventory/delete/' + inventory.id, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    await getInventoryList(inventory.ownerId)
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handleInventorySetting = (row) => {
+  inventoryForm.value = JSON.parse(JSON.stringify(row))
+  inventorySettingVisible.value = true
+}
+
+const handleInventorySettingSubmit = async () => {
+  const res = await request({
+    url: '/inventory/update',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    data: inventoryForm.value,
+    method: 'PUT'
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    await getInventoryList(inventoryForm.value.ownerId)
+    inventorySettingVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const addInventory = async (userId, itemid) => {
+  const res = await request({
+    url: '/inventory/add',
+    headers: { 'token': localStorage.getItem("token"), 'Content-Type': 'application/json' },
+    method: 'POST',
+    params: { userId: userId, itemId: itemid }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    await getInventoryList(userId)
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const exportInventoryCsv = async () => {
+  try {
+    const res = await request({
+      url: '/inventory/exportCsv',
+      headers: { 'token': localStorage.getItem("token") },
+      method: 'GET'
+    })
+    const blob = new Blob([res])
+    const elink = document.createElement('a')
+    elink.download = `Inventories_${new Date().toLocaleString()}.csv`
+    elink.style.display = 'none'
+    elink.href = URL.createObjectURL(blob)
+    document.body.appendChild(elink)
+    elink.click()
+    URL.revokeObjectURL(elink.href)
+    document.body.removeChild(elink)
+    ElMessage.success("导出成功")
+  } catch (error) {
+    ElMessage.error("导出失败")
+  }
+}
+
+const initRootFile = async () => {
+  const res = await request.get('/file/init', {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'success', placement: 'bottom-left' })
+  } else {
+    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'warning', placement: 'bottom-left' })
+  }
+}
+
+const sync = async (isFileSync = true) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '同步中...',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+
+  try {
+    if (isFileSync) {
+      const res = await request.get('/file/sync', {
+        headers: { token: localStorage.getItem("token") }
+      })
+      if (res.code === 1) {
+        ElMessage({ message: '本地与数据库 - 已同步', type: 'success', placement: 'bottom-left' })
+      } else {
+        ElMessage({ message: '本地与数据库 - 同步失败', type: 'error', placement: 'bottom-left' })
+      }
+    }
+    await getInfo()
+    await getStatistic()
+    await getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+    refreshSaying()
+    refreshUser()
+    refreshGroup()
+    refreshItem()
+    loading.close()
+    ElMessage({ message: '全部浏览数据 - 已更新', type: 'success', placement: 'bottom-left' })
+  } catch (error) {
+    loading.close()
+    ElMessage({ message: "同步更新异常: " + (error.message || '未知错误'), type: 'error', placement: 'bottom-left' })
+  }
+}
+
+const deleteAdmin = async () => {
+  const res = await request.delete('/delete', {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    localStorage.clear()
+    await router.push('/login')
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const handlePasswordChange = () => {
+  passwordChangeForm.value = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  }
+  passwordChangeVisible.value = true
+}
+
+const handlePasswordChangeSubmit = async () => {
+  const res = await request.post('/changePwd', passwordChangeForm.value, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    passwordChangeVisible.value = false
+  } else {
+    ElMessage.error(`更改失败: ${res.message}`)
+  }
+}
+
+const handleAdminEdit = () => {
+  adminEditForm.value = JSON.parse(JSON.stringify(info.value))
+  adminEditVisible.value = true
+}
+
+const handleAdminEditSubmit = async () => {
+  const res = await request.post('/update', adminEditForm.value, {
+    headers: { token: localStorage.getItem("token") }
+  })
+  if (res.code === 1) {
+    await getInfo()
+    ElMessage.success(res.message)
+    adminEditVisible.value = false
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+
+const logout = () => {
+  localStorage.clear()
+  router.push('/login')
+}
+
+const invoke = async () => {
+  const res = await request.get('/system/invoke', {
+    headers: { token: localStorage.getItem("token") },
+    params: { command: invokeCommand.value }
+  })
+  if (res.code === 1) {
+    ElMessage.success('调用成功')
+    invokeResult.value = invokeResult.value + res.data.result + '\n'
+  } else {
+    ElMessage.error('调用失败')
+    invokeResult.value = invokeResult.value + res.message + '\n'
+  }
+}
+
+// created
+token.value = localStorage.getItem("token")
+if (!token.value) {
+  router.push('/login')
+} else {
+  sync(false)
+}
+
+// mounted
+onMounted(() => {
+  updateTime()
+  timer.value = setInterval(updateTime, 1000)
+})
+
+// beforeUnmount
+onBeforeUnmount(() => {
+  if (timer.value) {
+    clearInterval(timer.value)
+  }
+})
+
+// watch op
+watch(op, (newVal) => {
+  if (newVal === 4) {
+    getStatistic()
+  } else if (newVal === 1) {
+    getFilePage(filePageInfo.value.current, filePageInfo.value.size)
+  } else if (newVal === 3) {
+    refreshSaying()
+  } else if (newVal === 5) {
+    refreshUser()
+  } else if (newVal === 6) {
+    refreshGroup()
+  } else if (newVal === 7) {
+    refreshItem()
+  }
+})
 </script>
 
 <style scoped>
