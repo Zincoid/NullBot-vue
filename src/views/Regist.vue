@@ -89,12 +89,11 @@ export default {
     regist() {
       this.$axios.post('/regist', this.registForm)
           .then(res => {
-            console.log(res.data)
-            if (res.data.code === 1) {
-              this.$message.success(res.data.message)
+            if (res.code === 1) {
+              this.$message.success(res.message)
               this.$router.push('/login')
             } else {
-              this.$message.warning(`管理员注册失败: ${res.data.message}`)
+              this.$message.warning(`管理员注册失败: ${res.message}`)
             }
           })
     },

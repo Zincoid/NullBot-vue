@@ -11,7 +11,7 @@
             style="min-width: 100%;"
         >
           <!-- 左侧LOGO信息 -->
-          <el-menu-item>
+          <el-menu-item index="logo">
             <h1>NullBot <el-icon size="25">
               <MostlyCloudy />
             </el-icon></h1>
@@ -36,7 +36,7 @@
             </div>
             <!-- op=2时 显示问候 -->
             <h3 v-show="op === 2" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; white-space: nowrap">
-              <span>Ciallo～(∠・ω< ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
+              <span>Ciallo～(∠・ω&lt; ) <span style="font-weight: bold;">{{ currentTime }}</span> ⌒☆</span>
             </h3>
             <!-- op=3时 显示语录管理 -->
             <h3 v-show="op === 3" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
@@ -65,7 +65,7 @@
           </div>
 
           <!-- 右侧用户信息 -->
-          <el-sub-menu style="margin-left: auto;">
+          <el-sub-menu index="user" style="margin-left: auto;">
             <div style="padding: 10px; margin-bottom: 2px">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <el-avatar
@@ -86,17 +86,17 @@
               </div>
             </div>
 
-            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+            <el-menu-item index="init" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button :disabled="userType === 0" type="warning" plain style="width: 100%; justify-content: center;" @click="initRootFile">
                 <el-icon size="15"><Coin /></el-icon>根初始化
               </el-button>
             </el-menu-item>
-            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+            <el-menu-item index="sync" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="primary" plain style="width: 100%; justify-content: center;" @click="sync">
                 <el-icon size="15"><Switch /></el-icon>数据同步
               </el-button>
             </el-menu-item>
-            <el-menu-item style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
+            <el-menu-item index="logout" style="background-color: transparent !important; --el-menu-hover-bg-color: transparent;">
               <el-button type="danger" plain style="width: 100%; justify-content: center;" @click="logout">
                 <el-icon size="15"><SwitchButton /></el-icon>退出登录
               </el-button>
@@ -191,7 +191,7 @@
                   <HomeFilled />
                 </el-icon>
                 <el-text size="large">{{ " "+curDir }}&nbsp;</el-text>
-                <el-button type="text" title="复制路径" @click="copyCurDir"><el-icon size="15"><DocumentCopy /></el-icon></el-button>
+                <el-button :link="true" title="复制路径" @click="copyCurDir"><el-icon size="15"><DocumentCopy /></el-icon></el-button>
               </div>
 
               <!-- 文件操作按钮 -->
@@ -357,7 +357,7 @@
                       v-model="itemSearchCategory"
                       style="width: 100%"
                   >
-                    <el-option label="ALL" :value="null" />
+                    <el-option label="ALL" :value="''" />
                     <el-option label="COMMON" :value="'COMMON'" />
                     <el-option label="SPECIAL" :value="'SPECIAL'" />
                     <el-option label="BREAD" :value="'BREAD'" />
@@ -371,7 +371,7 @@
                       v-model="itemSearchRarity"
                       style="width: 100%"
                   >
-                    <el-option label="ALL" :value="null" />
+                    <el-option label="ALL" :value="''" />
                     <el-option label="WHITE" :value="'WHITE'" />
                     <el-option label="GREEN" :value="'GREEN'" />
                     <el-option label="BLUE" :value="'BLUE'" />
@@ -773,7 +773,7 @@
 
                 <el-table-column label="介绍" min-width="300" show-overflow-tooltip>
                   <template v-slot="scope">
-                    {{ scope.row.description || 无介绍 }}
+                    {{ scope.row.description || '无介绍' }}
                   </template>
                 </el-table-column>
 
@@ -2146,8 +2146,8 @@ export default {
         pages: 0
       },
 
-      itemSearchRarity: null,
-      itemSearchCategory: null,
+      itemSearchRarity: '',
+      itemSearchCategory: '',
       itemSearchKey: '',
 
       itemImportVisible: false,
@@ -2226,16 +2226,16 @@ export default {
     },
 
     hasItemFilter() {
-      return this.itemSearchCategory !== null || this.itemSearchRarity !== null || this.itemSearchKey !== ''
+      return this.itemSearchCategory !== '' || this.itemSearchRarity !== '' || this.itemSearchKey !== ''
     },
 
     filteredItemTableData() {
       if(this.hasItemFilter) {
         return this.allItemTableData.filter(item => {
           // 类别过滤
-          const categoryMatch = this.itemSearchCategory === null || item.category === this.itemSearchCategory
+          const categoryMatch = this.itemSearchCategory === '' || item.category === this.itemSearchCategory
           // 品质过滤
-          const rarityMatch = this.itemSearchRarity === null || item.rarity === this.itemSearchRarity
+          const rarityMatch = this.itemSearchRarity === '' || item.rarity === this.itemSearchRarity
           // 关键词过滤
           const keyMatch = this.itemSearchKey === '' || item.name.includes(this.itemSearchKey)
           return categoryMatch && rarityMatch && keyMatch
@@ -2308,7 +2308,7 @@ export default {
   methods: {
 
     uploadAction(url) {
-      const baseURL = axios.defaults.baseURL || ''
+      const baseURL = this.$axios?.defaults?.baseURL || ''
       return `${baseURL}${url}`
     },
 
@@ -2384,8 +2384,8 @@ export default {
     // 处理预览点击事件
     handlePreview(file) {
       // 1. 构造文件预览URL（需要后端的支持）
-      const baseUrl = axios.defaults.baseURL + '/preview/';
-      this.previewUrl = baseUrl + file.id + '?token=' + localStorage.getItem("token");
+      const baseUrl = this.$axios?.defaults?.baseURL || ''
+      this.previewUrl = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
 
       // 2. 判断文件类型
       const fileName = file.fileName.toLowerCase();
@@ -2406,18 +2406,18 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.totalVisits = res.data.data.statistic.totalVisits
-          this.visitsXAxis = res.data.data.statistic.visitsXAxis
-          this.visitsData = res.data.data.statistic.visitsData
-          this.topGroupsAxis = res.data.data.statistic.topGroupsAxis
-          this.topGroupsData = res.data.data.statistic.topGroupsData
-          this.topUsersAxis = res.data.data.statistic.topUsersAxis
-          this.topUsersData = res.data.data.statistic.topUsersData
-          this.topCommandsAxis = res.data.data.statistic.topCommandsAxis
-          this.topCommandsData = res.data.data.statistic.topCommandsData
+        if (res.code === 1) {
+          this.totalVisits = res.data.statistic.totalVisits
+          this.visitsXAxis = res.data.statistic.visitsXAxis
+          this.visitsData = res.data.statistic.visitsData
+          this.topGroupsAxis = res.data.statistic.topGroupsAxis
+          this.topGroupsData = res.data.statistic.topGroupsData
+          this.topUsersAxis = res.data.statistic.topUsersAxis
+          this.topUsersData = res.data.statistic.topUsersData
+          this.topCommandsAxis = res.data.statistic.topCommandsAxis
+          this.topCommandsData = res.data.statistic.topCommandsData
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -2428,12 +2428,12 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          let info = res.data.data.info
+        if (res.code === 1) {
+          let info = res.data.info
           this.info = JSON.parse(JSON.stringify(info))
-          this.userType = res.data.data.userType
+          this.userType = res.data.userType
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -2547,11 +2547,11 @@ export default {
           curDir: this.curDir,
         }
       }).then(res => {
-        this.fileTableData = JSON.parse(JSON.stringify(res.data.data.filePage.data))
-        this.filePageInfo.total = res.data.data.filePage.total
-        this.filePageInfo.size = res.data.data.filePage.size
-        this.filePageInfo.current = res.data.data.filePage.current
-        this.filePageInfo.pages = res.data.data.filePage.pages
+        this.fileTableData = JSON.parse(JSON.stringify(res.data.filePage.data))
+        this.filePageInfo.total = res.data.filePage.total
+        this.filePageInfo.size = res.data.filePage.size
+        this.filePageInfo.current = res.data.filePage.current
+        this.filePageInfo.pages = res.data.filePage.pages
       })
     },
 
@@ -2567,7 +2567,7 @@ export default {
           curDir: this.curDir,
         }
       }).then(res => {
-        this.searchData = JSON.parse(JSON.stringify(res.data.data.filePage.data))
+        this.searchData = JSON.parse(JSON.stringify(res.data.filePage.data))
         this.searchTableVisible = true
         console.log('searchData:')
         console.log(this.searchData)
@@ -2580,14 +2580,14 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.getFilePage(this.filePageInfo.current, this.filePageInfo.size)
           if (this.searchTableVisible === true) {
             this.searchFile(this.searchKey, this.curDir)
           }
         } else {
-          this.$message.error(`${file.fileName} - ${res.data.message}`)
+          this.$message.error(`${file.fileName} - ${res.message}`)
         }
       })
     },
@@ -2615,10 +2615,10 @@ export default {
             timeout: 300000, // 5分钟超时
             maxContentLength: Infinity,
           })
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             this.$message.success(`${fileObj.name} - 上传成功`)
           } else {
-            this.$message.error(`${fileObj.name} - ${res.data.message}`)
+            this.$message.error(`${fileObj.name} - ${res.message}`)
           }
         } catch (err) {
           console.error("上传失败:", err)
@@ -2652,7 +2652,7 @@ export default {
           token: localStorage.getItem("token")
         },
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = file.fileName;
         elink.style.display = 'none';
@@ -2712,7 +2712,7 @@ export default {
               token: localStorage.getItem("token")
             }
           }).then(res => {
-            if (res.data.code === 1) {
+            if (res.code === 1) {
               this.$message({
                 type: 'success',
                 message: value + '创建成功!'
@@ -2721,7 +2721,7 @@ export default {
             } else {
               this.$message({
                 type: 'error',
-                message: res.data.message
+                message: res.message
               });
             }
           })
@@ -2760,7 +2760,7 @@ export default {
             newFileName: value
           }
         }).then(res => {
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             // 刷新当前视图
             this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
@@ -2768,7 +2768,7 @@ export default {
             }
             this.$message.success('重命名成功');
           } else {
-            this.$message.error(`${file.fileName} - ${res.data.message}`);
+            this.$message.error(`${file.fileName} - ${res.message}`);
           }
         })
       }).catch(() => {
@@ -2802,7 +2802,7 @@ export default {
             newDir: value
           }
         }).then(res => {
-          if (res.data.code === 1) {
+          if (res.code === 1) {
             // 刷新当前视图
             this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
             if (this.searchTableVisible) {
@@ -2810,7 +2810,7 @@ export default {
             }
             this.$message.success('移动成功');
           } else {
-            this.$message.error(`${res.data.message}`);
+            this.$message.error(`${res.message}`);
           }
         })
       }).catch(() => {
@@ -2832,7 +2832,7 @@ export default {
               visible: !row.visible
             }
           }).then(res => {
-            if (res.data.code === 1) {
+            if (res.code === 1) {
               // 刷新当前视图
               this.getFilePage(this.filePageInfo.current, this.filePageInfo.size);
               if (this.searchTableVisible) {
@@ -2868,7 +2868,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.allSayingTableData = JSON.parse(JSON.stringify(res.data.data.sayings))
+        this.allSayingTableData = JSON.parse(JSON.stringify(res.data.sayings))
       })
     },
 
@@ -2880,11 +2880,11 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.sayingTableData = JSON.parse(JSON.stringify(res.data.data.sayingPage.data))
-        this.sayingPageInfo.total = res.data.data.sayingPage.total
-        this.sayingPageInfo.size = res.data.data.sayingPage.size
-        this.sayingPageInfo.current = res.data.data.sayingPage.current
-        this.sayingPageInfo.pages = res.data.data.sayingPage.pages
+        this.sayingTableData = JSON.parse(JSON.stringify(res.data.sayingPage.data))
+        this.sayingPageInfo.total = res.data.sayingPage.total
+        this.sayingPageInfo.size = res.data.sayingPage.size
+        this.sayingPageInfo.current = res.data.sayingPage.current
+        this.sayingPageInfo.pages = res.data.sayingPage.pages
       })
     },
 
@@ -2894,11 +2894,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshSaying()
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -2911,7 +2911,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Sayings_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -2939,7 +2939,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.allUserTableData = JSON.parse(JSON.stringify(res.data.data.users))
+        this.allUserTableData = JSON.parse(JSON.stringify(res.data.users))
       })
     },
 
@@ -2951,11 +2951,11 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.userTableData = JSON.parse(JSON.stringify(res.data.data.userPage.data))
-        this.userPageInfo.total = res.data.data.userPage.total
-        this.userPageInfo.size = res.data.data.userPage.size
-        this.userPageInfo.current = res.data.data.userPage.current
-        this.userPageInfo.pages = res.data.data.userPage.pages
+        this.userTableData = JSON.parse(JSON.stringify(res.data.userPage.data))
+        this.userPageInfo.total = res.data.userPage.total
+        this.userPageInfo.size = res.data.userPage.size
+        this.userPageInfo.current = res.data.userPage.current
+        this.userPageInfo.pages = res.data.userPage.pages
       })
     },
 
@@ -2965,11 +2965,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshUser()
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -2990,12 +2990,12 @@ export default {
         data: this.userForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshUser()
           this.userSettingVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3008,7 +3008,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Users_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -3036,7 +3036,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.allGroupTableData = JSON.parse(JSON.stringify(res.data.data.groups))
+        this.allGroupTableData = JSON.parse(JSON.stringify(res.data.groups))
       })
     },
 
@@ -3048,11 +3048,11 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.groupTableData = JSON.parse(JSON.stringify(res.data.data.groupPage.data))
-        this.groupPageInfo.total = res.data.data.groupPage.total
-        this.groupPageInfo.size = res.data.data.groupPage.size
-        this.groupPageInfo.current = res.data.data.groupPage.current
-        this.groupPageInfo.pages = res.data.data.groupPage.pages
+        this.groupTableData = JSON.parse(JSON.stringify(res.data.groupPage.data))
+        this.groupPageInfo.total = res.data.groupPage.total
+        this.groupPageInfo.size = res.data.groupPage.size
+        this.groupPageInfo.current = res.data.groupPage.current
+        this.groupPageInfo.pages = res.data.groupPage.pages
       })
     },
 
@@ -3062,11 +3062,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshGroup()
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3087,12 +3087,12 @@ export default {
         data: this.groupForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshGroup()
           this.groupSettingVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3106,11 +3106,11 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.groupFuncForm = JSON.parse(JSON.stringify(res.data.data.setting));
+        if (res.code === 1) {
+          this.groupFuncForm = JSON.parse(JSON.stringify(res.data.setting));
           this.groupFuncVisible = true
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3125,11 +3125,11 @@ export default {
         data: this.groupFuncForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.groupFuncVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3142,7 +3142,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Groups_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -3165,7 +3165,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Settings_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -3193,7 +3193,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.allItemTableData = JSON.parse(JSON.stringify(res.data.data.items))
+        this.allItemTableData = JSON.parse(JSON.stringify(res.data.items))
       })
     },
 
@@ -3205,11 +3205,11 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        this.itemTableData = JSON.parse(JSON.stringify(res.data.data.itemPage.data))
-        this.itemPageInfo.total = res.data.data.itemPage.total
-        this.itemPageInfo.size = res.data.data.itemPage.size
-        this.itemPageInfo.current = res.data.data.itemPage.current
-        this.itemPageInfo.pages = res.data.data.itemPage.pages
+        this.itemTableData = JSON.parse(JSON.stringify(res.data.itemPage.data))
+        this.itemPageInfo.total = res.data.itemPage.total
+        this.itemPageInfo.size = res.data.itemPage.size
+        this.itemPageInfo.current = res.data.itemPage.current
+        this.itemPageInfo.pages = res.data.itemPage.pages
       })
     },
 
@@ -3229,12 +3229,12 @@ export default {
         data: this.itemForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshItem()
           this.itemSettingVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3265,12 +3265,12 @@ export default {
         data: this.itemForm,
         method: 'POST'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshItem()
           this.itemAddingVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3281,11 +3281,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.refreshItem()
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3298,7 +3298,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Items_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -3332,7 +3332,7 @@ export default {
           userId: id
         }
       }).then(res => {
-        this.inventoriesData = JSON.parse(JSON.stringify(res.data.data.inventories))
+        this.inventoriesData = JSON.parse(JSON.stringify(res.data.inventories))
       })
     },
 
@@ -3342,11 +3342,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.getInventoryList(inventory.ownerId)
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3367,12 +3367,12 @@ export default {
         data: this.inventoryForm,
         method: 'PUT'
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.getInventoryList(this.inventoryForm.ownerId)
           this.inventorySettingVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3390,11 +3390,11 @@ export default {
           itemId: itemid
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.getInventoryList(userId)
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3407,7 +3407,7 @@ export default {
         },
         method: 'GET'
       }).then(res => {
-        const blob = new Blob([res.data]);
+        const blob = new Blob([res]);
         const elink = document.createElement('a');
         elink.download = `Inventories_${new Date().toLocaleString()}.csv`;
         elink.style.display = 'none';
@@ -3428,15 +3428,15 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
+        if (res.code === 1) {
           ElMessage({
-            message: `Root 文件 - ${res.data.message}`,
+            message: `Root 文件 - ${res.message}`,
             type: 'success',
             placement: 'bottom-left',
           })
         } else {
           ElMessage({
-            message: `Root 文件 - ${res.data.message}`,
+            message: `Root 文件 - ${res.message}`,
             type: 'warning',
             placement: 'bottom-left',
           })
@@ -3458,7 +3458,7 @@ export default {
               token: localStorage.getItem("token")
             }
           }).then(res => {
-            if (res.data.code === 1) {
+            if (res.code === 1) {
               ElMessage({
                 message: '本地与数据库 - 已同步',
                 type: 'success',
@@ -3507,12 +3507,12 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           localStorage.clear()
           this.$router.push('/login')
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3532,11 +3532,11 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
-          this.$message.success(res.data.message)
+        if (res.code === 1) {
+          this.$message.success(res.message)
           this.passwordChangeVisible = false
         } else {
-          this.$message.error(`更改失败: ${res.data.message}`)
+          this.$message.error(`更改失败: ${res.message}`)
         }
       })
     },
@@ -3553,12 +3553,12 @@ export default {
           token: localStorage.getItem("token")
         }
       }).then(res => {
-        if (res.data.code === 1) {
+        if (res.code === 1) {
           this.getInfo()
-          this.$message.success(res.data.message)
+          this.$message.success(res.message)
           this.adminEditVisible = false
         } else {
-          this.$message.error(res.data.message)
+          this.$message.error(res.message)
         }
       })
     },
@@ -3577,12 +3577,12 @@ export default {
           command: this.invokeCommand
         }
       }).then(res => {
-        if (res.data.code === 1) {
+        if (res.code === 1) {
           this.$message.success('调用成功')
-          this.invokeResult = this.invokeResult + res.data.data.result  + '\n'
+          this.invokeResult = this.invokeResult + res.data.result  + '\n'
         } else {
           this.$message.error('调用失败')
-          this.invokeResult = this.invokeResult + res.data.message  + '\n'
+          this.invokeResult = this.invokeResult + res.message  + '\n'
         }
       })
     }

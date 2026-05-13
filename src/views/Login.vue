@@ -73,13 +73,12 @@ export default {
     login() {
       this.$axios.post('/login', this.loginForm)
           .then(res => {
-            console.log(res.data)
-            if (res.data.code === 1) {
-              this.$message.success(res.data.message)
-              localStorage.setItem("token", res.data.data.token)
+            if (res.code === 1) {
+              this.$message.success(res.message)
+              localStorage.setItem("token", res.data.token)
               this.$router.push('/index')
             } else {
-              this.$message.warning(`登录失败: ${res.data.message}`)
+              this.$message.warning(`登录失败: ${res.message}`)
             }
           })
     },
@@ -88,12 +87,12 @@ export default {
       this.$axios.post('/guest')
           .then(res => {
             console.log(res.data)
-            if (res.data.code === 1) {
-              this.$message.success(res.data.message)
-              localStorage.setItem("token", res.data.data.token)
+            if (res.code === 1) {
+              this.$message.success(res.message)
+              localStorage.setItem("token", res.data.token)
               this.$router.push('/index')
             } else {
-              this.$message.warning(`登录失败: ${res.data.message}`)
+              this.$message.warning(`登录失败: ${res.message}`)
             }
           })
     },
