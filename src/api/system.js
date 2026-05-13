@@ -1,41 +1,33 @@
 import request from '@/utils/request';
 
-
 /**
  * 管理登录接口
- * @param {string} id - 用户ID
- * @param {string} password - 用户密码
+ * @param {Object} loginForm
+ * @param {string} loginForm.id
+ * @param {string} loginForm.password
  * @returns {Promise}
  */
 export const loginApi = (loginForm) => {
-    return request.post({
-        url: '/login',
-        data: loginForm
-    });
+    return request.post('/login', loginForm);
 }
-
 
 /**
  * 访客登录接口
  * @returns {Promise}
  */
 export const guestApi = () => {
-    return request.post({
-        url: '/guest',
-    });
+    return request.post('/guest');
 }
 
 /**
  * 管理员注册接口
- * @param {string} id - 用户ID
- * @param {string} password - 用户密码
- * @param {string} email - 用户邮箱
- * @param {string} activationCode - 激活码
+ * @param {Object} registForm
+ * @param {string} registForm.id
+ * @param {string} registForm.password
+ * @param {string} registForm.email
+ * @param {string} registForm.activationCode
  * @returns {Promise}
  */
 export const registApi = (registForm) => {
-    return request.post({
-        url: '/regist',
-        data: registForm
-    });
+    return request.post('/regist', registForm);
 }
