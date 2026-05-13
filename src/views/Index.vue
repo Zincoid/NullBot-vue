@@ -412,6 +412,17 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100%;
   padding: 0 10px;
+  border-right: none;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 12px,
+    var(--el-menu-border-color) 12px,
+    var(--el-menu-border-color) calc(100% - 12px),
+    transparent calc(100% - 12px)
+  );
+  background-size: 1px 100%;
+  background-position: right center;
+  background-repeat: no-repeat;
 }
 
 .aside-menu h3 {
