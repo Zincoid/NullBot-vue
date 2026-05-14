@@ -101,7 +101,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit, Setting, Delete, SwitchButton } from '@element-plus/icons-vue'
 import { getInfoApi, deleteApi, changePwdApi, updateApi } from '@/api/system'
-import { pa } from 'element-plus/es/locales.mjs'
+import { requiredRule, passwordRules, confirmPasswordRules } from '@/utils/rules'
 
 const router = useRouter()
 
@@ -117,23 +117,9 @@ const passwordChangeVisible = ref(false)
 const passwordChangeForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
 const passwordChangeFormRef = ref(null)
 const passwordChangeFormRules = ref({
-  oldPassword: [{ required: true, message: '旧密码不能为空', trigger: 'blur' }],
-  newPassword: [
-    { required: true, message: '新密码不能为空', trigger: 'blur' },
-    { min: 6, max: 20, message: '新密码长度必须在6~20位之间', trigger: 'blur' }
-  ],
-  confirmPassword: [
-    { required: true, message: '确认密码不能为空', trigger: 'blur' },
-    {
-      validator: (rule, value, callback) => {
-        if (value !== passwordChangeForm.value.newPassword) {
-          callback(new Error('两次密码不一致'))
-        } else {
-          callback()
-        }
-      }, message: '两次新密码输入不一致', trigger: 'blur'
-    }
-  ],
+  oldPassword: [requiredRule('旧密码不能为空')],
+  newPassword: passwordRules(),
+  confirmPassword: confirmPasswordRules(() => passwordChangeForm.value.newPassword),
 })
 
 const handlePasswordChange = () => {
