@@ -2,7 +2,7 @@
   <div class="regist-root">
     <div class="regist-form-wrapper">
       <h1 class="regist-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      <el-form ref="registFormRef" :model="registForm" :rules="registFormRules" label-width="40px" class="regist-form"
+      <el-form ref="registFormRef" :model="registForm" :rules="registRules" label-width="40px" class="regist-form"
         hide-required-asterisk>
         <el-form-item label="账号" prop="id">
           <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id"
@@ -47,7 +47,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
 import { registApi } from "@/api/system";
-import { registFormRules } from "@/rules/regist";
+import { registRules } from "@/rules/regist";
 
 const router = useRouter()
 
