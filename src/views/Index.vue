@@ -435,6 +435,10 @@ onBeforeUnmount(() => {
   background-color: var(--el-menu-hover-bg-color);
 }
 
+/* .el-aside-menu .el-menu-item.is-active {
+  background-color: color-mix(in srgb, var(--el-color-primary) 20%, transparent);
+} */
+
 
 .content-container {
   height: 100%;
