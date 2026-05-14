@@ -1,14 +1,14 @@
 <template>
-  <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
-    <div style="margin-right: 40px; margin-top: 10px;">
-      <el-header height="400px" style="padding: 0 0; display: flex; justify-content: left; align-items: center">
-        <div class="statistic-card" style="min-width: 110px">
+  <el-main class="statistic-main">
+    <div class="statistic-content">
+      <el-header height="400px" class="statistic-header">
+        <div class="statistic-card">
           <el-statistic :value="totalVisits">
             <template #title>
-              <div style="display: inline-flex; align-items: center">
+              <div class="statistic-title-row">
                 总调用次数
                 <el-tooltip effect="dark" content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)" placement="top">
-                  <el-icon style="margin-left: 4px" :size="12"><Warning /></el-icon>
+                  <el-icon class="statistic-title-icon" :size="12"><Warning /></el-icon>
                 </el-tooltip>
               </div>
             </template>
@@ -76,18 +76,48 @@ watch(syncTrigger, () => {
 </script>
 
 <style scoped>
-.el-statistic {
-  --el-statistic-content-font-size: 28px;
+.statistic-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: clip;
+  padding: 20px;
+}
+
+.statistic-content {
+  margin-right: 40px;
+  margin-top: 10px;
+}
+
+.statistic-header {
+  padding: 0 0;
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 .statistic-card {
   height: 295px;
   width: 10%;
+  min-width: 110px;
   margin-left: 36px;
   margin-top: 0;
   margin-bottom: 25px;
   padding: 25px;
   border-radius: 8px;
   background-color: var(--el-bg-color-overlay);
+}
+
+.statistic-card :deep(.el-statistic) {
+  --el-statistic-content-font-size: 28px;
+}
+
+.statistic-title-row {
+  display: inline-flex;
+  align-items: center;
+}
+
+.statistic-title-icon {
+  margin-left: 4px;
 }
 </style>
