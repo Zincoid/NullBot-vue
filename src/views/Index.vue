@@ -2,15 +2,15 @@
   <div class="app-root">
     <el-container>
       <!-- 头部区域 -->
-      <el-header class="header" height="auto">
-        <el-menu class="header-menu" mode="horizontal" :ellipsis="false">
-          <el-menu-item index="logo" class="header-menu-logo" :default-active="''">
+      <el-header class="el-header" height="auto">
+        <el-menu class="el-header-menu" mode="horizontal" :ellipsis="false">
+          <el-menu-item index="logo" class="menu-logo" :default-active="''">
             <h1>NullBot <el-icon size="25">
                 <MostlyCloudy />
               </el-icon></h1>
           </el-menu-item>
 
-          <div class="header-center">
+          <div class="el-header-center">
             <!-- 文件管理：搜索栏 -->
             <div v-show="routePath === '/index/file'" class="search-container">
               <el-icon size="20">
@@ -71,7 +71,7 @@
           </div>
 
           <!-- 右侧用户信息 -->
-          <el-sub-menu index="user" class="header-menu-user">
+          <el-sub-menu index="user" class="menu-user">
             <div class="user-dropdown-info">
               <div class="user-dropdown-row">
                 <el-avatar :size="40" :src="info.avatar" class="user-avatar">
@@ -120,13 +120,13 @@
 
       <el-container>
         <!-- 左侧导航 -->
-        <el-aside class="aside">
-          <el-menu :default-active="activeMenu" :default-openeds="defaultOpeneds" class="aside-menu" :ellipsis="false"
+        <el-aside class="el-aside">
+          <el-menu :default-active="activeMenu" :default-openeds="defaultOpeneds" class="el-aside-menu" :ellipsis="false"
             @select="handleMenuSelect">
             <h3 align="center"><el-icon>
                 <Promotion />
               </el-icon>&nbsp;导航</h3>
-            <el-menu-item index="/index/file" class="menu-item">
+            <el-menu-item index="/index/file">
               <el-icon>
                 <Files />
               </el-icon><span>文件存储</span>
@@ -137,38 +137,38 @@
                   <Setting />
                 </el-icon><span>数据管理</span>
               </template>
-              <el-menu-item index="/index/saying" class="menu-item">
+              <el-menu-item index="/index/saying">
                 <el-icon>
                   <ChatDotSquare />
                 </el-icon><span>语录</span>
               </el-menu-item>
-              <el-menu-item index="/index/user" class="menu-item">
+              <el-menu-item index="/index/user">
                 <el-icon>
                   <Cellphone />
                 </el-icon><span>用户</span>
               </el-menu-item>
-              <el-menu-item index="/index/group" class="menu-item">
+              <el-menu-item index="/index/group">
                 <el-icon>
                   <OfficeBuilding />
                 </el-icon><span>群组</span>
               </el-menu-item>
-              <el-menu-item index="/index/item" class="menu-item">
+              <el-menu-item index="/index/item">
                 <el-icon>
                   <Box />
                 </el-icon><span>物品</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="/index/statistic" class="menu-item">
+            <el-menu-item index="/index/statistic">
               <el-icon>
                 <Histogram />
               </el-icon><span>访问统计</span>
             </el-menu-item>
-            <el-menu-item index="/index/center" class="menu-item">
+            <el-menu-item index="/index/center">
               <el-icon>
                 <UserFilled />
               </el-icon><span>个人中心</span>
             </el-menu-item>
-            <el-menu-item index="/index/system" v-if="userType === 1" class="menu-item">
+            <el-menu-item index="/index/system" v-if="userType === 1">
               <el-icon>
                 <Platform />
               </el-icon><span>系统调用</span>
@@ -308,20 +308,20 @@ onBeforeUnmount(() => {
 }
 
 /* ===== 头部区域 ===== */
-.header {
+.el-header {
   --el-header-padding: 0;
   display: flex;
   align-items: center;
 }
 
-.header-menu {
+.el-header-menu {
   width: 100%;
   --el-menu-horizontal-height: 70px;
   min-width: 100%;
   padding: 0 20px 0 10px;
 }
 
-.header-center {
+.el-header-center {
   flex: 1;
   display: flex;
   align-items: center;
@@ -355,7 +355,7 @@ onBeforeUnmount(() => {
 }
 
 /* ===== 用户子菜单 ===== */
-.header-menu-user {
+.menu-user {
   margin-top: 5px;
 }
 
@@ -400,11 +400,11 @@ onBeforeUnmount(() => {
 }
 
 /* ===== 侧边导航 ===== */
-.aside {
+.el-aside {
   width: 175px;
 }
 
-.aside-menu {
+.el-aside-menu {
   width: 100%;
   height: 100%;
   padding: 0 10px;
@@ -421,17 +421,17 @@ onBeforeUnmount(() => {
   background-repeat: no-repeat;
 }
 
-.aside-menu h3 {
+.el-aside-menu h3 {
   margin-top: 0;
   padding-top: 1em;
 }
 
-.aside-menu .el-menu-item {
+.el-aside-menu .el-menu-item {
   border-radius: 8px;
   margin-bottom: 4px;
 }
 
-.aside-menu .el-menu-item.is-active {
+.el-aside-menu .el-menu-item.is-active {
   background-color: var(--el-menu-hover-bg-color);
 }
 
@@ -511,20 +511,20 @@ onBeforeUnmount(() => {
   color: var(--el-color-error);
 }
 
-.header-menu-logo {
+.menu-logo {
   pointer-events: none;
   user-select: none;
   padding-top: 5px;
 }
 
-.header .el-sub-menu__title {
+.el-header .el-sub-menu__title {
   justify-content: center;
 }
 </style>
 
 <style>
 /* ===== 侧边导航子菜单样式 ===== */
-.aside-menu .el-sub-menu__title {
+.el-aside-menu .el-sub-menu__title {
   border-radius: 8px;
   margin-bottom: 4px;
 }

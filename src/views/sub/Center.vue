@@ -1,7 +1,7 @@
 <template>
-  <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: clip; padding: 20px;">
-    <div style="margin-right: 20px;">
-      <el-descriptions title="用户信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+  <el-main class="center-main">
+    <div class="center-content">
+      <el-descriptions title="用户信息" size="small" label-width="80px" class="center-section" :column="1" border>
         <el-descriptions-item label="ID">
           <el-tag type="danger">{{ info.id || '无' }}</el-tag>
         </el-descriptions-item>
@@ -13,18 +13,16 @@
         </el-descriptions-item>
       </el-descriptions>
 
-      <el-descriptions title="访问信息" size="small" label-width="80px" style="margin-bottom: 20px" :column="1" border>
+      <el-descriptions title="访问信息" size="small" label-width="80px" class="center-section" :column="1" border>
         <el-descriptions-item label="Type">
           <el-tag type="warning">{{ userType }}</el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="Token">
-          <el-tag type="warning"
-            style="white-space: normal; word-break: break-all; height: auto; padding-bottom: 5px; padding-top: 5px">{{
-              token }}</el-tag>
+          <el-tag type="warning" class="token-tag">{{ token }}</el-tag>
         </el-descriptions-item>
       </el-descriptions>
 
-      <div style="position: fixed; bottom: 75px; right: 50px; display: flex; flex-wrap: nowrap; gap: 10px;">
+      <div class="center-actions">
         <el-button type="success" round plain @click="handleAdminEdit" :disabled="userType === 0">
           <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
         </el-button>
@@ -44,16 +42,16 @@
       </div>
 
       <!-- 个人信息编辑对话框 -->
-        <el-dialog v-model="adminEditVisible" title="个人信息修改" width="500px">
-        <el-form ref="adminEditFormRef" :model="adminEditForm" label-width="100px">
+      <el-dialog v-model="adminEditVisible" title="个人信息修改" width="500px">
+        <el-form ref="adminEditFormRef" :model="adminEditForm" label-width="100px" class="dialog-form">
           <el-form-item label="ID" prop="id">
-            <el-input v-model="adminEditForm.id" :disabled="true" style="width: 90%" />
+            <el-input v-model="adminEditForm.id" :disabled="true" />
           </el-form-item>
           <el-form-item label="名称" prop="username">
-            <el-input v-model="adminEditForm.username" style="width: 90%" />
+            <el-input v-model="adminEditForm.username" />
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="adminEditForm.email" style="width: 90%" />
+            <el-input v-model="adminEditForm.email" />
           </el-form-item>
         </el-form>
         <template #footer>
@@ -66,15 +64,15 @@
 
       <!-- 密码修改对话框 -->
       <el-dialog v-model="passwordChangeVisible" title="密码修改" width="500px">
-        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" label-width="100px">
+        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" label-width="100px" class="dialog-form">
           <el-form-item label="旧密码" prop="oldPassword" :required="true">
-            <el-input v-model="passwordChangeForm.oldPassword" show-password style="width: 90%" />
+            <el-input v-model="passwordChangeForm.oldPassword" show-password />
           </el-form-item>
           <el-form-item label="新密码" prop="newPassword" :required="true">
-            <el-input v-model="passwordChangeForm.newPassword" show-password style="width: 90%" />
+            <el-input v-model="passwordChangeForm.newPassword" show-password />
           </el-form-item>
           <el-form-item label="确认密码" prop="confirmPassword" :required="true">
-            <el-input v-model="passwordChangeForm.confirmPassword" show-password style="width: 90%" />
+            <el-input v-model="passwordChangeForm.confirmPassword" show-password />
           </el-form-item>
         </el-form>
         <template #footer>
@@ -167,6 +165,43 @@ async function getInfo() {
 </script>
 
 <style scoped>
+.center-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: clip;
+  padding: 20px;
+}
+
+.center-content {
+  margin-right: 20px;
+}
+
+.center-section {
+  margin-bottom: 20px;
+}
+
+.token-tag {
+  white-space: normal;
+  word-break: break-all;
+  height: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.center-actions {
+  position: fixed;
+  bottom: 75px;
+  right: 50px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.dialog-form :deep(.el-input) {
+  width: 90%;
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
