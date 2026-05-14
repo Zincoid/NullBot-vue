@@ -4,6 +4,6 @@ import { emailRules, createPasswordRules, createRequiredRule } from '../utils/ru
 export const registFormRules = {
   id: [createRequiredRule('账号不能为空')],
   password: createPasswordRules(),
-  email: emailRules(),
+  email: emailRules,
   activationCode: [createRequiredRule('激活码不能为空')],
 }
