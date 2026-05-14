@@ -1,5 +1,6 @@
 import { requiredRule, passwordRules, equalRule } from '../utils/rules'
 
+
 export const createPasswordChangeRules = (getNewPassword) => ({
   oldPassword: [requiredRule('旧密码不能为空')],
   newPassword: passwordRules('新'),

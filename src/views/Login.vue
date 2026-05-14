@@ -2,27 +2,34 @@
   <div class="login-root">
     <div class="login-form-wrapper">
       <h1 class="login-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      <el-form :model="loginForm" label-width="40px" class="login-form">
-        <el-form-item label="账号">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" label-width="40px" class="login-form"
+        hide-required-asterisk>
+        <el-form-item label="账号" prop="id">
           <el-input placeholder="请输入账号..." v-model="loginForm.id"
             @input="loginForm.id = loginForm.id.replace(/\D/g, '')"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input placeholder="请输入密码..." v-model="loginForm.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <div class="login-btn-wrapper">
             <el-button type="warning" plain class="login-btn-guest" @click="guest">
-              <el-icon size="15"><Lock /></el-icon>&nbsp;暂访
+              <el-icon size="15">
+                <Lock />
+              </el-icon>&nbsp;暂访
             </el-button>
             <el-button type="success" plain class="login-btn-login" @click="login">
-              <el-icon size="15"><Key /></el-icon>&nbsp;登录
+              <el-icon size="15">
+                <Key />
+              </el-icon>&nbsp;登录
             </el-button>
           </div>
         </el-form-item>
         <div class="login-link-wrapper">
           <el-link type="primary" @click="toRegist">
-            <el-icon><Connection /></el-icon>&nbsp;前往注册
+            <el-icon>
+              <Connection />
+            </el-icon>&nbsp;前往注册
           </el-link>
         </div>
       </el-form>
@@ -39,6 +46,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
 import { loginApi, guestApi } from "@/api/system";
+import { loginRules } from "@/rules/login";
 
 const router = useRouter()
 
@@ -46,8 +54,16 @@ const loginForm = ref({
   id: '',
   password: ''
 })
+const loginFormRef = ref(null)
 
 const login = async () => {
+  if (!loginFormRef.value) return
+  try {
+    await loginFormRef.value.validate()
+  } catch (error) {
+    ElMessage.warning(`${error.message}`)
+    return
+  }
   const res = await loginApi(loginForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
