@@ -53,9 +53,7 @@ const registForm = ref({
   email: '',
   activationCode: ''
 })
-
 const registFormRef = ref(null)
-
 const registFormRules = ref({
   id: [{ required: true, message: '账号不能为空', trigger: 'blur' }],
   password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -64,6 +62,7 @@ const registFormRules = ref({
 })
 
 const regist = async () => {
+  if (!registFormRef.value) return
   registFormRef.value.validate(async (valid) => {
     if (!valid) {
       ElMessage.error('表单校验失败')

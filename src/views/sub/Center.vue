@@ -64,14 +64,14 @@
 
       <!-- 密码修改对话框 -->
       <el-dialog v-model="passwordChangeVisible" title="密码修改" width="500px">
-        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" label-width="100px" class="dialog-form">
-          <el-form-item label="旧密码" prop="oldPassword" :required="true">
+        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" :rules="passwordChangeFormRules" label-width="100px" class="dialog-form">
+          <el-form-item label="旧密码" prop="oldPassword">
             <el-input v-model="passwordChangeForm.oldPassword" show-password />
           </el-form-item>
-          <el-form-item label="新密码" prop="newPassword" :required="true">
+          <el-form-item label="新密码" prop="newPassword">
             <el-input v-model="passwordChangeForm.newPassword" show-password />
           </el-form-item>
-          <el-form-item label="确认密码" prop="confirmPassword" :required="true">
+          <el-form-item label="确认密码" prop="confirmPassword">
             <el-input v-model="passwordChangeForm.confirmPassword" show-password />
           </el-form-item>
         </el-form>
@@ -92,6 +92,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit, Setting, Delete, SwitchButton } from '@element-plus/icons-vue'
 import { getInfoApi, deleteApi, changePwdApi, updateApi } from '@/api/system'
+import { pa } from 'element-plus/es/locales.mjs'
 
 const router = useRouter()
 
@@ -105,6 +106,50 @@ const adminEditForm = ref({ id: 0, username: '', email: '' })
 
 const passwordChangeVisible = ref(false)
 const passwordChangeForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
+const passwordChangeFormRef = ref(null)
+const passwordChangeFormRules = ref({
+  oldPassword: [{ required: true, message: '旧密码不能为空', trigger: 'blur' }],
+  newPassword: [
+    { required: true, message: '新密码不能为空', trigger: 'blur' },
+    { min: 6, max: 20, message: '新密码长度必须在6~20位之间', trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { required: true, message: '确认密码不能为空', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== passwordChangeForm.value.newPassword) {
+          callback(new Error('两次密码不一致'))
+        } else {
+          callback()
+        }
+      }, message: '两次新密码输入不一致', trigger: 'blur'
+    }
+  ],
+})
+
+const handlePasswordChange = () => {
+  if (passwordChangeFormRef.value) {
+    passwordChangeFormRef.value.resetFields()
+  }
+  passwordChangeForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
+  passwordChangeVisible.value = true
+}
+
+const handlePasswordChangeSubmit = async () => {
+  if (!passwordChangeFormRef.value) return
+  passwordChangeFormRef.value.validate(async (valid) => {
+    if (!valid) {
+      return
+    }
+    const res = await changePwdApi(passwordChangeForm.value)
+    if (res.code === 1) {
+      ElMessage.success(res.message)
+      passwordChangeVisible.value = false
+    } else {
+      ElMessage.error(`更改失败: ${res.message}`)
+    }
+  })
+}
 
 const handleAdminEdit = () => {
   adminEditForm.value = JSON.parse(JSON.stringify(info.value))
@@ -119,21 +164,6 @@ const handleAdminEditSubmit = async () => {
     adminEditVisible.value = false
   } else {
     ElMessage.error(res.message)
-  }
-}
-
-const handlePasswordChange = () => {
-  passwordChangeForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
-  passwordChangeVisible.value = true
-}
-
-const handlePasswordChangeSubmit = async () => {
-  const res = await changePwdApi(passwordChangeForm.value)
-  if (res.code === 1) {
-    ElMessage.success(res.message)
-    passwordChangeVisible.value = false
-  } else {
-    ElMessage.error(`更改失败: ${res.message}`)
   }
 }
 
@@ -153,7 +183,7 @@ const logout = () => {
   router.push('/login')
 }
 
-async function getInfo() {
+const getInfo = async () => {
   const res = await getInfoApi()
   if (res.code === 1) {
     info.value = JSON.parse(JSON.stringify(res.data.info))
