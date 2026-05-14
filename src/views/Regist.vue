@@ -2,18 +2,18 @@
   <div class="regist-root">
     <div class="regist-form-wrapper">
       <h1 class="regist-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      <el-form :model="registForm" label-width="40px" class="regist-form">
-        <el-form-item label="账号">
+      <el-form ref="registFormRef" :model="registForm" :rules="registFormRules" label-width="40px" class="regist-form" hide-required-asterisk>
+        <el-form-item label="账号" prop="id">
           <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id"
             @input="registForm.id = registForm.id.replace(/\D/g, '')"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="password">
           <el-input placeholder="请输入密码..." v-model="registForm.password" show-password></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input placeholder="请输入邮箱..." v-model="registForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="密钥">
+        <el-form-item label="密钥" prop="activationCode">
           <el-input placeholder="请输入激活码..." v-model="registForm.activationCode"></el-input>
         </el-form-item>
         <el-form-item>
@@ -54,14 +54,30 @@ const registForm = ref({
   activationCode: ''
 })
 
+const registFormRef = ref(null)
+
+const registFormRules = ref({
+  id: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  activationCode: [{ required: true, message: '请输入激活码', trigger: 'blur' }],
+})
+
 const regist = async () => {
-  const res = await registApi(registForm.value)
-  if (res.code === 1) {
-    ElMessage.success(res.message)
-    router.push('/login')
-  } else {
-    ElMessage.warning(`管理员注册失败: ${res.message}`)
-  }
+  if (!registFormRef.value) return
+  registFormRef.value.validate(async (valid) => {
+    if (!valid) {
+      ElMessage.error('表单校验失败')
+      return
+    }
+    const res = await registApi(registForm.value)
+    if (res.code === 1) {
+      ElMessage.success(res.message)
+      router.push('/login')
+    } else {
+      ElMessage.warning(`管理员注册失败: ${res.message}`)
+    }
+  })
 }
 
 const toLogin = () => {
