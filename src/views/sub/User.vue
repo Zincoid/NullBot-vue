@@ -487,7 +487,7 @@ watch(syncTrigger, () => {
 
 .user-header-form {
   display: flex;
-  width: 70%;
+  width: 100%;
   gap: 0;
   align-items: center;
   flex-wrap: nowrap;
@@ -505,8 +505,6 @@ watch(syncTrigger, () => {
 
 .user-header-search {
   flex: 2;
-  min-width: 310px;
-  max-width: 740px;
 }
 
 .user-header-search :deep(.el-input) {
