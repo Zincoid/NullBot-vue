@@ -1,15 +1,13 @@
 <template>
   <el-container>
     <!-- 头部操作 -->
-    <el-header height="20px"
-      style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+    <el-header height="20px" class="item-header">
+      <div class="item-header-left">
         <el-icon size="18px"><Filter /></el-icon>&nbsp;
-        <el-form :inline="true"
-          style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
-          <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;" />
-          <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
-            <el-select placeholder="All Types" v-model="itemSearchCategory" style="width: 100%">
+        <el-form :inline="true" class="item-header-form">
+          <el-form-item label="过滤器" class="item-header-label" />
+          <el-form-item class="item-header-select">
+            <el-select placeholder="All Types" v-model="itemSearchCategory">
               <el-option label="ALL" :value="''" />
               <el-option label="COMMON" :value="'COMMON'" />
               <el-option label="SPECIAL" :value="'SPECIAL'" />
@@ -17,8 +15,8 @@
               <el-option label="LOOTING" :value="'LOOTING'" />
             </el-select>
           </el-form-item>
-          <el-form-item style="margin: 0; flex: 1; min-width: 80px; max-width: 140px">
-            <el-select placeholder="All Rarity" v-model="itemSearchRarity" style="width: 100%">
+          <el-form-item class="item-header-select">
+            <el-select placeholder="All Rarity" v-model="itemSearchRarity">
               <el-option label="ALL" :value="''" />
               <el-option label="WHITE" :value="'WHITE'" />
               <el-option label="GREEN" :value="'GREEN'" />
@@ -28,14 +26,13 @@
               <el-option label="RED" :value="'RED'" />
             </el-select>
           </el-form-item>
-          <el-form-item style="margin: 0; flex: 2; min-width: 150px; max-width: 500px">
-            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="itemSearchKey" clearable
-              style="width: 100%" />
+          <el-form-item class="item-header-search">
+            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="itemSearchKey" clearable />
           </el-form-item>
         </el-form>
       </div>
-      <div style="display: flex; align-items: center; flex-shrink: 0;">
-        <el-button-group style="display: inline-flex; margin-right: 1px">
+      <div class="item-header-right">
+        <el-button-group class="item-header-btns">
           <el-button round plain @click="itemImportVisible = true" :disabled="userType === 0">
             <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入物品
           </el-button>
@@ -49,8 +46,8 @@
       </div>
     </el-header>
 
-    <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: auto; padding: 20px;">
-      <el-table :data="filteredItemTableData" style="width: 100%" height="calc(100vh - 250px)">
+    <el-main class="item-main">
+      <el-table :data="filteredItemTableData" class="item-table" height="calc(100vh - 250px)">
         <template #empty>
           <el-empty description="暂无物品" />
         </template>
@@ -89,7 +86,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="item-actions">
               <el-button type="warning" plain @click="handleItemSetting(scope.row)" size="small" title="设置"
                 :disabled="userType === 0">
                 <el-icon size="14"><Setting /></el-icon>
@@ -108,14 +105,12 @@
     </el-main>
 
     <!-- 分页 -->
-    <el-footer height="60px" style="padding: 10px 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <el-text v-if="hasItemFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+    <el-footer height="60px" class="item-footer">
+      <div class="item-footer-row">
+        <el-text v-if="hasItemFilter" class="item-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ filteredItemTableData.length }} 条记录
         </el-text>
-        <el-text v-if="!hasItemFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+        <el-text v-if="!hasItemFilter" class="item-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ itemPageInfo.total }} 条记录
         </el-text>
         <el-pagination v-if="!hasItemFilter" background @size-change="handleItemSizeChange"
@@ -127,15 +122,15 @@
 
     <!-- 物品设置对话框 -->
     <el-dialog v-model="itemSettingVisible" title="物品设置" width="500px">
-      <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px">
+      <el-form ref="itemSettingFormRef" :model="itemForm" label-width="100px" class="item-form">
         <el-form-item label="物品ID" prop="id">
-          <el-input v-model="itemForm.id" :disabled="true" style="width: 90%" />
+          <el-input v-model="itemForm.id" :disabled="true" />
         </el-form-item>
         <el-form-item label="名称" prop="name" :required="true">
-          <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%" />
+          <el-input v-model="itemForm.name" placeholder="请输入名称..." />
         </el-form-item>
         <el-form-item label="类别" prop="category" :required="true">
-          <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+          <el-select v-model="itemForm.category" placeholder="请选择类别...">
             <el-option label="COMMON" :value="0" />
             <el-option label="SPECIAL" :value="1" />
             <el-option label="BREAD" :value="2" />
@@ -143,7 +138,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="品质" prop="rarity" :required="true">
-          <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
+          <el-select v-model="itemForm.rarity" placeholder="请选择品质...">
             <el-option label="WHITE" :value="0" />
             <el-option label="GREEN" :value="1" />
             <el-option label="BLUE" :value="2" />
@@ -154,26 +149,26 @@
         </el-form-item>
         <el-form-item label="可获得" prop="available" :required="true">
           <el-switch v-model="itemForm.available" inline-prompt
-            style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
+            class="item-switch"
             :active-icon="Check" :inactive-icon="Close" />
         </el-form-item>
         <el-form-item label="价格" prop="price" :required="true">
           <el-input v-model="itemForm.price" @input="v => itemForm.price = v.replace(/\D/g,'')" placeholder="请输入价格..."
-            style="width: 90%" />
+            />
         </el-form-item>
         <el-form-item label="重量" prop="weight" :required="true">
           <el-input v-model="itemForm.weight" @input="v => itemForm.weight = v.replace(/\D/g,'')" placeholder="请输入重量..."
-            style="width: 90%" />
+            />
         </el-form-item>
         <el-form-item label="介绍" prop="description">
           <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea"
-            :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%" />
+            :autosize="{ minRows: 3, maxRows: 6 }" />
         </el-form-item>
         <el-form-item label="指令" prop="command">
-          <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%" />
+          <el-input v-model="itemForm.command" placeholder="暂无指令" />
         </el-form-item>
         <el-form-item label="图路径" prop="imagePath">
-          <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%" />
+          <el-input v-model="itemForm.imagePath" placeholder="暂无路径" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -186,12 +181,12 @@
 
     <!-- 物品新增对话框 -->
     <el-dialog v-model="itemAddingVisible" title="新增物品" width="500px">
-      <el-form ref="itemAddingFormRef" :model="itemForm" label-width="100px">
+      <el-form ref="itemAddingFormRef" :model="itemForm" label-width="100px" class="item-form">
         <el-form-item label="名称" prop="name" :required="true">
-          <el-input v-model="itemForm.name" placeholder="请输入名称..." style="width: 90%" />
+          <el-input v-model="itemForm.name" placeholder="请输入名称..." />
         </el-form-item>
         <el-form-item label="类别" prop="category" :required="true">
-          <el-select v-model="itemForm.category" placeholder="请选择类别..." style="width: 90%">
+          <el-select v-model="itemForm.category" placeholder="请选择类别...">
             <el-option label="COMMON" :value="0" />
             <el-option label="SPECIAL" :value="1" />
             <el-option label="BREAD" :value="2" />
@@ -199,7 +194,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="品质" prop="rarity" :required="true">
-          <el-select v-model="itemForm.rarity" placeholder="请选择品质..." style="width: 90%">
+          <el-select v-model="itemForm.rarity" placeholder="请选择品质...">
             <el-option label="WHITE" :value="0" />
             <el-option label="GREEN" :value="1" />
             <el-option label="BLUE" :value="2" />
@@ -210,26 +205,26 @@
         </el-form-item>
         <el-form-item label="可获得" prop="available" :required="true">
           <el-switch v-model="itemForm.available" inline-prompt
-            style="--el-switch-on-color: rgba(19,206,102,0.75); --el-switch-off-color: rgba(255,73,73,0.75)"
+            class="item-switch"
             :active-icon="Check" :inactive-icon="Close" />
         </el-form-item>
         <el-form-item label="价格" prop="price" :required="true">
           <el-input v-model="itemForm.price" @input="v => itemForm.price = v.replace(/\D/g,'')" placeholder="请输入价格..."
-            style="width: 90%" />
+            />
         </el-form-item>
         <el-form-item label="重量" prop="weight" :required="true">
           <el-input v-model="itemForm.weight" @input="v => itemForm.weight = v.replace(/\D/g,'')" placeholder="请输入重量..."
-            style="width: 90%" />
+            />
         </el-form-item>
         <el-form-item label="介绍" prop="description">
           <el-input v-model="itemForm.description" placeholder="暂无介绍" type="textarea"
-            :autosize="{ minRows: 3, maxRows: 6 }" style="width: 90%" />
+            :autosize="{ minRows: 3, maxRows: 6 }" />
         </el-form-item>
         <el-form-item label="指令" prop="command">
-          <el-input v-model="itemForm.command" placeholder="暂无指令" style="width: 90%" />
+          <el-input v-model="itemForm.command" placeholder="暂无指令" />
         </el-form-item>
         <el-form-item label="图路径" prop="imagePath">
-          <el-input v-model="itemForm.imagePath" placeholder="暂无路径" style="width: 90%" />
+          <el-input v-model="itemForm.imagePath" placeholder="暂无路径" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -416,6 +411,124 @@ watch(syncTrigger, () => {
 </script>
 
 <style scoped>
+/* ===== 头部 ===== */
+.item-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.item-header-form {
+  display: flex;
+  width: 70%;
+  gap: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.item-header-form :deep(.el-form-item) {
+  margin: 0;
+}
+
+.item-header-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.item-header-select {
+  flex: 1;
+  min-width: 80px;
+  max-width: 140px;
+}
+
+.item-header-select :deep(.el-select) {
+  width: 100%;
+}
+
+.item-header-search {
+  flex: 2;
+  min-width: 150px;
+  max-width: 500px;
+}
+
+.item-header-search :deep(.el-input) {
+  width: 100%;
+}
+
+.item-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.item-header-btns {
+  display: inline-flex;
+  margin-right: 1px;
+}
+
+/* ===== 主区域 ===== */
+.item-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.item-table {
+  width: 100%;
+}
+
+/* ===== 操作列 ===== */
+.item-actions {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* ===== 分页 ===== */
+.item-footer {
+  padding: 10px 20px;
+}
+
+.item-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item-footer-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 30px;
+}
+
+/* ===== 物品设置/新增对话框 ===== */
+.item-form :deep(.el-input),
+.item-form :deep(.el-textarea),
+.item-form :deep(.el-select) {
+  width: 90%;
+}
+
+.item-switch {
+  --el-switch-on-color: rgba(19, 206, 102, 0.75);
+  --el-switch-off-color: rgba(255, 73, 73, 0.75);
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;

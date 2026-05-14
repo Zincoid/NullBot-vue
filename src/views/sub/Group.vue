@@ -481,14 +481,16 @@ watch(syncTrigger, () => {
   justify-content: flex-start;
 }
 
-.group-header-label {
+.group-header-form :deep(.el-form-item) {
   margin: 0;
+}
+
+.group-header-label {
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .group-header-search {
-  margin: 0;
   flex: 2;
   min-width: 310px;
   max-width: 740px;
