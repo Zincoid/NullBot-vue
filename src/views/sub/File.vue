@@ -236,6 +236,7 @@ import {
   Delete, InfoFilled
 } from '@element-plus/icons-vue'
 import request from '@/utils/request'
+import { saveFileToLocal } from '@/utils/save'
 import {
   getFilePageApi, searchFileApi, deleteFileApi, uploadFileApi,
   downloadFileApi, createDirApi, renameFileApi, moveFileApi, setVisibleApi
@@ -408,15 +409,7 @@ const handleFileChange = (file, fileList) => {
 const download = async (file) => {
   try {
     const res = await downloadFileApi(file.id)
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = file.fileName
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, file.fileName)
     ElMessage.success('下载成功')
   } catch (err) {
     ElMessage.error('下载失败')

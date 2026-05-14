@@ -260,6 +260,7 @@ import { ref, computed, inject, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Filter, Search, DocumentAdd, DocumentCopy, Delete, InfoFilled, Box, Setting, Plus, UploadFilled } from '@element-plus/icons-vue'
 import request from '@/utils/request'
+import { saveFileToLocal } from '@/utils/save'
 import { getUserListApi, getUserPageApi, deleteUserApi, updateUserApi, exportUserCsvApi } from '@/api/user'
 import { getInventoryListApi, deleteInventoryApi, updateInventoryApi, addInventoryApi, exportInventoryCsvApi } from '@/api/inventory'
 
@@ -365,15 +366,7 @@ const handleUserSettingSubmit = async () => {
 const exportUserCsv = async () => {
   try {
     const res = await exportUserCsvApi()
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = `Users_${new Date().toLocaleString()}.csv`
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, `Users_${new Date().toLocaleString()}.csv`)
     ElMessage.success('导出成功')
   } catch (error) {
     ElMessage.error('导出失败')
@@ -443,15 +436,7 @@ const addInventory = async (userId, itemId) => {
 const exportInventoryCsv = async () => {
   try {
     const res = await exportInventoryCsvApi()
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = `Inventories_${new Date().toLocaleString()}.csv`
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, `Inventories_${new Date().toLocaleString()}.csv`)
     ElMessage.success('导出成功')
   } catch (error) {
     ElMessage.error('导出失败')

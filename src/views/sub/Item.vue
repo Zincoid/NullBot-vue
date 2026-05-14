@@ -254,6 +254,7 @@ import { ref, computed, inject, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Filter, Search, DocumentAdd, DocumentCopy, Delete, InfoFilled, Setting, Plus, Check, Close, UploadFilled } from '@element-plus/icons-vue'
 import request from '@/utils/request'
+import { saveFileToLocal } from '@/utils/save'
 import { getItemListApi, getItemPageApi, updateItemApi, addItemApi, deleteItemApi, exportItemCsvApi } from '@/api/item'
 
 const userType = inject('userType')
@@ -376,15 +377,7 @@ const deleteItem = async (item) => {
 const exportItemCsv = async () => {
   try {
     const res = await exportItemCsvApi()
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = `Items_${new Date().toLocaleString()}.csv`
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, `Items_${new Date().toLocaleString()}.csv`)
     ElMessage.success('导出成功')
   } catch (error) {
     ElMessage.error('导出失败')

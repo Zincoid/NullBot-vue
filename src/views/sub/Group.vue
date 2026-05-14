@@ -273,6 +273,7 @@ import { ref, computed, inject, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Filter, Search, DocumentAdd, DocumentCopy, Delete, InfoFilled, Setting, TurnOff, Odometer, Promotion, Monitor, Grid, Check, Close, UploadFilled } from '@element-plus/icons-vue'
 import request from '@/utils/request'
+import { saveFileToLocal } from '@/utils/save'
 import {
   getGroupListApi, getGroupPageApi, deleteGroupApi, updateGroupApi, exportGroupCsvApi,
   getGroupSettingApi, updateGroupSettingApi, exportGroupSettingCsvApi
@@ -402,15 +403,7 @@ const handleGroupFuncSubmit = async () => {
 const exportGroupCsv = async () => {
   try {
     const res = await exportGroupCsvApi()
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = `Groups_${new Date().toLocaleString()}.csv`
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, `Groups_${new Date().toLocaleString()}.csv`)
     ElMessage.success('导出成功')
   } catch (error) {
     ElMessage.error('导出失败')
@@ -420,15 +413,7 @@ const exportGroupCsv = async () => {
 const exportFuncCsv = async () => {
   try {
     const res = await exportGroupSettingCsvApi()
-    const blob = new Blob([res])
-    const elink = document.createElement('a')
-    elink.download = `Settings_${new Date().toLocaleString()}.csv`
-    elink.style.display = 'none'
-    elink.href = URL.createObjectURL(blob)
-    document.body.appendChild(elink)
-    elink.click()
-    URL.revokeObjectURL(elink.href)
-    document.body.removeChild(elink)
+    saveFileToLocal(res, `Settings_${new Date().toLocaleString()}.csv`)
     ElMessage.success('导出成功')
   } catch (error) {
     ElMessage.error('导出失败')
