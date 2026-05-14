@@ -1,7 +1,7 @@
 <template>
   <div class="filing-info">
     <span>
-      <img src="../assets/备案图标.png" alt="" class="filing-icon">
+      <img src="../assets/filing_icon.png" alt="" class="filing-icon">
       <a href="https://beian.mps.gov.cn/#/query/webSearch?code=21021702000850" rel="noreferrer" target="_blank"
         class="filing-link filing-link-gongan">辽公网安备21021702000850号</a>
       <a href="https://beian.miit.gov.cn/" target="_blank"
