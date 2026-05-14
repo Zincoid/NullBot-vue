@@ -1,9 +1,8 @@
 <template>
   <el-container>
     <!-- 文件操作栏 -->
-    <el-header height="20px"
-      style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; padding-right: 5px">
+    <el-header height="20px" class="file-header">
+      <div class="file-breadcrumb">
         <el-icon size="20"><HomeFilled /></el-icon>
         <el-text size="large">{{ " " + curDir }}&nbsp;</el-text>
         <el-button type="primary" :link="true" title="复制路径" @click="copyCurDir">
@@ -11,10 +10,9 @@
         </el-button>
       </div>
 
-      <div style="display: flex; align-items: center;">
+      <div class="file-toolbar">
         <el-upload multiple ref="uploadRef" class="upload" action="" :file-list="uploadFileList"
-          :on-change="handleFileChange" :on-remove="handleFileChange" :auto-upload="false"
-          style="display: inline-flex; padding-left: 5px">
+          :on-change="handleFileChange" :on-remove="handleFileChange" :auto-upload="false">
           <template #trigger>
             <el-button type="primary" plain :disabled="uploading || userType === 0">
               <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;{{ uploading ? uploadFilesTotal + "/" + uploadFileList.length : "添加文件" }}
@@ -27,7 +25,7 @@
           <el-icon v-if="!uploading" size="15"><UploadFilled /></el-icon>&nbsp;{{ uploading ? "处理中..." : "上传" }}
         </el-button>
 
-        <el-button-group style="margin-left: 15px; margin-right: 1px;display: inline-flex;">
+        <el-button-group class="file-btn-group">
           <el-button round plain @click="backDir">
             <el-icon size="15"><RefreshLeft /></el-icon>&nbsp;返回上级
           </el-button>
@@ -38,8 +36,8 @@
       </div>
     </el-header>
 
-    <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: auto; padding: 20px;">
-      <el-table :data="fileTableData" style="width: 100%" height="calc(100vh - 250px)">
+    <el-main class="file-main">
+      <el-table :data="fileTableData" class="file-table" height="calc(100vh - 250px)">
         <template #empty>
           <el-empty description="暂无文件" />
         </template>
@@ -47,24 +45,17 @@
           :index="(filePageInfo.current - 1) * filePageInfo.size + 1" />
         <el-table-column label="文件名" min-width="300" show-overflow-tooltip>
           <template v-slot="scope">
-            <div style="display: flex; align-items: center;">
-              <el-icon v-if="scope.row.isDir === 1" style="margin-right: 8px;"><Folder /></el-icon>
-              <el-icon v-else style="margin-right: 8px;"><Document /></el-icon>
-              <span v-if="scope.row.isDir === 1" class="file-name-clickable" @click="enterDir(scope.row)"
-                :title="`进入文件夹: ${scope.row.fileName}`"
-                style="cursor: pointer; color: #409eff; text-decoration: none;"
-                @mouseenter="e => e.target.style.textDecoration = 'underline'"
-                @mouseleave="e => e.target.style.textDecoration = 'none'">
+            <div class="file-name-cell">
+              <el-icon class="file-name-icon"><Folder v-if="scope.row.isDir === 1" /><Document v-else /></el-icon>
+              <span v-if="scope.row.isDir === 1" class="file-name-link file-name-dir"
+                @click="enterDir(scope.row)" :title="`进入文件夹: ${scope.row.fileName}`">
                 {{ scope.row.fileName }}
               </span>
-              <span v-else-if="isPreviewable(scope.row)" class="file-name-clickable"
-                @click="handlePreview(scope.row)" :title="`预览文件: ${scope.row.fileName}`"
-                style="cursor: pointer; color: #67c23a; text-decoration: none;"
-                @mouseenter="e => e.target.style.textDecoration = 'underline'"
-                @mouseleave="e => e.target.style.textDecoration = 'none'">
+              <span v-else-if="isPreviewable(scope.row)" class="file-name-link file-name-preview"
+                @click="handlePreview(scope.row)" :title="`预览文件: ${scope.row.fileName}`">
                 {{ scope.row.fileName }}
               </span>
-              <span v-else style="color: #cdd1da;">{{ scope.row.fileName }}</span>
+              <span v-else class="file-name-plain">{{ scope.row.fileName }}</span>
             </div>
           </template>
         </el-table-column>
@@ -86,7 +77,7 @@
         </el-table-column>
         <el-table-column label="文件类型" width="100" align="center">
           <template v-slot="scope">
-            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
+            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" effect="plain" round class="file-type-tag">
               {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
             </el-tag>
           </template>
@@ -94,13 +85,13 @@
         <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
           <template v-slot="scope">
             <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
-              style="--el-switch-on-color: rgba(218,62,113,0.95)" :loading="scope.row._loading"
+              class="file-switch" :loading="scope.row._loading"
               :before-change="() => changeFileVisible(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="275" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="file-actions">
               <el-button type="info" plain @click="handlePreview(scope.row)" v-if="isPreviewable(scope.row)"
                 size="small" title="预览">
                 <el-icon size="14"><Picture /></el-icon>
@@ -135,9 +126,9 @@
     </el-main>
 
     <!-- 分页 -->
-    <el-footer height="60px" style="padding: 10px 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <el-text style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+    <el-footer height="60px" class="file-footer">
+      <div class="file-footer-row">
+        <el-text class="file-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ filePageInfo.total }} 条记录
         </el-text>
         <el-pagination background @size-change="handleFileSizeChange" @current-change="handleFileCurrentChange"
@@ -148,16 +139,14 @@
 
     <!-- 搜索对话框 -->
     <el-dialog title="搜索结果" v-model="searchTableVisible" width="75%">
-      <el-table :data="searchData" style="width: 100%" stripe>
+      <el-table :data="searchData" class="file-table" stripe>
         <template #empty>
           <el-empty description="无搜索结果" />
         </template>
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column label="文件名" min-width="200">
           <template v-slot="scope">
-            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              {{ scope.row.fileName }}
-            </div>
+            <div class="file-search-name">{{ scope.row.fileName }}</div>
           </template>
         </el-table-column>
         <el-table-column label="所有者" width="100" align="center" show-overflow-tooltip>
@@ -178,7 +167,7 @@
         </el-table-column>
         <el-table-column label="文件类型" width="100" align="center">
           <template v-slot="scope">
-            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" style="min-width: 70px" effect="plain" round>
+            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" effect="plain" round class="file-type-tag">
               {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
             </el-tag>
           </template>
@@ -186,13 +175,13 @@
         <el-table-column v-if="userType === 1" label="可见性" width="100" align="center">
           <template v-slot="scope">
             <el-switch v-model="scope.row.visible" inline-prompt :active-icon="Check" :inactive-icon="Close"
-              style="--el-switch-on-color: rgba(102,192,58,0.81)" :loading="scope.row._loading"
+              class="file-switch file-switch-search" :loading="scope.row._loading"
               :before-change="() => changeFileVisible(scope.row)" />
           </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="216" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="file-actions">
               <el-button type="info" plain @click="handlePreview(scope.row)" v-if="isPreviewable(scope.row)"
                 size="small" title="预览">
                 <el-icon size="14"><Picture /></el-icon>
@@ -224,14 +213,13 @@
 
     <!-- 预览对话框 -->
     <el-dialog v-model="previewVisible" :title="previewTitle" :destroy-on-close="true" width="70%" top="5vh" center>
-      <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+      <div class="preview-wrapper">
         <el-image v-if="previewType === 'image'" :src="previewUrl" :preview-src-list="[previewUrl]" fit="contain"
-          style="width: 100%; display: flex; justify-content: center;" :hide-on-click-modal="true" />
-        <video v-else-if="previewType === 'video'" :src="previewUrl" controls autoplay
-          style="max-width: 100%; max-height: 65vh;">
+          class="preview-image" :hide-on-click-modal="true" />
+        <video v-else-if="previewType === 'video'" ref="previewMediaRef" :src="previewUrl" controls autoplay class="preview-video">
           您的浏览器不支持 video 标签。
         </video>
-        <audio v-else-if="previewType === 'audio'" :src="previewUrl" controls autoplay style="width: 100%;">
+        <audio v-else-if="previewType === 'audio'" ref="previewMediaRef" :src="previewUrl" controls autoplay class="preview-audio">
           您的浏览器不支持 audio 标签。
         </audio>
       </div>
@@ -240,7 +228,7 @@
 </template>
 
 <script setup>
-import { ref, inject, watch, onMounted } from 'vue'
+import { ref, inject, watch, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   HomeFilled, DocumentCopy, DocumentAdd, UploadFilled, RefreshLeft, FolderAdd,
@@ -276,6 +264,7 @@ const previewVisible = ref(false)
 const previewUrl = ref('')
 const previewType = ref('')
 const previewTitle = ref('')
+const previewMediaRef = ref(null)
 
 const getFileExtension = (fileName) => {
   if (!fileName) return '未知类型'
@@ -298,7 +287,7 @@ const isPreviewable = (file) => {
     audioExtensions.some(ext => fileName.endsWith(ext))
 }
 
-const handlePreview = (file) => {
+const handlePreview = async (file) => {
   const baseUrl = request?.defaults?.baseURL || ''
   previewUrl.value = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
   const fileName = file.fileName.toLowerCase()
@@ -307,6 +296,10 @@ const handlePreview = (file) => {
   previewType.value = imageExtensions.some(ext => fileName.endsWith(ext)) ? 'image' : (videoExtensions.some(ext => fileName.endsWith(ext)) ? 'video' : 'audio')
   previewTitle.value = `预览 - ${file.fileName}`
   previewVisible.value = true
+  await nextTick()
+  if (previewMediaRef.value) {
+    previewMediaRef.value.volume = 0.25
+  }
 }
 
 const formatFileSize = (bytes) => {
@@ -586,7 +579,39 @@ watch(searchTrigger, () => {
 </script>
 
 <style scoped>
-::v-deep .upload .el-upload-list {
+/* ===== 操作栏 ===== */
+.file-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file-breadcrumb {
+  display: flex;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.file-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+.file-btn-group {
+  margin-left: 15px;
+  margin-right: 1px;
+  display: inline-flex;
+}
+
+/* ===== 上传组件 ===== */
+.upload {
+  position: relative;
+  display: inline-flex;
+  padding-left: 5px;
+}
+
+:deep(.upload .el-upload-list) {
   position: absolute;
   top: 100%;
   left: 0;
@@ -601,8 +626,117 @@ watch(searchTrigger, () => {
   margin-top: 5px;
 }
 
-.upload {
-  position: relative;
-  display: inline-block;
+/* ===== 主内容区 ===== */
+.file-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.file-table {
+  width: 100%;
+}
+
+/* ===== 文件名列 ===== */
+.file-name-cell {
+  display: flex;
+  align-items: center;
+}
+
+.file-name-icon {
+  margin-right: 8px;
+}
+
+.file-name-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.file-name-link:hover {
+  text-decoration: underline;
+}
+
+.file-name-dir {
+  color: #409eff;
+}
+
+.file-name-preview {
+  color: #67c23a;
+}
+
+.file-name-plain {
+  color: #cdd1da;
+}
+
+/* ===== 类型标签 & 可见性开关 ===== */
+.file-type-tag {
+  min-width: 70px;
+}
+
+.file-switch {
+  --el-switch-on-color: rgba(218, 62, 113, 0.95);
+}
+
+.file-switch-search {
+  --el-switch-on-color: rgba(102, 192, 58, 0.81);
+}
+
+/* ===== 操作列 ===== */
+.file-actions {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* ===== 底部分页 ===== */
+.file-footer {
+  padding: 10px 20px;
+}
+
+.file-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-footer-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 30px;
+}
+
+/* ===== 搜索对话框 ===== */
+.file-search-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== 预览对话框 ===== */
+.preview-wrapper {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-video {
+  max-width: 100%;
+  max-height: 65vh;
+}
+
+.preview-audio {
+  width: 100%;
 }
 </style>
