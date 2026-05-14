@@ -101,7 +101,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit, Setting, Delete, SwitchButton } from '@element-plus/icons-vue'
 import { getInfoApi, deleteApi, changePwdApi, updateApi } from '@/api/system'
-import { createPasswordChangeRules } from '@/rules/center'
+import { createPasswordChangeFormRules } from '@/rules/center'
 
 const router = useRouter()
 
@@ -116,7 +116,7 @@ const adminEditForm = ref({ id: 0, username: '', email: '' })
 const passwordChangeVisible = ref(false)
 const passwordChangeForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
 const passwordChangeFormRef = ref(null)
-const passwordChangeFormRules = createPasswordChangeRules(() => passwordChangeForm.value.newPassword)
+const passwordChangeFormRules = createPasswordChangeFormRules(() => passwordChangeForm.value.newPassword)
 
 const handlePasswordChange = () => {
   if (passwordChangeFormRef.value) {

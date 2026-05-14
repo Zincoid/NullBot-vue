@@ -2,7 +2,7 @@
   <div class="login-root">
     <div class="login-form-wrapper">
       <h1 class="login-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" label-width="40px" class="login-form"
+      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="40px" class="login-form"
         hide-required-asterisk>
         <el-form-item label="账号" prop="id">
           <el-input placeholder="请输入账号..." v-model="loginForm.id"
@@ -46,7 +46,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
 import { loginApi, guestApi } from "@/api/system";
-import { loginRules } from "@/rules/login";
+import { loginFormRules } from "@/rules/login";
 
 const router = useRouter()
 
