@@ -61,7 +61,7 @@ const login = async () => {
   try {
     await loginFormRef.value.validate()
   } catch (error) {
-    ElMessage.warning(`${error.message}`)
+    ElMessage.error('请填写完整账号和密码')
     return
   }
   const res = await loginApi(loginForm.value)

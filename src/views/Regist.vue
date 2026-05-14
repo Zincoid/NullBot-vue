@@ -64,7 +64,7 @@ const regist = async () => {
   try {
     await registFormRef.value.validate()
   } catch {
-    ElMessage.error('表单校验失败')
+    ElMessage.error('请填写完整注册信息')
     return
   }
   const res = await registApi(registForm.value)
