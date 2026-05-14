@@ -1,37 +1,34 @@
 <template>
   <div class="regist-root">
     <div class="regist-form-wrapper">
-      <div>
-        <h1 align="center" style="margin-bottom: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      </div>
-      <el-form :model="registForm" label-width="40px" class="demo-ruleForm" style="width: 300px;">
+      <h1 class="regist-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
+      <el-form :model="registForm" label-width="40px" class="regist-form">
         <el-form-item label="账号">
           <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id"
-            @input="registForm.id = registForm.id.replace(/\D/g, '')" style="width: 100%"></el-input>
+            @input="registForm.id = registForm.id.replace(/\D/g, '')"></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input placeholder="请输入密码..." v-model="registForm.password" show-password style="width: 100%"></el-input>
+          <el-input placeholder="请输入密码..." v-model="registForm.password" show-password></el-input>
         </el-form-item>
-        <!-- <el-form-item label="确认">
-          <el-input placeholder="请确认密码" v-model="registForm.password" show-password style="width: 100%"></el-input>
-        </el-form-item> -->
         <el-form-item label="邮箱">
-          <el-input placeholder="请输入邮箱..." v-model="registForm.email" style="width: 100%"></el-input>
+          <el-input placeholder="请输入邮箱..." v-model="registForm.email"></el-input>
         </el-form-item>
         <el-form-item label="密钥">
-          <el-input placeholder="请输入激活码..." v-model="registForm.activationCode" style="width: 100%"></el-input>
+          <el-input placeholder="请输入激活码..." v-model="registForm.activationCode"></el-input>
         </el-form-item>
         <el-form-item>
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <el-button type="danger" plain @click="regist" style="width: 100%;"><el-icon size="15">
-                <User />
-              </el-icon>&nbsp;注册</el-button>
+          <div class="regist-btn-wrapper">
+            <el-button type="danger" plain class="regist-btn" @click="regist">
+              <el-icon size="15"><User /></el-icon>&nbsp;注册
+            </el-button>
           </div>
         </el-form-item>
-        <div style="display: flex; justify-content: center; padding-left: 25px;">
-          <el-link type="primary" @click="toLogin"><el-icon>
+        <div class="regist-link-wrapper">
+          <el-link type="primary" @click="toLogin">
+            <el-icon>
               <Connection />
-            </el-icon>&nbsp;前往登录</el-link>
+            </el-icon>&nbsp;前往登录
+          </el-link>
         </div>
       </el-form>
     </div>
@@ -85,5 +82,34 @@ const toLogin = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.regist-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.regist-form {
+  width: 300px;
+}
+
+.regist-form :deep(.el-input) {
+  width: 100%;
+}
+
+.regist-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.regist-btn {
+  width: 100%;
+}
+
+.regist-link-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-left: 25px;
 }
 </style>
