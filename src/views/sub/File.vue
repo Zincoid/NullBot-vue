@@ -724,6 +724,11 @@ watch(searchTrigger, () => {
   justify-content: center;
 }
 
+:deep(.el-image-viewer__actions),
+:deep(.el-image-viewer__close) {
+  background-color: #33333388;
+}
+
 .preview-video {
   max-width: 100%;
   max-height: 65vh;
