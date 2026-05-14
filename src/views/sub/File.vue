@@ -435,7 +435,7 @@ const enterDir = (dir) => {
 
 const backDir = () => {
   if (curDir.value === "/") {
-    ElMessage.error("已在根目录")
+    ElMessage.warning("已在根目录")
   } else {
     let index = curDir.value.lastIndexOf('/')
     if (index === 0) {

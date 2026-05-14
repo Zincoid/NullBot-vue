@@ -1,21 +1,18 @@
 <template>
   <el-container>
     <!-- 头部操作 -->
-    <el-header height="20px"
-      style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+    <el-header height="20px" class="group-header">
+      <div class="group-header-left">
         <el-icon size="18px"><Filter /></el-icon>&nbsp;
-        <el-form :inline="true"
-          style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
-          <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;" />
-          <el-form-item style="margin: 0; flex: 2; min-width: 310px; max-width: 740px">
-            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="groupSearchKey" clearable
-              style="width: 100%" />
+        <el-form :inline="true" class="group-header-form">
+          <el-form-item label="过滤器" class="group-header-label" />
+          <el-form-item class="group-header-search">
+            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="groupSearchKey" clearable />
           </el-form-item>
         </el-form>
       </div>
-      <div style="display: flex; align-items: center; flex-shrink: 0;">
-        <el-button-group style="display: inline-flex; margin-right: 1px">
+      <div class="group-header-right">
+        <el-button-group class="group-header-btns">
           <el-button round plain @click="funcImportVisible = true" :disabled="userType === 0">
             <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入配置
           </el-button>
@@ -32,8 +29,8 @@
       </div>
     </el-header>
 
-    <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: auto; padding: 20px;">
-      <el-table :data="filteredGroupTableData" style="width: 100%" height="calc(100vh - 250px)">
+    <el-main class="group-main">
+      <el-table :data="filteredGroupTableData" class="group-table" height="calc(100vh - 250px)">
         <template #empty>
           <el-empty description="暂无群组" />
         </template>
@@ -51,7 +48,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="216" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="group-actions">
               <el-button type="primary" plain @click="handleGroupFunc(scope.row)" size="small" title="功能"
                 :disabled="userType === 0">
                 <el-icon size="14"><TurnOff /></el-icon>
@@ -74,14 +71,12 @@
     </el-main>
 
     <!-- 分页 -->
-    <el-footer height="60px" style="padding: 10px 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <el-text v-if="hasGroupFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+    <el-footer height="60px" class="group-footer">
+      <div class="group-footer-row">
+        <el-text v-if="hasGroupFilter" class="group-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ filteredGroupTableData.length }} 条记录
         </el-text>
-        <el-text v-if="!hasGroupFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+        <el-text v-if="!hasGroupFilter" class="group-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ groupPageInfo.total }} 条记录
         </el-text>
         <el-pagination v-if="!hasGroupFilter" background @size-change="handleGroupSizeChange"
@@ -93,15 +88,15 @@
 
     <!-- 群组设置对话框 -->
     <el-dialog v-model="groupSettingVisible" title="群组设置" width="500px">
-      <el-form ref="groupSettingFormRef" :model="groupForm" label-width="100px">
+      <el-form ref="groupSettingFormRef" :model="groupForm" label-width="100px" class="setting-form">
         <el-form-item label="群组ID" prop="id">
-          <el-input v-model="groupForm.id" :disabled="true" style="width: 90%" />
+          <el-input v-model="groupForm.id" :disabled="true" />
         </el-form-item>
         <el-form-item label="群名" prop="name">
-          <el-input v-model="groupForm.name" :disabled="true" style="width: 90%" />
+          <el-input v-model="groupForm.name" :disabled="true" />
         </el-form-item>
         <el-form-item label="权限" prop="access">
-          <el-select v-model="groupForm.access" style="width: 90%">
+          <el-select v-model="groupForm.access">
             <el-option label="II级 (超级管理)" :value="2" />
             <el-option label="I级 (管理)" :value="1" />
             <el-option label="0级 (用户)" :value="0" />
@@ -126,22 +121,22 @@
             <el-icon><Odometer /></el-icon>
             <span class="section-title">Limit 设置</span>
           </div>
-          <el-form ref="groupFuncLimitFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+          <el-form ref="groupFuncLimitFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
             <el-form-item label="限速范围" prop="limitScope">
-              <el-select v-model="groupFuncForm.limitScope" style="width: 250px">
+              <el-select v-model="groupFuncForm.limitScope">
                 <el-option label="Group" :value="'Group'" />
                 <el-option label="User" :value="'User'" />
                 <el-option label="Cmd" :value="'Cmd'" />
               </el-select>
             </el-form-item>
             <el-form-item label="限速容量" prop="limitCapacity" :required="true">
-              <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.limitCapacity" placeholder="请输入容量..." />
             </el-form-item>
             <el-form-item label="补充数量" prop="limitRefill" :required="true">
-              <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充数量..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.limitRefill" placeholder="请输入补充数量..." />
             </el-form-item>
             <el-form-item label="补充间隔" prop="limitInterval" :required="true">
-              <el-input v-model="groupFuncForm.limitInterval" placeholder="请输入补充间隔(单位:Min)..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.limitInterval" placeholder="请输入补充间隔(单位:Min)..." />
             </el-form-item>
           </el-form>
         </div>
@@ -151,44 +146,44 @@
             <el-icon><Promotion /></el-icon>
             <span class="section-title">AIChat 设置</span>
           </div>
-          <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+          <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
             <el-form-item label="会话范围" prop="chatScope">
-              <el-select v-model="groupFuncForm.chatScope" style="width: 250px">
+              <el-select v-model="groupFuncForm.chatScope">
                 <el-option label="Group" :value="'Group'" />
                 <el-option label="Personal" :value="'Personal'" />
                 <el-option label="Monitor" :value="'Monitor'" />
               </el-select>
             </el-form-item>
             <el-form-item label="发言频率" prop="replyFrequency" :required="true">
-              <el-input v-model="groupFuncForm.replyFrequency" placeholder="请输入频率(0~1)..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.replyFrequency" placeholder="请输入频率(0~1)..." />
             </el-form-item>
-            <el-form-item label="思考模式" prop="thinking" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.thinking" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="思考模式" prop="thinking" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.thinking" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="语音模式" prop="voice">
-              <el-switch v-model="groupFuncForm.voice" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+              <el-switch v-model="groupFuncForm.voice" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="指令模式" prop="embedding" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.embedding" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="指令模式" prop="embedding" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.embedding" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="防注模式" prop="antiInjection">
-              <el-switch v-model="groupFuncForm.antiInjection" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+              <el-switch v-model="groupFuncForm.antiInjection" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="自定模式" prop="custom" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.custom" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="自定模式" prop="custom" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.custom" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="指令校验" prop="embeddingAuth">
-              <el-switch v-model="groupFuncForm.embeddingAuth" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+              <el-switch v-model="groupFuncForm.embeddingAuth" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="自动发言" prop="autoReply" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.autoReply" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="自动发言" prop="autoReply" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.autoReply" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
           </el-form>
         </div>
@@ -198,26 +193,26 @@
             <el-icon><Monitor /></el-icon>
             <span class="section-title">Monitor 设置</span>
           </div>
-          <el-form ref="groupFuncMonitorFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
-            <el-form-item label="图片收集" prop="imageCollect" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.imageCollect" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+          <el-form ref="groupFuncMonitorFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
+            <el-form-item label="图片收集" prop="imageCollect" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.imageCollect" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="消息收集" prop="messageCollect">
-              <el-switch v-model="groupFuncForm.messageCollect" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+              <el-switch v-model="groupFuncForm.messageCollect" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="词语检测" prop="keywordDetect" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.keywordDetect" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="词语检测" prop="keywordDetect" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.keywordDetect" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="戳戳检测" prop="pokeDetect">
-              <el-switch v-model="groupFuncForm.pokeDetect" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+              <el-switch v-model="groupFuncForm.pokeDetect" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="撤回检测" prop="recallDetect" style="margin-left: 15px">
-              <el-switch v-model="groupFuncForm.recallDetect" inline-prompt
-                style="--el-switch-on-color: rgba(19,206,102,0.75)" :active-icon="Check" :inactive-icon="Close" />
+            <el-form-item label="撤回检测" prop="recallDetect" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.recallDetect" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
           </el-form>
         </div>
@@ -227,15 +222,15 @@
             <el-icon><Grid /></el-icon>
             <span class="section-title">Guess 设置</span>
           </div>
-          <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px">
+          <el-form ref="groupFuncGuessFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
             <el-form-item label="切割比例" prop="guessCropRatio" :required="true">
-              <el-input v-model="groupFuncForm.guessCropRatio" placeholder="请输入切割比例..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.guessCropRatio" placeholder="请输入切割比例..." />
             </el-form-item>
             <el-form-item label="透明比例" prop="guessTransparentRatio" :required="true">
-              <el-input v-model="groupFuncForm.guessTransparentRatio" placeholder="请输入透明比例(最大)..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.guessTransparentRatio" placeholder="请输入透明比例(最大)..." />
             </el-form-item>
             <el-form-item label="切割边距" prop="guessPadding" :required="true">
-              <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入切割边距..." style="width: 250px" />
+              <el-input v-model="groupFuncForm.guessPadding" placeholder="请输入切割边距..." />
             </el-form-item>
           </el-form>
         </div>
@@ -460,12 +455,113 @@ watch(syncTrigger, () => {
 </script>
 
 <style scoped>
+/* ===== 头部 ===== */
+.group-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.group-header-form {
+  display: flex;
+  width: 70%;
+  gap: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.group-header-label {
+  margin: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.group-header-search {
+  margin: 0;
+  flex: 2;
+  min-width: 310px;
+  max-width: 740px;
+}
+
+.group-header-search :deep(.el-input) {
+  width: 100%;
+}
+
+.group-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.group-header-btns {
+  display: inline-flex;
+  margin-right: 1px;
+}
+
+/* ===== 主区域 ===== */
+.group-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.group-table {
+  width: 100%;
+}
+
+/* ===== 操作列 ===== */
+.group-actions {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* ===== 分页 ===== */
+.group-footer {
+  padding: 10px 20px;
+}
+
+.group-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.group-footer-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 30px;
+}
+
+/* ===== 群组设置对话框 ===== */
+.setting-form :deep(.el-input),
+.setting-form :deep(.el-select) {
+  width: 90%;
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
 }
 
+/* ===== 功能设置对话框 ===== */
 .function-sections {
   display: flex;
   flex-direction: column;
@@ -488,7 +584,7 @@ watch(syncTrigger, () => {
   border-bottom: 1px solid #555555;
 }
 
-.section-header .el-icon {
+.section-header :deep(.el-icon) {
   color: #409eff;
   font-size: 15px;
 }
@@ -496,6 +592,19 @@ watch(syncTrigger, () => {
 .section-title {
   font-size: 15px;
   font-weight: 600;
+}
+
+.func-form :deep(.el-input),
+.func-form :deep(.el-select) {
+  width: 250px;
+}
+
+.func-switch-indent {
+  margin-left: 15px;
+}
+
+.func-switch {
+  --el-switch-on-color: rgba(19, 206, 102, 0.75);
 }
 
 .group-func-dialog-footer {
