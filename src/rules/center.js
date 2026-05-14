@@ -1,7 +1,7 @@
-import { passwordRules, confirmPasswordRules } from '../utils/rules'
+import { requiredRule, passwordRules, confirmPasswordRules } from '../utils/rules'
 
-export const createPasswordChangeRules = (form) => ({
+export const createPasswordChangeRules = (getNewPassword) => ({
   oldPassword: passwordRules(),
   newPassword: passwordRules(),
-  confirmPassword: confirmPasswordRules(form.newPassword),
+  confirmPassword: confirmPasswordRules(getNewPassword),
 })

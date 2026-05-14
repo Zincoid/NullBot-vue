@@ -116,7 +116,7 @@ const adminEditForm = ref({ id: 0, username: '', email: '' })
 const passwordChangeVisible = ref(false)
 const passwordChangeForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
 const passwordChangeFormRef = ref(null)
-const passwordChangeFormRules = createPasswordChangeRules(passwordChangeForm.value)
+const passwordChangeFormRules = createPasswordChangeRules(() => passwordChangeForm.value.newPassword)
 
 const handlePasswordChange = () => {
   if (passwordChangeFormRef.value) {
