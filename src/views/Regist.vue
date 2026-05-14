@@ -47,7 +47,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from "element-plus";
 import { registApi } from "@/api/system";
-import { requiredRule } from "@/utils/rules";
+import { registFormRules } from "@/rules/regist";
 
 const router = useRouter()
 
@@ -58,12 +58,6 @@ const registForm = ref({
   activationCode: ''
 })
 const registFormRef = ref(null)
-const registFormRules = ref({
-  id: [requiredRule('账号不能为空')],
-  password: [requiredRule('密码不能为空')],
-  email: [requiredRule('邮箱不能为空')],
-  activationCode: [requiredRule('激活码不能为空')],
-})
 
 const regist = async () => {
   if (!registFormRef.value) return
