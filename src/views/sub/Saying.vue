@@ -1,21 +1,18 @@
 <template>
   <el-container>
     <!-- 头部操作 -->
-    <el-header height="20px"
-      style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+    <el-header height="20px" class="saying-header">
+      <div class="saying-header-left">
         <el-icon size="18px"><Filter /></el-icon>&nbsp;
-        <el-form :inline="true"
-          style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
-          <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;" />
-          <el-form-item style="margin: 0; flex: 2; min-width: 310px; max-width: 740px">
-            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="sayingSearchKey" clearable
-              style="width: 100%" />
+        <el-form :inline="true" class="saying-header-form">
+          <el-form-item label="过滤器" class="saying-header-label" />
+          <el-form-item class="saying-header-search">
+            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="sayingSearchKey" clearable />
           </el-form-item>
         </el-form>
       </div>
-      <div style="display: flex; align-items: center; flex-shrink: 0;">
-        <el-button-group style="display: inline-flex; margin-right: 1px">
+      <div class="saying-header-right">
+        <el-button-group class="saying-header-btns">
           <el-button round plain @click="sayingImportVisible = true" :disabled="userType === 0">
             <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入语录
           </el-button>
@@ -26,8 +23,8 @@
       </div>
     </el-header>
 
-    <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: auto; padding: 20px;">
-      <el-table :data="filteredSayingTableData" style="width: 100%" height="calc(100vh - 250px)">
+    <el-main class="saying-main">
+      <el-table :data="filteredSayingTableData" class="saying-table" height="calc(100vh - 250px)">
         <template #empty>
           <el-empty description="暂无语录" />
         </template>
@@ -60,14 +57,12 @@
     </el-main>
 
     <!-- 分页 -->
-    <el-footer height="60px" style="padding: 10px 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <el-text v-if="hasSayingFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+    <el-footer height="60px" class="saying-footer">
+      <div class="saying-footer-row">
+        <el-text v-if="hasSayingFilter" class="saying-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ filteredSayingTableData.length }} 条记录
         </el-text>
-        <el-text v-if="!hasSayingFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+        <el-text v-if="!hasSayingFilter" class="saying-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ sayingPageInfo.total }} 条记录
         </el-text>
         <el-pagination v-if="!hasSayingFilter" background @size-change="handleSayingSizeChange"
@@ -205,3 +200,94 @@ watch(syncTrigger, () => {
   refreshSaying()
 })
 </script>
+
+<style scoped>
+/* ===== 头部 ===== */
+.saying-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saying-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.saying-header-form {
+  display: flex;
+  width: 70%;
+  gap: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.saying-header-form :deep(.el-form-item) {
+  margin: 0;
+}
+
+.saying-header-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.saying-header-search {
+  flex: 2;
+  min-width: 310px;
+  max-width: 740px;
+}
+
+.saying-header-search :deep(.el-input) {
+  width: 100%;
+}
+
+.saying-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.saying-header-btns {
+  display: inline-flex;
+  margin-right: 1px;
+}
+
+/* ===== 主区域 ===== */
+.saying-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.saying-table {
+  width: 100%;
+}
+
+/* ===== 分页 ===== */
+.saying-footer {
+  padding: 10px 20px;
+}
+
+.saying-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.saying-footer-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 30px;
+}
+</style>
