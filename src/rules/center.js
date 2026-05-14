@@ -1,7 +1,10 @@
-import { requiredRule, passwordRules, confirmPasswordRules } from '../utils/rules'
+import { requiredRule, passwordRules, equalRule } from '../utils/rules'
 
 export const createPasswordChangeRules = (getNewPassword) => ({
-  oldPassword: passwordRules(),
-  newPassword: passwordRules(),
-  confirmPassword: confirmPasswordRules(getNewPassword),
+  oldPassword: [requiredRule('旧密码不能为空')],
+  newPassword: passwordRules('新'),
+  confirmPassword: [
+    requiredRule('确认密码不能为空'),
+    equalRule(getNewPassword, '两次密码不一致')
+  ],
 })
