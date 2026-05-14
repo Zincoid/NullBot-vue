@@ -73,6 +73,10 @@ const invoke = async () => {
   margin-left: 0;
 }
 
+.system-invoke-row :deep(.el-button + .el-button) {
+  margin-left: 0;
+}
+
 .system-result-input :deep(.el-textarea) {
   width: 100%;
 }
