@@ -6,7 +6,7 @@ export const requiredRule = (message) => ({ required: true, message, trigger: 'b
 
 export const lengthRule = (min, max, message) => ({ min, max, message, trigger: 'blur' })
 
-export const regRule = (reg, message) => ({ reg, message, trigger: 'reg' })
+export const regRule = (pattern, message) => ({ pattern, message, trigger: 'blur' })
 
 export const equalRule = (other, message) => ({
   validator: (rule, value, callback) => {
