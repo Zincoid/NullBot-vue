@@ -24,20 +24,28 @@
 
       <div class="center-actions">
         <el-button type="success" round plain @click="handleAdminEdit" :disabled="userType === 0">
-          <el-icon size="15"><Edit /></el-icon>&nbsp;修改信息
+          <el-icon size="15">
+            <Edit />
+          </el-icon>&nbsp;修改信息
         </el-button>
         <el-button type="warning" round plain @click="handlePasswordChange" :disabled="userType === 0">
-          <el-icon size="15"><Setting /></el-icon>&nbsp;修改密码
+          <el-icon size="15">
+            <Setting />
+          </el-icon>&nbsp;修改密码
         </el-button>
         <el-popconfirm title="确认注销吗?" @confirm="deleteAdmin">
           <template #reference>
             <el-button type="primary" round plain :disabled="userType === 0">
-              <el-icon size="15"><Delete /></el-icon>&nbsp;注销账号
+              <el-icon size="15">
+                <Delete />
+              </el-icon>&nbsp;注销账号
             </el-button>
           </template>
         </el-popconfirm>
         <el-button type="danger" round plain @click="logout">
-          <el-icon size="15"><SwitchButton /></el-icon>&nbsp;退出登录
+          <el-icon size="15">
+            <SwitchButton />
+          </el-icon>&nbsp;退出登录
         </el-button>
       </div>
 
@@ -64,7 +72,8 @@
 
       <!-- 密码修改对话框 -->
       <el-dialog v-model="passwordChangeVisible" title="密码修改" width="500px">
-        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" :rules="passwordChangeFormRules" label-width="100px" class="dialog-form">
+        <el-form ref="passwordChangeFormRef" :model="passwordChangeForm" :rules="passwordChangeFormRules"
+          label-width="100px" class="dialog-form">
           <el-form-item label="旧密码" prop="oldPassword">
             <el-input v-model="passwordChangeForm.oldPassword" show-password />
           </el-form-item>
@@ -137,18 +146,19 @@ const handlePasswordChange = () => {
 
 const handlePasswordChangeSubmit = async () => {
   if (!passwordChangeFormRef.value) return
-  passwordChangeFormRef.value.validate(async (valid) => {
-    if (!valid) {
-      return
-    }
-    const res = await changePwdApi(passwordChangeForm.value)
-    if (res.code === 1) {
-      ElMessage.success(res.message)
-      passwordChangeVisible.value = false
-    } else {
-      ElMessage.error(`更改失败: ${res.message}`)
-    }
-  })
+  try {
+    await passwordChangeFormRef.value.validate()
+  } catch {
+    ElMessage.error('表单校验失败')
+    return
+  }
+  const res = await changePwdApi(passwordChangeForm.value)
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    passwordChangeVisible.value = false
+  } else {
+    ElMessage.error(`更改失败: ${res.message}`)
+  }
 }
 
 const handleAdminEdit = () => {

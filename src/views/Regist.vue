@@ -2,7 +2,8 @@
   <div class="regist-root">
     <div class="regist-form-wrapper">
       <h1 class="regist-title">&nbsp;&nbsp;&nbsp;&nbsp;Hi! NullBot =]</h1>
-      <el-form ref="registFormRef" :model="registForm" :rules="registFormRules" label-width="40px" class="regist-form" hide-required-asterisk>
+      <el-form ref="registFormRef" :model="registForm" :rules="registFormRules" label-width="40px" class="regist-form"
+        hide-required-asterisk>
         <el-form-item label="账号" prop="id">
           <el-input placeholder="请输入账号 (QQ)..." v-model="registForm.id"
             @input="registForm.id = registForm.id.replace(/\D/g, '')"></el-input>
@@ -19,7 +20,9 @@
         <el-form-item>
           <div class="regist-btn-wrapper">
             <el-button type="danger" plain class="regist-btn" @click="regist">
-              <el-icon size="15"><User /></el-icon>&nbsp;注册
+              <el-icon size="15">
+                <User />
+              </el-icon>&nbsp;注册
             </el-button>
           </div>
         </el-form-item>
@@ -63,19 +66,19 @@ const registFormRules = ref({
 
 const regist = async () => {
   if (!registFormRef.value) return
-  registFormRef.value.validate(async (valid) => {
-    if (!valid) {
-      ElMessage.error('表单校验失败')
-      return
-    }
-    const res = await registApi(registForm.value)
-    if (res.code === 1) {
-      ElMessage.success(res.message)
-      router.push('/login')
-    } else {
-      ElMessage.warning(`管理员注册失败: ${res.message}`)
-    }
-  })
+  try {
+    await registFormRef.value.validate()
+  } catch {
+    ElMessage.error('表单校验失败')
+    return
+  }
+  const res = await registApi(registForm.value)
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    router.push('/login')
+  } else {
+    ElMessage.warning(`管理员注册失败: ${res.message}`)
+  }
 }
 
 const toLogin = () => {
