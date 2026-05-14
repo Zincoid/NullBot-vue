@@ -2,8 +2,8 @@
  * 规则命名格式:
  *
  * 单条规则: *Rule(..) -> 单条规则对象
- * 复合规则: *Rules -> 复合规则列表 或 create*Rules(..) -> 复合规则列表
- * 表单规则: *FormRules -> 表单规则对象 或 create*FormRules(..) -> 表单规则对象
+ * 复合规则: *Rules 或 create*Rules(..) -> 复合规则列表
+ * 表单规则: *FormRules 或 create*FormRules(..) -> 表单规则对象
  */
 
 
