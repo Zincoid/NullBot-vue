@@ -195,7 +195,7 @@ import {
   MostlyCloudy, User, Coin, Switch, SwitchButton, Promotion,
   Files, ChatDotSquare, Cellphone, OfficeBuilding, Box,
   Histogram, UserFilled, Platform, Search, Setting
-} from '@element-plus/icons-vue'
+} from '@element-plus/icons-vue'  // 不可移除
 import FilingInfo from '@/components/FilingInfo.vue'
 import { getInfoApi } from '@/api/system'
 import { initApi, syncApi } from '@/api/file'
