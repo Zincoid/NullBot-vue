@@ -29,6 +29,7 @@ const props = defineProps({
 
 const chartRef = ref(null)
 let chartInstance = null
+let resizeChart = null
 
 // 渐变色配置
 const gradientColors = {
@@ -133,8 +134,6 @@ const initChart = () => {
     ],
     tooltip: {
       backgroundColor: '#121212',
-      // backgroundColor: '#3f3f3f',
-      // borderColor: '#3f3f3f',
       borderRadius: 10,
       trigger: 'axis',
       axisPointer: {
@@ -154,18 +153,20 @@ const initChart = () => {
 
   chartInstance.setOption(option)
 
-  // 响应窗口变化
-  const resizeChart = () => {
-    chartInstance && chartInstance.resize()
+  if (!resizeChart) {
+    resizeChart = () => {
+      chartInstance && chartInstance.resize()
+    }
+    window.addEventListener('resize', resizeChart)
   }
-  window.addEventListener('resize', resizeChart)
-
-  // 组件卸载时移除监听器
-  onUnmounted(() => {
-    window.removeEventListener('resize', resizeChart)
-    chartInstance && chartInstance.dispose()
-  })
 }
+
+onUnmounted(() => {
+  if (resizeChart) {
+    window.removeEventListener('resize', resizeChart)
+  }
+  chartInstance && chartInstance.dispose()
+})
 
 // 监听数据变化
 watch(
