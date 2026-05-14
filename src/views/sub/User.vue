@@ -1,21 +1,18 @@
 <template>
   <el-container>
     <!-- 头部操作 -->
-    <el-header height="20px"
-      style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; align-items: center; flex: 1; min-width: 0; margin-right: 20px; overflow: hidden;">
+    <el-header height="20px" class="user-header">
+      <div class="user-header-left">
         <el-icon size="18px"><Filter /></el-icon>&nbsp;
-        <el-form :inline="true"
-          style="display: flex; width: 70%; gap: 0; align-items: center; flex-wrap: nowrap; justify-content: flex-start;">
-          <el-form-item label="过滤器" style="margin: 0; flex-shrink: 0; white-space: nowrap;" />
-          <el-form-item style="margin: 0; flex: 2; min-width: 310px; max-width: 740px">
-            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="userSearchKey" clearable
-              style="width: 100%" />
+        <el-form :inline="true" class="user-header-form">
+          <el-form-item label="过滤器" class="user-header-label" />
+          <el-form-item class="user-header-search">
+            <el-input placeholder="请输入关键字..." :prefix-icon="Search" v-model="userSearchKey" clearable />
           </el-form-item>
         </el-form>
       </div>
-      <div style="display: flex; align-items: center; flex-shrink: 0;">
-        <el-button-group style="display: inline-flex; margin-right: 1px">
+      <div class="user-header-right">
+        <el-button-group class="user-header-btns">
           <el-button round plain @click="inventoryImportVisible = true" :disabled="userType === 0">
             <el-icon size="15"><DocumentAdd /></el-icon>&nbsp;导入库存
           </el-button>
@@ -32,8 +29,8 @@
       </div>
     </el-header>
 
-    <el-main style="height: 100%; width: 100%; overflow-y: auto; overflow-x: auto; padding: 20px;">
-      <el-table :data="filteredUserTableData" style="width: 100%" height="calc(100vh - 250px)">
+    <el-main class="user-main">
+      <el-table :data="filteredUserTableData" class="user-table" height="calc(100vh - 250px)">
         <template #empty>
           <el-empty description="暂无用户" />
         </template>
@@ -63,7 +60,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="216" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="user-actions">
               <el-button type="success" plain size="small" @click="handleInventories(scope.row)" title="库存">
                 <el-icon size="14"><Box /></el-icon>
               </el-button>
@@ -85,14 +82,12 @@
     </el-main>
 
     <!-- 分页 -->
-    <el-footer height="60px" style="padding: 10px 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between;">
-        <el-text v-if="hasUserFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+    <el-footer height="60px" class="user-footer">
+      <div class="user-footer-row">
+        <el-text v-if="hasUserFilter" class="user-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ filteredUserTableData.length }} 条记录
         </el-text>
-        <el-text v-if="!hasUserFilter"
-          style="flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 30px;">
+        <el-text v-if="!hasUserFilter" class="user-footer-text">
           <el-icon><InfoFilled /></el-icon> 共 {{ userPageInfo.total }} 条记录
         </el-text>
         <el-pagination v-if="!hasUserFilter" background @size-change="handleUserSizeChange"
@@ -104,15 +99,15 @@
 
     <!-- 用户设置对话框 -->
     <el-dialog v-model="userSettingVisible" title="用户设置" width="500px">
-      <el-form ref="userSettingFormRef" :model="userForm" label-width="100px">
+      <el-form ref="userSettingFormRef" :model="userForm" label-width="100px" class="user-form">
         <el-form-item label="用户ID" prop="id">
-          <el-input v-model="userForm.id" :disabled="true" style="width: 90%" />
+          <el-input v-model="userForm.id" :disabled="true" />
         </el-form-item>
         <el-form-item label="昵称" prop="name">
-          <el-input v-model="userForm.name" :disabled="true" style="width: 90%" />
+          <el-input v-model="userForm.name" :disabled="true" />
         </el-form-item>
         <el-form-item label="权限" prop="access">
-          <el-select v-model="userForm.access" style="width: 90%">
+          <el-select v-model="userForm.access">
             <el-option label="II级 (超级管理)" :value="2" />
             <el-option label="I级 (管理)" :value="1" />
             <el-option label="0级 (用户)" :value="0" />
@@ -121,16 +116,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="等级" prop="level">
-          <el-input v-model="userForm.level" @input="v => userForm.level = v.replace(/\D/g,'')" style="width: 90%" />
+          <el-input v-model="userForm.level" @input="v => userForm.level = v.replace(/\D/g,'')" />
         </el-form-item>
         <el-form-item label="现金" prop="cash">
-          <el-input v-model="userForm.cash" @input="v => userForm.cash = v.replace(/\D/g,'')" style="width: 90%" />
+          <el-input v-model="userForm.cash" @input="v => userForm.cash = v.replace(/\D/g,'')" />
         </el-form-item>
         <el-form-item label="抽数" prop="drawTimes">
-          <el-input v-model="userForm.drawTimes" @input="v => userForm.drawTimes = v.replace(/\D/g,'')" style="width: 90%" />
+          <el-input v-model="userForm.drawTimes" @input="v => userForm.drawTimes = v.replace(/\D/g,'')" />
         </el-form-item>
         <el-form-item label="仓库容量" prop="capacity">
-          <el-input v-model="userForm.capacity" @input="v => userForm.capacity = v.replace(/\D/g,'')" style="width: 90%" />
+          <el-input v-model="userForm.capacity" @input="v => userForm.capacity = v.replace(/\D/g,'')" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -143,7 +138,7 @@
 
     <!-- 用户库存对话框 -->
     <el-dialog v-model="inventoriesVisible" :title="inventoriesTitle" width="55%">
-      <el-table :data="inventoriesData" style="width: 100%" stripe>
+      <el-table :data="inventoriesData" class="user-table" stripe>
         <template #empty>
           <el-empty description="暂无库存" />
         </template>
@@ -171,7 +166,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150" align="center">
           <template v-slot="scope">
-            <div style="display: flex; gap: 2px; justify-content: center;">
+            <div class="user-actions">
               <el-button type="warning" plain @click="handleInventorySetting(scope.row)" size="small" title="设置"
                 :disabled="userType === 0">
                 <el-icon size="14"><Setting /></el-icon>
@@ -189,11 +184,11 @@
       </el-table>
       <template #footer>
         <div class="inventories-dialog-footer">
-          <el-form-item prop="newItemId" style="margin-bottom: 0; margin-right: 16px;">
+          <el-form-item prop="newItemId" class="inventory-add-item">
             <el-input :prefix-icon="Box" v-model="newItemId" @input="v => newItemId = v.replace(/\D/g,'')"
-              placeholder="请输入新增库存物品ID..." style="width: 100%" />
+              placeholder="请输入新增库存物品ID..." class="inventory-add-input" />
           </el-form-item>
-          <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" style="width: 200px"
+          <el-button plain type="primary" @click="addInventory(inventoriesUserId, newItemId)" class="inventory-add-btn"
             :disabled="userType === 0">
             <el-icon size="15px"><Plus /></el-icon>&nbsp;新增库存
           </el-button>
@@ -203,28 +198,28 @@
 
     <!-- 库存设置对话框 -->
     <el-dialog v-model="inventorySettingVisible" title="库存设置" width="500px">
-      <el-form ref="inventorySettingFormRef" :model="inventoryForm" label-width="100px">
+      <el-form ref="inventorySettingFormRef" :model="inventoryForm" label-width="100px" class="user-form">
         <el-form-item label="库存ID" prop="id">
-          <el-input v-model="inventoryForm.id" :disabled="true" style="width: 90%" />
+          <el-input v-model="inventoryForm.id" :disabled="true" />
         </el-form-item>
         <el-form-item label="物品ID" prop="itemId">
-          <el-input v-model="inventoryForm.itemId" :disabled="true" style="width: 90%" />
+          <el-input v-model="inventoryForm.itemId" :disabled="true" />
         </el-form-item>
         <el-form-item label="名称" prop="itemName">
-          <el-input v-model="inventoryForm.itemName" :disabled="true" style="width: 90%" />
+          <el-input v-model="inventoryForm.itemName" :disabled="true" />
         </el-form-item>
         <el-form-item label="类别" prop="category">
-          <el-select v-model="inventoryForm.category" :disabled="true" style="width: 90%" />
+          <el-select v-model="inventoryForm.category" :disabled="true" />
         </el-form-item>
         <el-form-item label="品质" prop="rarity">
-          <el-select v-model="inventoryForm.rarity" :disabled="true" style="width: 90%" />
+          <el-select v-model="inventoryForm.rarity" :disabled="true" />
         </el-form-item>
         <el-form-item label="价格" prop="price">
-          <el-input v-model="inventoryForm.price" :disabled="true" style="width: 90%" />
+          <el-input v-model="inventoryForm.price" :disabled="true" />
         </el-form-item>
         <el-form-item label="数量" prop="amount" :required="true">
           <el-input v-model="inventoryForm.amount" @input="v => inventoryForm.amount = v.replace(/\D/g,'')"
-            placeholder="请输入数量..." style="width: 90%" />
+            placeholder="请输入数量..." />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -473,12 +468,115 @@ watch(syncTrigger, () => {
 </script>
 
 <style scoped>
+/* ===== 头部 ===== */
+.user-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-right: 20px;
+  overflow: hidden;
+}
+
+.user-header-form {
+  display: flex;
+  width: 70%;
+  gap: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.user-header-form :deep(.el-form-item) {
+  margin: 0;
+}
+
+.user-header-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.user-header-search {
+  flex: 2;
+  min-width: 310px;
+  max-width: 740px;
+}
+
+.user-header-search :deep(.el-input) {
+  width: 100%;
+}
+
+.user-header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.user-header-btns {
+  display: inline-flex;
+  margin-right: 1px;
+}
+
+/* ===== 主区域 ===== */
+.user-main {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.user-table {
+  width: 100%;
+}
+
+/* ===== 操作列 ===== */
+.user-actions {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+/* ===== 分页 ===== */
+.user-footer {
+  padding: 10px 20px;
+}
+
+.user-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-footer-text {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 30px;
+}
+
+/* ===== 用户设置/库存设置对话框 ===== */
+.user-form :deep(.el-input),
+.user-form :deep(.el-select) {
+  width: 90%;
+}
+
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
 }
 
+/* ===== 库存对话框 ===== */
 .inventories-dialog-footer {
   display: flex;
   align-items: flex-end;
@@ -486,8 +584,16 @@ watch(syncTrigger, () => {
   gap: 16px;
 }
 
-.inventories-dialog-footer ::v-deep .el-form-item {
+.inventories-dialog-footer :deep(.el-form-item) {
   margin-bottom: 0;
   flex: 1;
+}
+
+.inventory-add-input :deep(.el-input) {
+  width: 100%;
+}
+
+.inventory-add-btn {
+  width: 200px;
 }
 </style>
