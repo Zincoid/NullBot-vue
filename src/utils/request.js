@@ -1,3 +1,11 @@
+/*
+ * 请求工具函数
+ *
+ * 基础URL: /api
+ * 超时时间: 600000ms
+ */
+
+
 import axios from 'axios';
 
 const request = axios.create({

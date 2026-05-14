@@ -1,15 +1,15 @@
 /*
- * 规则命名格式:
+ * 表单校验规则工具函数
  *
+ * 规则命名格式:
  * 单条规则: create*Rule(..) -> 单条规则对象
  * 复合规则: *Rules 或 create*Rules(..) -> 复合规则列表
  * 表单规则: *FormRules 或 create*FormRules(..) -> 表单规则对象
+ * 
  */
 
 
-/**
- * 基本规则
- */
+// 基本规则
 
 export const createRequiredRule = (message) => ({ required: true, message, trigger: 'blur' })
 
@@ -30,9 +30,8 @@ export const createEqualRule = (other, message) => ({
 })
 
 
-/**
- * 复合规则
- */
+
+// 复合规则
 
 export const createPasswordRules = (type) => [
   createRequiredRule(`${type || ''}密码不能为空`),
