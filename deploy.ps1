@@ -1,9 +1,8 @@
 $ErrorActionPreference = "Stop"
 
 $SERVER   = "zn-server"
-$REMOTE   = "/root/Nginx"
-$NGINX    = "/usr/share/nginx/dist"
-$TAR      = "dist.tar.gz"
+$WORK_DIR = "/root/Nginx"
+$TAR_NAME = "dist.tar.gz"
 $SSH_OPTS = "-o StrictHostKeyChecking=accept-new"
 
 function Exec {
@@ -21,22 +20,22 @@ Write-Host "[ === Nginx Deployment === ]" -ForegroundColor Cyan
 Write-Host "[ === [1/7] Building === ]" -ForegroundColor Cyan
 Exec "npm run build"
 
-Write-Host "[ === [2/7] Packing dist.tar.gz === ]" -ForegroundColor Cyan
-Exec "tar -czvf $TAR dist"
+Write-Host "[ === [2/7] Packing $TAR_NAME === ]" -ForegroundColor Cyan
+Exec "tar -czvf $TAR_NAME dist"
 
-Write-Host "[ === [3/7] Uploading to $SERVER`:$REMOTE === ]" -ForegroundColor Cyan
-Exec "scp $SSH_OPTS $TAR `"$SERVER`:$REMOTE`""
+Write-Host "[ === [3/7] Uploading to $SERVER`:$WORK_DIR === ]" -ForegroundColor Cyan
+Exec "scp $SSH_OPTS $TAR_NAME ${SERVER}:${WORK_DIR}/tar"
 
 Write-Host "[ === [4/7] Removing old dist on server === ]" -ForegroundColor Red
-Exec "ssh $SSH_OPTS $SERVER `"rm -rf $NGINX`""
+Exec "ssh $SSH_OPTS $SERVER rm -rf $WORK_DIR/dist"
 
 Write-Host "[ === [5/7] Extracting on server === ]" -ForegroundColor Cyan
-Exec "ssh $SSH_OPTS $SERVER `"sudo tar -xzvf $REMOTE/$TAR -C /usr/share/nginx`""
+Exec "ssh $SSH_OPTS $SERVER sudo tar -xzvf $WORK_DIR/tar/$TAR_NAME -C $WORK_DIR"
 
 Write-Host "[ === [6/7] Reloading nginx === ]" -ForegroundColor Cyan
-Exec "ssh $SSH_OPTS $SERVER `"sudo nginx -s reload`""
+Exec "ssh $SSH_OPTS $SERVER sudo nginx -s reload"
 
-Write-Host "[ === [7/7] Removing local $TAR === ]" -ForegroundColor Red
-Exec "rm $TAR"
+Write-Host "[ === [7/7] Removing local $TAR_NAME === ]" -ForegroundColor Red
+Exec "rm $TAR_NAME"
 
 Write-Host "[ === Nginx Deployment Done === ]" -ForegroundColor Green
