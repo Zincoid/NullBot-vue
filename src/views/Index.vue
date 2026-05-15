@@ -87,27 +87,27 @@
                 </div>
               </div>
             </div>
-            <el-menu-item index="init" class="menu-action-item">
+            <div class="menu-action-item">
               <el-button :disabled="userType === 0" type="warning" plain class="menu-action-btn" @click="initRootFile">
                 <el-icon size="15">
                   <Coin />
-                </el-icon>根初始化
+                </el-icon>&nbsp;&nbsp;根初始化
               </el-button>
-            </el-menu-item>
-            <el-menu-item index="sync" class="menu-action-item">
+            </div>
+            <div class="menu-action-item">
               <el-button type="primary" plain class="menu-action-btn" @click="sync">
                 <el-icon size="15">
                   <Switch />
-                </el-icon>数据同步
+                </el-icon>&nbsp;&nbsp;数据同步
               </el-button>
-            </el-menu-item>
-            <el-menu-item index="logout" class="menu-action-item">
+            </div>
+            <div class="menu-action-item">
               <el-button type="danger" plain class="menu-action-btn" @click="logout">
                 <el-icon size="15">
                   <SwitchButton />
-                </el-icon>退出登录
+                </el-icon>&nbsp;&nbsp;退出登录
               </el-button>
-            </el-menu-item>
+            </div>
             <template #title>
               <el-icon>
                 <User />
@@ -390,8 +390,8 @@ onBeforeUnmount(() => {
 }
 
 .menu-action-item {
+  padding: 2px 10px;
   background-color: transparent !important;
-  --el-menu-hover-bg-color: transparent;
 }
 
 .menu-action-btn {
