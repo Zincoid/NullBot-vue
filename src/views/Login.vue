@@ -61,7 +61,7 @@ const login = async () => {
   try {
     await loginFormRef.value.validate()
   } catch (error) {
-    ElMessage.error('请填写完整账号和密码')
+    ElMessage.warning('请填写完整账号和密码')
     return
   }
   const res = await loginApi(loginForm.value)
@@ -70,7 +70,7 @@ const login = async () => {
     localStorage.setItem("token", res.data.token)
     router.push('/index')
   } else {
-    ElMessage.warning(`登录失败: ${res.message}`)
+    ElMessage.error(`登录失败: ${res.message}`)
   }
 }
 
@@ -81,7 +81,7 @@ const guest = async () => {
     localStorage.setItem("token", res.data.token)
     router.push('/index')
   } else {
-    ElMessage.warning(`登录失败: ${res.message}`)
+    ElMessage.error(`登录失败: ${res.message}`)
   }
 }
 

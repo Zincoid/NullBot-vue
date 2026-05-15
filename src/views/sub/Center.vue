@@ -51,8 +51,8 @@
 
       <!-- 个人信息编辑对话框 -->
       <el-dialog v-model="adminEditVisible" title="个人信息修改" width="500px">
-        <el-form ref="adminEditFormRef" :model="adminEditForm" label-width="100px" class="dialog-form">
-          <el-form-item label="ID" prop="id">
+        <el-form ref="adminEditFormRef" :model="adminEditForm" :rules="AdminEditFormRules" label-width="100px" class="dialog-form">
+          <el-form-item label="ID">
             <el-input v-model="adminEditForm.id" :disabled="true" />
           </el-form-item>
           <el-form-item label="名称" prop="username">
@@ -101,7 +101,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Edit, Setting, Delete, SwitchButton } from '@element-plus/icons-vue'
 import { getInfoApi, deleteApi, changePwdApi, updateApi } from '@/api/system'
-import { createPasswordChangeFormRules } from '@/rules/center'
+import { createPasswordChangeFormRules, AdminEditFormRules } from '@/rules/center'
 
 const router = useRouter()
 
@@ -112,6 +112,7 @@ const token = ref(localStorage.getItem('token') || '')
 
 const adminEditVisible = ref(false)
 const adminEditForm = ref({ id: 0, username: '', email: '' })
+const adminEditFormRef = ref(null)
 
 const passwordChangeVisible = ref(false)
 const passwordChangeForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
@@ -131,7 +132,7 @@ const handlePasswordChangeSubmit = async () => {
   try {
     await passwordChangeFormRef.value.validate()
   } catch {
-    ElMessage.error('表单校验失败')
+    ElMessage.warning('表单校验失败')
     return
   }
   const res = await changePwdApi(passwordChangeForm.value)
@@ -149,13 +150,20 @@ const handleAdminEdit = () => {
 }
 
 const handleAdminEditSubmit = async () => {
+  if (!adminEditFormRef.value) return
+  try {
+    await adminEditFormRef.value.validate()
+  } catch {
+    ElMessage.warning('表单校验失败')
+    return
+  }
   const res = await updateApi(adminEditForm.value)
   if (res.code === 1) {
     await getInfo()
     ElMessage.success(res.message)
     adminEditVisible.value = false
   } else {
-    ElMessage.error(res.message)
+    ElMessage.error(`修改失败: ${res.message}`)
   }
 }
 
@@ -166,7 +174,7 @@ const deleteAdmin = async () => {
     localStorage.clear()
     router.push('/login')
   } else {
-    ElMessage.error(res.message)
+    ElMessage.error(`删除失败: ${res.message}`)
   }
 }
 
@@ -181,7 +189,7 @@ const getInfo = async () => {
     info.value = JSON.parse(JSON.stringify(res.data.info))
     userType.value = res.data.userType
   } else {
-    ElMessage.error(res.message)
+    ElMessage.error(`获取失败: ${res.message}`)
   }
 }
 </script>

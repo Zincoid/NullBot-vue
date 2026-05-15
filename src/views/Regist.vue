@@ -64,7 +64,7 @@ const regist = async () => {
   try {
     await registFormRef.value.validate()
   } catch {
-    ElMessage.error('请填写完整注册信息')
+    ElMessage.warning('请填写完整注册信息')
     return
   }
   const res = await registApi(registForm.value)
@@ -72,7 +72,7 @@ const regist = async () => {
     ElMessage.success(res.message)
     router.push('/login')
   } else {
-    ElMessage.warning(`管理员注册失败: ${res.message}`)
+    ElMessage.error(`管理员注册失败: ${res.message}`)
   }
 }
 

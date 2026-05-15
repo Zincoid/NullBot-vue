@@ -1,4 +1,4 @@
-import { createRequiredRule, createPasswordRules, createEqualRule } from '../utils/rules'
+import { createRequiredRule, createPasswordRules, createEqualRule, emailRules } from '../utils/rules'
 
 
 export const createPasswordChangeFormRules = (getNewPassword) => ({
@@ -9,3 +9,8 @@ export const createPasswordChangeFormRules = (getNewPassword) => ({
     createEqualRule(getNewPassword, '两次密码不一致')
   ],
 })
+
+export const AdminEditFormRules = {
+  username: [createRequiredRule('用户名不能为空')],
+  email: emailRules,
+}
