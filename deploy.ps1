@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $SERVER   = "zn-server"
-$WORK_DIR = "/root/Nginx"
+$WORK_DIR = "/usr/share/nginx"
 $TAR_NAME = "dist.tar.gz"
 $SSH_OPTS = "-o StrictHostKeyChecking=accept-new"
 
@@ -24,13 +24,13 @@ Write-Host "[ === [2/7] Packing $TAR_NAME === ]" -ForegroundColor Cyan
 Exec "tar -czvf $TAR_NAME dist"
 
 Write-Host "[ === [3/7] Uploading to $SERVER`:$WORK_DIR === ]" -ForegroundColor Cyan
-Exec "scp $SSH_OPTS $TAR_NAME ${SERVER}:${WORK_DIR}/tar"
+Exec "scp $SSH_OPTS $TAR_NAME ${SERVER}:${WORK_DIR}"
 
 Write-Host "[ === [4/7] Removing old dist on server === ]" -ForegroundColor Red
 Exec "ssh $SSH_OPTS $SERVER rm -rf $WORK_DIR/dist"
 
 Write-Host "[ === [5/7] Extracting on server === ]" -ForegroundColor Cyan
-Exec "ssh $SSH_OPTS $SERVER sudo tar -xzvf $WORK_DIR/tar/$TAR_NAME -C $WORK_DIR"
+Exec "ssh $SSH_OPTS $SERVER sudo tar -xzvf $WORK_DIR/$TAR_NAME -C $WORK_DIR"
 
 Write-Host "[ === [6/7] Reloading nginx === ]" -ForegroundColor Cyan
 Exec "ssh $SSH_OPTS $SERVER sudo nginx -s reload"
