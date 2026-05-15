@@ -53,6 +53,7 @@ sudo vim /etc/nginx/nginx.conf
 ```
 
 ```sh
-sudo nginx
+sudo systemctl start nginx
+sudo systemctl stop nginx
 sudo nginx -s reload
 ```
