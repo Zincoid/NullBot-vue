@@ -30,10 +30,10 @@ Write-Host "[ === [4/7] Removing old dist on server === ]" -ForegroundColor Red
 Exec "ssh $SSH_OPTS $SERVER rm -rf $WORK_DIR/dist"
 
 Write-Host "[ === [5/7] Extracting on server === ]" -ForegroundColor Cyan
-Exec "ssh $SSH_OPTS $SERVER sudo tar -xzvf $WORK_DIR/$TAR_NAME -C $WORK_DIR"
+Exec "ssh $SSH_OPTS $SERVER tar -xzvf $WORK_DIR/$TAR_NAME -C $WORK_DIR"
 
 Write-Host "[ === [6/7] Reloading nginx === ]" -ForegroundColor Cyan
-Exec "ssh $SSH_OPTS $SERVER sudo nginx -s reload"
+Exec "ssh $SSH_OPTS $SERVER nginx -s reload"
 
 Write-Host "[ === [7/7] Removing local $TAR_NAME === ]" -ForegroundColor Red
 Exec "rm $TAR_NAME"

@@ -44,16 +44,16 @@ tar -czvf dist.tar.gz dist
 ```
 
 ```sh
-rm -rf /root/Nginx/dist
-sudo tar -xzvf /root/Nginx/tar/dist.tar.gz -C /root/Nginx
+rm -rf /usr/share/nginx/dist
+tar -xzvf /usr/share/nginx/dist.tar.gz -C /usr/share/nginx
 ```
 
 ```sh
-sudo vim /etc/nginx/nginx.conf  
+vim /etc/nginx/nginx.conf  
 ```
 
 ```sh
-sudo systemctl start nginx
-sudo systemctl stop nginx
-sudo nginx -s reload
+systemctl start nginx
+systemctl stop nginx
+nginx -s reload
 ```
