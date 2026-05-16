@@ -349,8 +349,13 @@ const getFilePage = async (current, size) => {
 
 const searchFile = async () => {
   const res = await searchFileApi(searchKey.value, curDir.value)
-  searchData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
-  searchTableVisible.value = true
+  if (res.code === 1) {
+    ElMessage.success(res.message)
+    searchData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
+    searchTableVisible.value = true
+  } else {
+    ElMessage.error(res.message)
+  }
 }
 
 const deleteFile = async (file) => {
