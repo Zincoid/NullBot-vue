@@ -290,8 +290,8 @@ const isPreviewable = (file) => {
 
 const handlePreview = async (file) => {
   const baseUrl = request?.defaults?.baseURL || ''
-  previewUrl.value = `${baseUrl}/preview/${file.id}`
-  // previewUrl.value = `${baseUrl}/preview/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
+  previewUrl.value = `${baseUrl}/oss/${file.id}`
+  // previewUrl.value = `${baseUrl}/oss/${file.id}?token=${encodeURIComponent(localStorage.getItem('token') || '')}`
   const fileName = file.fileName.toLowerCase()
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
   const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
