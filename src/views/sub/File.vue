@@ -351,7 +351,7 @@ const searchFile = async () => {
   const res = await searchFileApi(searchKey.value, curDir.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
-    searchData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
+    searchData.value = JSON.parse(JSON.stringify(res.data.fileList))
     searchTableVisible.value = true
   } else {
     ElMessage.error(res.message)
