@@ -7,6 +7,8 @@
 
 
 import axios from 'axios';
+import router from '@/router';
+import { ElMessage } from 'element-plus';
 
 const request = axios.create({
     baseURL: '/api',
@@ -28,6 +30,11 @@ request.interceptors.response.use(
         return response.data;
     },
     (error) => {
+        // if (error.response.status === 401) {  // 目前后端不返回401
+        //     router.push('/login');
+        // } else {
+        //     ElMessage.error(error.response.data.message);
+        // }
         return Promise.reject(error);
     }
 );
