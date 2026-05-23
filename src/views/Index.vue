@@ -305,11 +305,24 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+}
+
+.app-root > .el-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.app-root > .el-container > .el-container {
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ===== 头部区域 ===== */
 .el-header {
   --el-header-padding: 0;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
 }
@@ -406,11 +419,12 @@ onBeforeUnmount(() => {
 /* ===== 侧边导航 ===== */
 .el-aside {
   width: 175px;
+  overflow-y: auto;
 }
 
 .el-aside-menu {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   padding: 0 10px;
   border-right: none;
   background-image: linear-gradient(
@@ -446,6 +460,8 @@ onBeforeUnmount(() => {
 
 .content-container {
   height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* ===== File.vue 上传样式 ===== */
