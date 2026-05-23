@@ -420,6 +420,11 @@ onBeforeUnmount(() => {
 .el-aside {
   width: 175px;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.el-aside::-webkit-scrollbar {
+  display: none;
 }
 
 .el-aside-menu {
@@ -440,8 +445,13 @@ onBeforeUnmount(() => {
 }
 
 .el-aside-menu h3 {
-  margin-top: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0;
   padding-top: 1em;
+  padding-bottom: 1em;
+  background: var(--el-bg-color);
 }
 
 .el-aside-menu .el-menu-item {
