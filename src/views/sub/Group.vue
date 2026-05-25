@@ -124,9 +124,9 @@
           <el-form ref="groupFuncLimitFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
             <el-form-item label="限速范围" prop="limitScope">
               <el-select v-model="groupFuncForm.limitScope">
-                <el-option label="Group" :value="'Group'" />
-                <el-option label="User" :value="'User'" />
-                <el-option label="Cmd" :value="'Cmd'" />
+                <el-option label="GROUP" :value="'GROUP'" />
+                <el-option label="USER" :value="'USER'" />
+                <el-option label="CMD" :value="'CMD'" />
               </el-select>
             </el-form-item>
             <el-form-item label="限速容量" prop="limitCapacity" :required="true">
@@ -149,9 +149,16 @@
           <el-form ref="groupFuncAiFormRef" :inline="true" :model="groupFuncForm" label-width="100px" class="func-form">
             <el-form-item label="会话范围" prop="chatScope">
               <el-select v-model="groupFuncForm.chatScope">
-                <el-option label="Group" :value="'Group'" />
-                <el-option label="Personal" :value="'Personal'" />
-                <el-option label="Monitor" :value="'Monitor'" />
+                <el-option label="GROUP" :value="'GROUP'" />
+                <el-option label="PERSONAL" :value="'PERSONAL'" />
+                <el-option label="MONITOR" :value="'MONITOR'" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="对话策略" prop="chatStrategy">
+              <el-select v-model="groupFuncForm.chatStrategy">
+                <el-option label="DIRECT" :value="'DIRECT'" />
+                <el-option label="EMBEDDING" :value="'EMBEDDING'" />
+                <el-option label="TOOLS" :value="'TOOLS'" />
               </el-select>
             </el-form-item>
             <el-form-item label="发言频率" prop="replyFrequency" :required="true">
@@ -163,10 +170,6 @@
             </el-form-item>
             <el-form-item label="语音模式" prop="voice">
               <el-switch v-model="groupFuncForm.voice" inline-prompt class="func-switch"
-                :active-icon="Check" :inactive-icon="Close" />
-            </el-form-item>
-            <el-form-item label="指令模式" prop="embedding" class="func-switch-indent">
-              <el-switch v-model="groupFuncForm.embedding" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="防注模式" prop="antiInjection">
@@ -295,8 +298,8 @@ const groupFuncVisible = ref(false)
 const groupFuncForm = ref({
   groupId: '',
   limitScope: null, limitCapacity: 25, limitRefill: 10, limitInterval: 1,
-  chatScope: null, antiInjection: false, thinking: false, voice: false,
-  embedding: false, embeddingAuth: false, custom: false, autoReply: false, replyFrequency: 0.01,
+  chatScope: null, chatStrategy: null, antiInjection: false, thinking: false, voice: false,
+  innerCmdAuth: false, custom: false, autoReply: false, replyFrequency: 0.01,
   imageCollect: false, messageCollect: false, keywordDetect: false, pokeDetect: false, recallDetect: false,
   guessCropRatio: 0.1, guessTransparentRatio: 0.75, guessPadding: 250
 })

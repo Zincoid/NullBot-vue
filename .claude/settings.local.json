@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F'\\\\t' 'BEGIN{OFS=\"\\\\t\"} {for\\(i=1;i<=NF;i++\\) if\\(i!=10\\) printf \"%s%s\", $i, \\(i==NF?\"\":OFS\\); print \"\"}' \"c:/Users/Zincoid/Downloads/Settings_2026_5_25 17_45_05.csv\" > \"c:/Users/Zincoid/Downloads/Settings_2026_5_25 17_45_05_cleaned.csv\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Zincoid\\Downloads"
+    ]
+  }
+}
