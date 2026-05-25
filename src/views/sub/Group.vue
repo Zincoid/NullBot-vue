@@ -177,8 +177,8 @@
               <el-switch v-model="groupFuncForm.custom" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="指令校验" prop="embeddingAuth">
-              <el-switch v-model="groupFuncForm.embeddingAuth" inline-prompt class="func-switch"
+            <el-form-item label="内令鉴权" prop="innerCmdAuth">
+              <el-switch v-model="groupFuncForm.innerCmdAuth" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
             <el-form-item label="自动发言" prop="autoReply" class="func-switch-indent">
