@@ -172,19 +172,19 @@
               <el-switch v-model="groupFuncForm.voice" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="防注模式" prop="antiInjection" class="func-switch-indent">
+            <el-form-item label="注入保护" prop="antiInjection" class="func-switch-indent">
               <el-switch v-model="groupFuncForm.antiInjection" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="自定模式" prop="custom">
-              <el-switch v-model="groupFuncForm.custom" inline-prompt class="func-switch"
-                :active-icon="Check" :inactive-icon="Close" />
-            </el-form-item>
-            <el-form-item label="内令鉴权" prop="innerCmdAuth" class="func-switch-indent">
+            <el-form-item label="内令鉴权" prop="innerCmdAuth">
               <el-switch v-model="groupFuncForm.innerCmdAuth" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
-            <el-form-item label="自动发言" prop="autoReply">
+            <el-form-item label="允许自定" prop="custom" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.custom" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
+            </el-form-item>
+            <el-form-item label="自主发言" prop="autoReply">
               <el-switch v-model="groupFuncForm.autoReply" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
