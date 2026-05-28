@@ -260,7 +260,7 @@ const sync = async (isFileSync = true) => {
       if (res.code === 1) {
         ElMessage({ message: '本地与数据库 - 已同步', type: 'success', placement: 'bottom-left' })
       } else {
-        ElMessage({ message: '本地与数据库 - 同步失败', type: 'error', placement: 'bottom-left' })
+        ElMessage({ message: `本地与数据库 - 同步失败: ${res.message}`, type: 'error', placement: 'bottom-left' })
       }
     }
     await getInfo()
