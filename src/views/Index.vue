@@ -95,7 +95,7 @@
               </el-button>
             </div>
             <div class="menu-action-item">
-              <el-button type="primary" plain class="menu-action-btn" @click="sync">
+              <el-button :disabled="userType === 0" type="primary" plain class="menu-action-btn" @click="sync">
                 <el-icon size="15">
                   <Switch />
                 </el-icon>数据同步
