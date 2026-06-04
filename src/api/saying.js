@@ -16,7 +16,7 @@ export const getSayingListApi = () => {
  * @returns {Promise}
  */
 export const getSayingPageApi = (current, size) => {
-    return request.get(`/saying/page/${current}/${size}`)
+    return request.get(`/saying/page`, { params: { current, size } })
 }
 
 /**

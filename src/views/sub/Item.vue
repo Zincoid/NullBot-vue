@@ -317,16 +317,16 @@ const refreshItem = () => {
 
 const getItemList = async () => {
   const res = await getItemListApi()
-  allItemTableData.value = JSON.parse(JSON.stringify(res.data.items))
+  allItemTableData.value = JSON.parse(JSON.stringify(res.data))
 }
 
 const getItemPage = async (current, size) => {
   const res = await getItemPageApi(current, size)
-  itemTableData.value = JSON.parse(JSON.stringify(res.data.itemPage.data))
-  itemPageInfo.value.total = res.data.itemPage.total
-  itemPageInfo.value.size = res.data.itemPage.size
-  itemPageInfo.value.current = res.data.itemPage.current
-  itemPageInfo.value.pages = res.data.itemPage.pages
+  itemTableData.value = JSON.parse(JSON.stringify(res.data.data))
+  itemPageInfo.value.total = res.data.total
+  itemPageInfo.value.size = res.data.size
+  itemPageInfo.value.current = res.data.current
+  itemPageInfo.value.pages = res.data.pages
 }
 
 const handleItemSetting = (row) => {

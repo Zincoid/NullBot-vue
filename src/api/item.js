@@ -16,7 +16,7 @@ export const getItemListApi = () => {
  * @returns {Promise}
  */
 export const getItemPageApi = (current, size) => {
-    return request.get(`/item/page/${current}/${size}`);
+    return request.get(`/item/page`, { params: { current, size } });
 }
 
 /**

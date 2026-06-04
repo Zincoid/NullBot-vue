@@ -9,7 +9,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getFilePageApi = (current, size, curDir) => {
-    return request.get(`/file/page/${current}/${size}`, { params: { curDir } });
+    return request.get(`/file/page`, { params: { current, size, curDir } })
 }
 
 /**

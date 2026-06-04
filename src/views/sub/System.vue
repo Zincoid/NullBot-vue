@@ -37,7 +37,7 @@ const invoke = async () => {
   const res = await invokeApi(invokeCommand.value)
   if (res.code === 1) {
     ElMessage.success('调用成功')
-    invokeResult.value = invokeResult.value + res.data.result + '\n'
+    invokeResult.value = invokeResult.value + res.data + '\n'
   } else {
     ElMessage.error('调用失败')
     invokeResult.value = invokeResult.value + res.message + '\n'

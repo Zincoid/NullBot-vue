@@ -143,16 +143,16 @@ const refreshSaying = () => {
 
 const getSayingList = async () => {
   const res = await getSayingListApi()
-  allSayingTableData.value = JSON.parse(JSON.stringify(res.data.sayings))
+  allSayingTableData.value = JSON.parse(JSON.stringify(res.data))
 }
 
 const getSayingPage = async (current, size) => {
   const res = await getSayingPageApi(current, size)
-  sayingTableData.value = JSON.parse(JSON.stringify(res.data.sayingPage.data))
-  sayingPageInfo.value.total = res.data.sayingPage.total
-  sayingPageInfo.value.size = res.data.sayingPage.size
-  sayingPageInfo.value.current = res.data.sayingPage.current
-  sayingPageInfo.value.pages = res.data.sayingPage.pages
+  sayingTableData.value = JSON.parse(JSON.stringify(res.data.data))
+  sayingPageInfo.value.total = res.data.total
+  sayingPageInfo.value.size = res.data.size
+  sayingPageInfo.value.current = res.data.current
+  sayingPageInfo.value.pages = res.data.pages
 }
 
 const deleteSaying = async (saying) => {

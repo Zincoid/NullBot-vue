@@ -344,16 +344,16 @@ const refreshGroup = () => {
 
 const getGroupList = async () => {
   const res = await getGroupListApi()
-  allGroupTableData.value = JSON.parse(JSON.stringify(res.data.groups))
+  allGroupTableData.value = JSON.parse(JSON.stringify(res.data))
 }
 
 const getGroupPage = async (current, size) => {
   const res = await getGroupPageApi(current, size)
-  groupTableData.value = JSON.parse(JSON.stringify(res.data.groupPage.data))
-  groupPageInfo.value.total = res.data.groupPage.total
-  groupPageInfo.value.size = res.data.groupPage.size
-  groupPageInfo.value.current = res.data.groupPage.current
-  groupPageInfo.value.pages = res.data.groupPage.pages
+  groupTableData.value = JSON.parse(JSON.stringify(res.data.data))
+  groupPageInfo.value.total = res.data.total
+  groupPageInfo.value.size = res.data.size
+  groupPageInfo.value.current = res.data.current
+  groupPageInfo.value.pages = res.data.pages
 }
 
 const deleteGroup = async (group) => {
@@ -385,7 +385,7 @@ const handleGroupSettingSubmit = async () => {
 const handleGroupFunc = async (row) => {
   const res = await getGroupSettingApi(row.id)
   if (res.code === 1) {
-    groupFuncForm.value = JSON.parse(JSON.stringify(res.data.setting))
+    groupFuncForm.value = JSON.parse(JSON.stringify(res.data))
     groupFuncForm.value.groupId = row.id
     groupFuncVisible.value = true
   } else {

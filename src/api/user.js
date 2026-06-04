@@ -16,7 +16,7 @@ export const getUserListApi = () => {
  * @returns {Promise}
  */
 export const getUserPageApi = (current, size) => {
-    return request.get(`/user/page/${current}/${size}`)
+    return request.get(`/user/page`, { params: { current, size } })
 }
 
 /**

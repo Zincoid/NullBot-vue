@@ -67,7 +67,7 @@ const login = async () => {
   const res = await loginApi(loginForm.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
-    localStorage.setItem("token", res.data.token)
+    localStorage.setItem("token", res.data)
     router.push('/index')
   } else {
     ElMessage.error(`登录失败: ${res.message}`)
@@ -78,7 +78,7 @@ const guest = async () => {
   const res = await guestApi()
   if (res.code === 1) {
     ElMessage.success(res.message)
-    localStorage.setItem("token", res.data.token)
+    localStorage.setItem("token", res.data)
     router.push('/index')
   } else {
     ElMessage.error(`登录失败: ${res.message}`)

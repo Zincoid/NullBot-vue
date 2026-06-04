@@ -52,15 +52,15 @@ const topCommandsAxis = ref([])
 const getStatistic = async () => {
   const res = await getStatisticApi()
   if (res.code === 1) {
-    totalVisits.value = res.data.statistic.totalVisits
-    visitsXAxis.value = res.data.statistic.visitsXAxis
-    visitsData.value = res.data.statistic.visitsData
-    topGroupsAxis.value = res.data.statistic.topGroupsAxis
-    topGroupsData.value = res.data.statistic.topGroupsData
-    topUsersAxis.value = res.data.statistic.topUsersAxis
-    topUsersData.value = res.data.statistic.topUsersData
-    topCommandsAxis.value = res.data.statistic.topCommandsAxis
-    topCommandsData.value = res.data.statistic.topCommandsData
+    totalVisits.value = res.data.totalVisits
+    visitsXAxis.value = res.data.visitsXAxis
+    visitsData.value = res.data.visitsData
+    topGroupsAxis.value = res.data.topGroupsAxis
+    topGroupsData.value = res.data.topGroupsData
+    topUsersAxis.value = res.data.topUsersAxis
+    topUsersData.value = res.data.topUsersData
+    topCommandsAxis.value = res.data.topCommandsAxis
+    topCommandsData.value = res.data.topCommandsData
   } else {
     ElMessage.error(res.message)
   }

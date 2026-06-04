@@ -325,16 +325,16 @@ const refreshUser = () => {
 
 const getUserList = async () => {
   const res = await getUserListApi()
-  allUserTableData.value = JSON.parse(JSON.stringify(res.data.users))
+  allUserTableData.value = JSON.parse(JSON.stringify(res.data))
 }
 
 const getUserPage = async (current, size) => {
   const res = await getUserPageApi(current, size)
-  userTableData.value = JSON.parse(JSON.stringify(res.data.userPage.data))
-  userPageInfo.value.total = res.data.userPage.total
-  userPageInfo.value.size = res.data.userPage.size
-  userPageInfo.value.current = res.data.userPage.current
-  userPageInfo.value.pages = res.data.userPage.pages
+  userTableData.value = JSON.parse(JSON.stringify(res.data.data))
+  userPageInfo.value.total = res.data.total
+  userPageInfo.value.size = res.data.size
+  userPageInfo.value.current = res.data.current
+  userPageInfo.value.pages = res.data.pages
 }
 
 const deleteUser = async (user) => {
@@ -394,7 +394,7 @@ const handleInventories = (row) => {
 
 const getInventoryList = async (id) => {
   const res = await getInventoryListApi(id)
-  inventoriesData.value = JSON.parse(JSON.stringify(res.data.inventories))
+  inventoriesData.value = JSON.parse(JSON.stringify(res.data))
 }
 
 const deleteInventory = async (inventory) => {

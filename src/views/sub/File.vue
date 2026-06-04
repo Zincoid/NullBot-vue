@@ -340,18 +340,18 @@ const copyCurDir = async () => {
 
 const getFilePage = async (current, size) => {
   const res = await getFilePageApi(current, size, curDir.value)
-  fileTableData.value = JSON.parse(JSON.stringify(res.data.filePage.data))
+  fileTableData.value = JSON.parse(JSON.stringify(res.data.data))
   filePageInfo.value.total = res.data.filePage.total
-  filePageInfo.value.size = res.data.filePage.size
-  filePageInfo.value.current = res.data.filePage.current
-  filePageInfo.value.pages = res.data.filePage.pages
+  filePageInfo.value.size = res.data.size
+  filePageInfo.value.current = res.data.current
+  filePageInfo.value.pages = res.data.pages
 }
 
 const searchFile = async () => {
   const res = await searchFileApi(searchKey.value, curDir.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
-    searchData.value = JSON.parse(JSON.stringify(res.data.fileList))
+    searchData.value = JSON.parse(JSON.stringify(res.data))
     searchTableVisible.value = true
   } else {
     ElMessage.error(res.message)

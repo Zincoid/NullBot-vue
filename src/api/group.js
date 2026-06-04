@@ -16,7 +16,7 @@ export const getGroupListApi = () => {
  * @returns {Promise}
  */
 export const getGroupPageApi = (current, size) => {
-    return request.get(`/group/page/${current}/${size}`)
+    return request.get(`/group/page`, { params: { current, size } })
 }
 
 /**
