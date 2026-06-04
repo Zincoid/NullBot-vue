@@ -341,7 +341,7 @@ const copyCurDir = async () => {
 const getFilePage = async (current, size) => {
   const res = await getFilePageApi(current, size, curDir.value)
   fileTableData.value = JSON.parse(JSON.stringify(res.data.data))
-  filePageInfo.value.total = res.data.filePage.total
+  filePageInfo.value.total = res.data.total
   filePageInfo.value.size = res.data.size
   filePageInfo.value.current = res.data.current
   filePageInfo.value.pages = res.data.pages
