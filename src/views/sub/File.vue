@@ -382,8 +382,8 @@ const upload = async () => {
   for (let fileObj of uploadFileList.value) {
     try {
       let formData = new FormData()
-      formData.append("uploadFile", fileObj.raw)
-      formData.append("curDir", curDir.value)
+      formData.append("file", fileObj.raw)
+      formData.append("directory", curDir.value)
       const res = await uploadFileApi(formData)
       if (res.code === 1) {
         ElMessage.success(`${fileObj.name} - 上传成功`)

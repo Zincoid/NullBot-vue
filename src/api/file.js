@@ -5,30 +5,30 @@ import request from '@/utils/request';
  * 文件分页接口
  * @param {number} current 当前页码
  * @param {number} size 每页数量
- * @param {string} curDir 当前目录
+ * @param {string} directory 当前目录
  * @returns {Promise}
  */
-export const getFilePageApi = (current, size, curDir) => {
-    return request.get(`/file/page`, { params: { current, size, curDir } })
+export const getFilePageApi = (current, size, directory) => {
+    return request.get(`/file/page`, { params: { current, size, directory } })
 }
 
 /**
  * 文件搜索接口
- * @param {string} key 搜索关键词
- * @param {string} curDir 当前目录
+ * @param {string} keyword 搜索关键词
+ * @param {string} directory 当前目录
  * @returns {Promise}
  */
-export const searchFileApi = (key, curDir) => {
-    return request.get('/file/searchFile', { params: { key, curDir } });
+export const searchFileApi = (keyword, directory) => {
+    return request.get('/file/search', { params: { keyword, directory } });
 }
 
 /**
  * 文件删除接口
- * @param {number} fileId 文件ID
+ * @param {number} id 文件ID
  * @returns {Promise}
  */
-export const deleteFileApi = (fileId) => {
-    return request.delete(`/file/delete/${fileId}`)
+export const deleteFileApi = (id) => {
+    return request.delete(`/file/delete/${id}`)
 }
 
 /**
@@ -42,51 +42,51 @@ export const uploadFileApi = (formData) => {
 
 /**
  * 文件下载接口
- * @param {number} fileId 文件ID
+ * @param {number} id 文件ID
  * @returns {Promise}
  */
-export const downloadFileApi = (fileId) => {
-    return request.get(`/file/download/${fileId}`, { responseType: "arraybuffer" })
+export const downloadFileApi = (id) => {
+    return request.get(`/file/download/${id}`, { responseType: "arraybuffer" })
 }
 
 /**
  * 目录创建接口
- * @param {string} curDir 当前目录
- * @param {string} dirName 目录名称
+ * @param {string} directory 当前目录
+ * @param {string} name 目录名称
  * @returns {Promise}
  */
-export const createDirApi = (curDir, dirName) => {
-    return request.post('/file/createDir', { curDir, dirName })
+export const createDirApi = (directory, name) => {
+    return request.get('/file/mkdir', { params: { directory, name } })
 }
 
 /**
  * 文件重命名接口
- * @param {number} fileId 文件ID
- * @param {string} newFileName 新文件名
+ * @param {number} id 文件ID
+ * @param {string} filename 新文件名
  * @returns {Promise}
  */
-export const renameFileApi = (fileId, newFileName) => {
-    return request.get(`/file/rename/${fileId}`, { params: { newFileName } })
+export const renameFileApi = (id, filename) => {
+    return request.get(`/file/rename/${id}`, { params: { filename } })
 }
 
 /**
  * 文件移动接口
- * @param {number} fileId 文件ID
- * @param {string} newDir 新目录
+ * @param {number} id 文件ID
+ * @param {string} directory 新目录
  * @returns {Promise}
  */
-export const moveFileApi = (fileId, newDir) => {
-    return request.get(`/file/move/${fileId}`, { params: { newDir } })
+export const moveFileApi = (id, directory) => {
+    return request.get(`/file/move/${id}`, { params: { directory } })
 }
 
 /**
  * 文件可见性设置接口
- * @param {number} fileId 文件ID
- * @param {boolean} visible 是否可见
+ * @param {number} id 文件ID
+ * @param {boolean} flag 是否可见
  * @returns {Promise}
  */
-export const setVisibleApi = (fileId, visible) => {
-    return request.get(`/file/setVisible/${fileId}`, { params: { visible } })
+export const setVisibleApi = (id, flag) => {
+    return request.get(`/file/visualize/${id}`, { params: { flag } })
 }
 
 /**
