@@ -495,56 +495,6 @@ onBeforeUnmount(() => {
   display: inline-block;
 }
 
-:global(h2#card-usage ~ .example .example-showcase) {
-  background-color: var(--el-fill-color) !important;
-}
-
-/* ===== Stats.vue 统计卡片样式 ===== */
-.el-statistic {
-  --el-statistic-content-font-size: 28px;
-}
-
-.stats-card {
-  height: 295px;
-  width: 10%;
-  margin-left: 36px;
-  margin-top: 0;
-  margin-bottom: 25px;
-  padding: 25px;
-  border-radius: 8px;
-  background-color: var(--el-bg-color-overlay);
-}
-
-.stats-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 12px;
-  color: var(--el-text-color-regular);
-  margin-top: 16px;
-}
-
-.stats-footer .footer-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.stats-footer .footer-item span:last-child {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 4px;
-}
-
-.green {
-  color: var(--el-color-success);
-}
-
-.red {
-  color: var(--el-color-error);
-}
-
 .menu-logo {
   pointer-events: none;
   user-select: none;

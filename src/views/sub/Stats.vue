@@ -108,8 +108,8 @@ watch(syncTrigger, () => {
   background-color: var(--el-bg-color-overlay);
 }
 
-.stats-card :deep(.el-stats) {
-  --el-stats-content-font-size: 28px;
+.stats-card :deep(.el-statistic) {
+  --el-statistic-content-font-size: 28px;
 }
 
 .stats-title-row {
