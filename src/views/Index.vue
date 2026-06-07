@@ -37,7 +37,7 @@
             </h3>
 
             <!-- 数据统计 -->
-            <h3 v-show="routePath === '/index/statistic'" class="section-title">
+            <h3 v-show="routePath === '/index/stats'" class="section-title">
               <el-icon>
                 <Histogram />
               </el-icon><span>访问统计</span>
@@ -158,7 +158,7 @@
                 </el-icon><span>物品</span>
               </el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="/index/statistic">
+            <el-menu-item index="/index/stats">
               <el-icon>
                 <Histogram />
               </el-icon><span>访问统计</span>
@@ -499,12 +499,12 @@ onBeforeUnmount(() => {
   background-color: var(--el-fill-color) !important;
 }
 
-/* ===== Statistic.vue 统计卡片样式 ===== */
-.el-statistic {
-  --el-statistic-content-font-size: 28px;
+/* ===== Stats.vue 统计卡片样式 ===== */
+.el-stats {
+  --el-stats-content-font-size: 28px;
 }
 
-.statistic-card {
+.stats-card {
   height: 295px;
   width: 10%;
   margin-left: 36px;
@@ -515,7 +515,7 @@ onBeforeUnmount(() => {
   background-color: var(--el-bg-color-overlay);
 }
 
-.statistic-footer {
+.stats-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -525,13 +525,13 @@ onBeforeUnmount(() => {
   margin-top: 16px;
 }
 
-.statistic-footer .footer-item {
+.stats-footer .footer-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.statistic-footer .footer-item span:last-child {
+.stats-footer .footer-item span:last-child {
   display: inline-flex;
   align-items: center;
   margin-left: 4px;

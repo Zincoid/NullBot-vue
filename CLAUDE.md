@@ -20,12 +20,12 @@ NullBot is a Vue 3 admin dashboard with Element Plus UI (dark mode). The backend
 
 - `/` and `/login` → Login page; `/regist` → Register page
 - `/index` → Main layout ([Index.vue](src/views/Index.vue)) wrapping a header, sidebar nav, and nested `<router-view />`
-- All functional pages live under `/index/*` as children of the Index route: File, Center, Saying, Statistic, User, Group, Item, System
+- All functional pages live under `/index/*` as children of the Index route: File, Center, Saying, Stats, User, Group, Item, System
 
 ### Data flow
 
 - `src/utils/request.js` — Axios instance with `/api` base URL, auto-attaches `token` header from localStorage, unwraps `response.data`
-- `src/api/` — One module per domain (system, user, file, group, item, inventory, saying, statistic). Each exports functions that call the Axios instance.
+- `src/api/` — One module per domain (system, user, file, group, item, inventory, saying, stats). Each exports functions that call the Axios instance.
 - Backend responses follow the pattern `{ code: 1, message: "", data: {} }` where code `1` means success.
 - Auth tokens are stored in `localStorage` under key `"token"`.
 

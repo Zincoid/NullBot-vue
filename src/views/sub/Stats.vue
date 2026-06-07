@@ -1,18 +1,18 @@
 <template>
-  <el-main class="statistic-main">
-    <div class="statistic-content">
-      <el-header height="400px" class="statistic-header">
-        <div class="statistic-card">
-          <el-statistic :value="totalVisits">
+  <el-main class="stats-main">
+    <div class="stats-content">
+      <el-header height="400px" class="stats-header">
+        <div class="stats-card">
+          <el-stats :value="totalVisits">
             <template #title>
-              <div class="statistic-title-row">
+              <div class="stats-title-row">
                 总调用次数
                 <el-tooltip effect="dark" content="自 2025/12/23 起的指令使用总次数 (数据统计启用于该日)" placement="top">
-                  <el-icon class="statistic-title-icon" :size="12"><Warning /></el-icon>
+                  <el-icon class="stats-title-icon" :size="12"><Warning /></el-icon>
                 </el-tooltip>
               </div>
             </template>
-          </el-statistic>
+          </el-stats>
         </div>
         <LineChart :title="'每日访问量 (近30日)'" :y_name="'调用次数'" :data="visitsData" :xAxis="visitsXAxis"
           :height="'400px'" :width="'90%'" />
@@ -35,7 +35,7 @@ import { ElMessage } from 'element-plus'
 import { Warning } from '@element-plus/icons-vue'
 import LineChart from '@/components/LineChart.vue'
 import BarChart from '@/components/BarChart.vue'
-import { getStatisticApi } from '@/api/statistic'
+import { getStatsApi } from '@/api/stats'
 
 const syncTrigger = inject('syncTrigger')
 
@@ -48,9 +48,9 @@ const topUsersData = ref([])
 const topUsersAxis = ref([])
 const topCommandsData = ref([])
 const topCommandsAxis = ref([])
-
-const getStatistic = async () => {
-  const res = await getStatisticApi()
+  
+const getStats = async () => {
+  const res = await getStatsApi()
   if (res.code === 1) {
     totalVisits.value = res.data.totalVisits
     visitsXAxis.value = res.data.visitsXAxis
@@ -67,16 +67,16 @@ const getStatistic = async () => {
 }
 
 onMounted(() => {
-  getStatistic()
+  getStats()
 })
 
 watch(syncTrigger, () => {
-  getStatistic()
+  getStats()
 })
 </script>
 
 <style scoped>
-.statistic-main {
+.stats-main {
   height: 100%;
   width: 100%;
   overflow-y: auto;
@@ -84,19 +84,19 @@ watch(syncTrigger, () => {
   padding: 20px;
 }
 
-.statistic-content {
+.stats-content {
   margin-right: 40px;
   margin-top: 10px;
 }
 
-.statistic-header {
+.stats-header {
   padding: 0 0;
   display: flex;
   justify-content: left;
   align-items: center;
 }
 
-.statistic-card {
+.stats-card {
   height: 295px;
   width: 10%;
   min-width: 110px;
@@ -108,16 +108,16 @@ watch(syncTrigger, () => {
   background-color: var(--el-bg-color-overlay);
 }
 
-.statistic-card :deep(.el-statistic) {
-  --el-statistic-content-font-size: 28px;
+.stats-card :deep(.el-stats) {
+  --el-stats-content-font-size: 28px;
 }
 
-.statistic-title-row {
+.stats-title-row {
   display: inline-flex;
   align-items: center;
 }
 
-.statistic-title-icon {
+.stats-title-icon {
   margin-left: 4px;
 }
 </style>

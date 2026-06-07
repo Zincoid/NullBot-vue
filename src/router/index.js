@@ -6,7 +6,7 @@ import IndexView from '@/views/Index.vue'
 import FileView from '@/views/sub/File.vue'
 import CenterView from '@/views/sub/Center.vue'
 import SayingView from '@/views/sub/Saying.vue'
-import StatisticView from '@/views/sub/Statistic.vue'
+import StatsView from '@/views/sub/Stats.vue'
 import UserView from '@/views/sub/User.vue'
 import GroupView from '@/views/sub/Group.vue'
 import ItemView from '@/views/sub/Item.vue'
@@ -36,7 +36,7 @@ const routes = [
       { path: 'file', name: 'File', component: FileView },
       { path: 'center', name: 'Center', component: CenterView },
       { path: 'saying', name: 'Saying', component: SayingView },
-      { path: 'statistic', name: 'Statistic', component: StatisticView },
+      { path: 'stats', name: 'Stats', component: StatsView },
       { path: 'user', name: 'User', component: UserView },
       { path: 'group', name: 'Group', component: GroupView },
       { path: 'item', name: 'Item', component: ItemView },
