@@ -500,8 +500,8 @@ onBeforeUnmount(() => {
 }
 
 /* ===== Stats.vue 统计卡片样式 ===== */
-.el-stats {
-  --el-stats-content-font-size: 28px;
+.el-statistic {
+  --el-statistic-content-font-size: 28px;
 }
 
 .stats-card {

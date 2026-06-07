@@ -3,7 +3,7 @@
     <div class="stats-content">
       <el-header height="400px" class="stats-header">
         <div class="stats-card">
-          <el-stats :value="totalVisits">
+          <el-statistic :value="totalVisits">
             <template #title>
               <div class="stats-title-row">
                 总调用次数
@@ -12,7 +12,7 @@
                 </el-tooltip>
               </div>
             </template>
-          </el-stats>
+          </el-statistic>
         </div>
         <LineChart :title="'每日访问量 (近30日)'" :y_name="'调用次数'" :data="visitsData" :xAxis="visitsXAxis"
           :height="'400px'" :width="'90%'" />
