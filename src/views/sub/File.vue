@@ -46,8 +46,8 @@
         <el-table-column label="文件名" min-width="300" show-overflow-tooltip>
           <template v-slot="scope">
             <div class="file-name-cell">
-              <el-icon class="file-name-icon"><Folder v-if="scope.row.isDir === 1" /><Document v-else /></el-icon>
-              <span v-if="scope.row.isDir === 1" class="file-name-link file-name-dir"
+              <el-icon class="file-name-icon"><Folder v-if="scope.row.isDir" /><Document v-else /></el-icon>
+              <span v-if="scope.row.isDir" class="file-name-link file-name-dir"
                 @click="enterDir(scope.row)" :title="`进入文件夹: ${scope.row.fileName}`">
                 {{ scope.row.fileName }}
               </span>
@@ -72,13 +72,13 @@
         </el-table-column>
         <el-table-column label="文件大小" width="100" align="center">
           <template v-slot="scope">
-            {{ scope.row.isDir === 1 ? '-' : formatFileSize(scope.row.fileSize) }}
+            {{ scope.row.isDir ? '-' : formatFileSize(scope.row.fileSize) }}
           </template>
         </el-table-column>
         <el-table-column label="文件类型" width="100" align="center">
           <template v-slot="scope">
-            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" effect="plain" round class="file-type-tag">
-              {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
+            <el-tag :type="scope.row.isDir ? 'info' : 'success'" effect="plain" round class="file-type-tag">
+              {{ scope.row.isDir ? '文件夹' : getFileExtension(scope.row.fileName) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -97,11 +97,11 @@
                 <el-icon size="14"><Picture /></el-icon>
               </el-button>
               <el-button type="info" plain size="small" @click="enterDir(scope.row)"
-                v-if="scope.row.isDir === 1" title="进入文件夹">
+                v-if="scope.row.isDir" title="进入文件夹">
                 <el-icon size="14"><FolderOpened /></el-icon>
               </el-button>
               <el-button type="success" plain size="small" @click="download(scope.row)"
-                v-if="scope.row.isDir === 0" title="下载">
+                v-if="!scope.row.isDir" title="下载">
                 <el-icon size="14"><Download /></el-icon>
               </el-button>
               <el-button type="warning" plain size="small" @click="handleRename(scope.row)" title="重命名"
@@ -162,13 +162,13 @@
         </el-table-column>
         <el-table-column label="文件大小" width="120" align="center">
           <template v-slot="scope">
-            {{ scope.row.isDir === 1 ? '-' : formatFileSize(scope.row.fileSize) }}
+            {{ scope.row.isDir ? '-' : formatFileSize(scope.row.fileSize) }}
           </template>
         </el-table-column>
         <el-table-column label="文件类型" width="100" align="center">
           <template v-slot="scope">
-            <el-tag :type="scope.row.isDir === 1 ? 'info' : 'success'" effect="plain" round class="file-type-tag">
-              {{ scope.row.isDir === 1 ? '文件夹' : getFileExtension(scope.row.fileName) }}
+            <el-tag :type="scope.row.isDir ? 'info' : 'success'" effect="plain" round class="file-type-tag">
+              {{ scope.row.isDir ? '文件夹' : getFileExtension(scope.row.fileName) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -186,11 +186,11 @@
                 size="small" title="预览">
                 <el-icon size="14"><Picture /></el-icon>
               </el-button>
-              <el-button type="primary" plain size="small" @click="enterDir(scope.row)" v-if="scope.row.isDir === 1"
+              <el-button type="primary" plain size="small" @click="enterDir(scope.row)" v-if="scope.row.isDir"
                 title="进入文件夹">
                 <el-icon size="14"><FolderOpened /></el-icon>
               </el-button>
-              <el-button type="success" plain size="small" @click="download(scope.row)" v-if="scope.row.isDir === 0"
+              <el-button type="success" plain size="small" @click="download(scope.row)" v-if="!scope.row.isDir"
                 title="下载">
                 <el-icon size="14"><Download /></el-icon>
               </el-button>
@@ -278,7 +278,7 @@ const getFileExtension = (fileName) => {
 }
 
 const isPreviewable = (file) => {
-  if (file.isDir === 1) return false
+  if (file.isDir) return false
   const fileName = file.fileName.toLowerCase()
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
   const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv']
