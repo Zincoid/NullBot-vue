@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $SERVER   = "zn-server"
-$WORK_DIR = "/usr/share/nginx"
+$WORK_DIR = "/usr/share/nginx/nullbot"
 $TAR_NAME = "dist.tar.gz"
 $SSH_OPTS = "-o StrictHostKeyChecking=accept-new"
 
