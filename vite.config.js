@@ -18,8 +18,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://localhost:8080',  // 生产环境 
-        target: 'http://101.200.136.96:8080',  // 开发环境
+        target: 'http://localhost:8080',  // 生产环境
+        // target: 'http://101.200.136.96:8080',  // 开发环境
         
         secure: false,
         changeOrigin: true,

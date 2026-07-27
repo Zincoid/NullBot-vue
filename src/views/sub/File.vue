@@ -423,11 +423,7 @@ const download = async (file) => {
 }
 
 const enterDir = (dir) => {
-  if (curDir.value === "/") {
-    curDir.value += dir.fileName
-  } else {
-    curDir.value += "/" + dir.fileName
-  }
+  curDir.value = dir.directory === "/" ? "/" + dir.fileName : dir.directory + "/" + dir.fileName
   getFilePage(1, filePageInfo.value.size)
   searchTableVisible.value = false
 }

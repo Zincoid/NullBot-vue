@@ -88,13 +88,6 @@
               </div>
             </div>
             <div class="menu-action-item">
-              <el-button :disabled="userType === 0" type="warning" plain class="menu-action-btn" @click="initRootFile">
-                <el-icon size="15">
-                  <Coin />
-                </el-icon>根初始化
-              </el-button>
-            </div>
-            <div class="menu-action-item">
               <el-button :disabled="userType === 0" type="primary" plain class="menu-action-btn" @click="sync">
                 <el-icon size="15">
                   <Switch />
@@ -198,7 +191,7 @@ import {
 } from '@element-plus/icons-vue'  // 不可移除
 import FilingInfo from '@/components/FilingInfo.vue'
 import { getInfoApi } from '@/api/system'
-import { initApi, syncApi } from '@/api/file'
+import { syncApi } from '@/api/file'
 
 const router = useRouter()
 const route = useRoute()
@@ -240,15 +233,6 @@ const getInfo = async () => {
     userType.value = res.data.userType
   } else {
     ElMessage.error(res.message)
-  }
-}
-
-const initRootFile = async () => {
-  const res = await initApi()
-  if (res.code === 1) {
-    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'success', placement: 'bottom-left' })
-  } else {
-    ElMessage({ message: `Root 文件 - ${res.message}`, type: 'warning', placement: 'bottom-left' })
   }
 }
 
