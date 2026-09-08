@@ -188,6 +188,10 @@
               <el-switch v-model="groupFuncForm.autoReply" inline-prompt class="func-switch"
                 :active-icon="Check" :inactive-icon="Close" />
             </el-form-item>
+            <el-form-item label="视觉模式" prop="vision" class="func-switch-indent">
+              <el-switch v-model="groupFuncForm.vision" inline-prompt class="func-switch"
+                :active-icon="Check" :inactive-icon="Close" />
+            </el-form-item>
           </el-form>
         </div>
 
@@ -298,7 +302,7 @@ const groupFuncVisible = ref(false)
 const groupFuncForm = ref({
   groupId: '',
   limitScope: null, limitCapacity: 25, limitRefill: 10, limitInterval: 1,
-  chatScope: null, chatStrategy: null, antiInjection: false, thinking: false, voice: false,
+  chatScope: null, chatStrategy: null, antiInjection: false, thinking: false, voice: false, vision: false,
   innerCmdAuth: false, custom: false, autoReply: false, replyFrequency: 0.01,
   imageCollect: false, messageCollect: false, keywordDetect: false, pokeDetect: false, recallDetect: false,
   guessCropRatio: 0.1, guessTransparentRatio: 0.75, guessPadding: 250
