@@ -249,6 +249,20 @@ watch(syncTrigger, () => {
   margin-right: 1px;
 }
 
+.saying-header-btns :deep(.el-button) {
+  border-radius: 0;
+}
+
+.saying-header-btns :deep(.el-button:first-child) {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.saying-header-btns :deep(.el-button:last-child) {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
 /* ===== 主区域 ===== */
 .saying-main {
   height: 100%;

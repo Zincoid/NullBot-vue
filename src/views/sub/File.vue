@@ -599,6 +599,20 @@ watch(searchTrigger, () => {
   display: inline-flex;
 }
 
+.file-btn-group :deep(.el-button) {
+  border-radius: 0;
+}
+
+.file-btn-group :deep(.el-button:first-child) {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.file-btn-group :deep(.el-button:last-child) {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
 /* ===== 上传组件 ===== */
 .upload {
   position: relative;
