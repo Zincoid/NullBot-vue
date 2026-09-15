@@ -61,6 +61,43 @@ export const changePwdApi = (passwordChangeForm) => {
 }
 
 /**
+ * 全局功能开关列表接口
+ * @returns {Promise}
+ */
+export const getSystemFuncApi = () => {
+    return request.get('/system/func');
+}
+
+/**
+ * 全局功能开关设置接口
+ * @param {string} func 功能名
+ * @param {boolean|null} enabled 开关状态 (null=切换)
+ * @returns {Promise}
+ */
+export const setSystemFuncApi = (func, enabled) => {
+    const params = { function: func }
+    if (enabled !== null && enabled !== undefined) params.enabled = enabled
+    return request.put('/system/func/set', null, { params })
+}
+
+/**
+ * 模型配置查询接口
+ * @returns {Promise}
+ */
+export const getSystemModelApi = () => {
+    return request.get('/system/model');
+}
+
+/**
+ * 模型配置切换接口
+ * @param {string} provider 供应商名称
+ * @returns {Promise}
+ */
+export const setSystemModelApi = (provider) => {
+    return request.put('/system/model/set', null, { params: { provider } })
+}
+
+/**
  * 系统调用接口
  * @param {string} command 命令
  * @returns {Promise}

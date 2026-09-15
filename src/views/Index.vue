@@ -64,7 +64,7 @@
               </el-icon><span>物品管理</span>
             </h3>
 
-            <!-- 系统调用 -->
+            <!-- 系统设置 -->
             <h3 v-show="routePath === '/index/system'" class="section-title">
               <span>{{ currentTime }}</span>
             </h3>
@@ -164,7 +164,7 @@
             <el-menu-item index="/index/system" v-if="userType === 1">
               <el-icon>
                 <Platform />
-              </el-icon><span>系统调用</span>
+              </el-icon><span>系统设置</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
