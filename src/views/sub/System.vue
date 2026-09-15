@@ -12,10 +12,11 @@
         </div>
         <div class="section-body">
           <div class="model-row">
-            <el-select v-model="modelActive" placeholder="选择供应商..." class="model-select">
+            <el-select v-model="modelSelected" placeholder="选择供应商..." class="model-select">
               <el-option v-for="p in modelProviders" :key="p.name" :label="p.name" :value="p.name" />
             </el-select>
-            <el-button type="primary" plain class="model-btn" @click="switchModel">切换</el-button>
+            <el-button type="primary" plain class="model-btn" :disabled="modelSelected === modelActive"
+              @click="switchModel">{{ modelSelected === modelActive ? '当前' : '切换' }}</el-button>
           </div>
           <el-table :data="modelProviders" class="model-table" height="100%">
             <template #empty>
@@ -103,6 +104,7 @@ import {
 const syncTrigger = inject('syncTrigger')
 
 const modelActive = ref('')
+const modelSelected = ref('')
 const modelProviders = ref([])
 
 const funcFlags = ref([])
@@ -114,6 +116,7 @@ const loadModel = async () => {
   const res = await getSystemModelApi()
   if (res.code === 1) {
     modelActive.value = res.data.active
+    modelSelected.value = res.data.active
     modelProviders.value = res.data.providers
   } else {
     ElMessage.error(res.message)
@@ -121,7 +124,7 @@ const loadModel = async () => {
 }
 
 const switchModel = async () => {
-  const res = await setSystemModelApi(modelActive.value)
+  const res = await setSystemModelApi(modelSelected.value)
   if (res.code === 1) {
     ElMessage.success(res.message)
     loadModel()
