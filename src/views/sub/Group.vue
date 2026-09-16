@@ -253,7 +253,7 @@
     <!-- 群组导入对话框 -->
     <el-dialog v-model="groupImportVisible" title="导入 - 群组 CSV 文件" width="500px">
       <el-upload class="upload-import-group" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/group/importCsv')" :on-success="refreshGroup" :on-error="() => {
+        :action="uploadAction('/groups/import')" :on-success="refreshGroup" :on-error="() => {
           refreshGroup()
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>
@@ -265,7 +265,7 @@
     <!-- 功能导入对话框 -->
     <el-dialog v-model="funcImportVisible" title="导入 - 配置 CSV 文件" width="500px">
       <el-upload class="upload-import-func" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/setting/importCsv')" :on-success="refreshGroup" :on-error="() => {
+        :action="uploadAction('/settings/import')" :on-success="refreshGroup" :on-error="() => {
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>

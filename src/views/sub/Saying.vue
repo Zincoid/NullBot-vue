@@ -75,7 +75,7 @@
     <!-- 导入对话框 -->
     <el-dialog v-model="sayingImportVisible" title="导入 - 语录 CSV 文件" width="500px">
       <el-upload class="upload-import-saying" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/saying/importCsv')" :on-success="refreshSaying" :on-error="(error, file, fileList) => {
+        :action="uploadAction('/sayings/import')" :on-success="refreshSaying" :on-error="(error, file, fileList) => {
           refreshSaying()
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>

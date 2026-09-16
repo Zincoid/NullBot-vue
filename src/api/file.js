@@ -9,7 +9,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getFilePageApi = (current, size, directory) => {
-    return request.get(`/file/page`, { params: { current, size, directory } })
+    return request.get(`/files`, { params: { current, size, directory } })
 }
 
 /**
@@ -19,7 +19,7 @@ export const getFilePageApi = (current, size, directory) => {
  * @returns {Promise}
  */
 export const searchFileApi = (keyword, directory) => {
-    return request.get('/file/search', { params: { keyword, directory } });
+    return request.get('/files/search', { params: { keyword, directory } });
 }
 
 /**
@@ -28,7 +28,7 @@ export const searchFileApi = (keyword, directory) => {
  * @returns {Promise}
  */
 export const deleteFileApi = (id) => {
-    return request.delete(`/file/delete/${id}`)
+    return request.delete(`/files/${id}`)
 }
 
 /**
@@ -37,7 +37,7 @@ export const deleteFileApi = (id) => {
  * @returns {Promise}
  */
 export const uploadFileApi = (formData) => {
-    return request.post('/file/upload', formData, { timeout: 300000, maxContentLength: Infinity })
+    return request.post('/files', formData, { timeout: 300000, maxContentLength: Infinity })
 }
 
 /**
@@ -46,7 +46,7 @@ export const uploadFileApi = (formData) => {
  * @returns {Promise}
  */
 export const downloadFileApi = (id) => {
-    return request.get(`/file/download/${id}`, { responseType: "arraybuffer" })
+    return request.get(`/files/${id}/download`, { responseType: "arraybuffer" })
 }
 
 /**
@@ -56,7 +56,7 @@ export const downloadFileApi = (id) => {
  * @returns {Promise}
  */
 export const createDirApi = (directory, name) => {
-    return request.get('/file/mkdir', { params: { directory, name } })
+    return request.post('/files/dir', null, { params: { directory, name } })
 }
 
 /**
@@ -66,7 +66,7 @@ export const createDirApi = (directory, name) => {
  * @returns {Promise}
  */
 export const renameFileApi = (id, filename) => {
-    return request.get(`/file/rename/${id}`, { params: { filename } })
+    return request.put(`/files/${id}/name`, { filename })
 }
 
 /**
@@ -76,7 +76,7 @@ export const renameFileApi = (id, filename) => {
  * @returns {Promise}
  */
 export const moveFileApi = (id, directory) => {
-    return request.get(`/file/move/${id}`, { params: { directory } })
+    return request.put(`/files/${id}/directory`, { directory })
 }
 
 /**
@@ -86,15 +86,7 @@ export const moveFileApi = (id, directory) => {
  * @returns {Promise}
  */
 export const setVisibleApi = (id, flag) => {
-    return request.get(`/file/visualize/${id}`, { params: { flag } })
-}
-
-/**
- * 文件系统初始化接口
- * @returns {Promise}
- */
-export const initApi = () => {
-    return request.get('/file/init');
+    return request.put(`/files/${id}/visible`, { flag })
 }
 
 /**
@@ -102,5 +94,5 @@ export const initApi = () => {
  * @returns {Promise}
  */
 export const syncApi = () => {
-    return request.get('/file/sync');
+    return request.post('/files/sync');
 }

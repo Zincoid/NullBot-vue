@@ -6,7 +6,7 @@ import request from '@/utils/request'
  * @returns {Promise}
  */
 export const getSayingListApi = () => {
-    return request.get('/saying/list')
+    return request.get('/sayings')
 }
 
 /**
@@ -16,7 +16,7 @@ export const getSayingListApi = () => {
  * @returns {Promise}
  */
 export const getSayingPageApi = (current, size) => {
-    return request.get(`/saying/page`, { params: { current, size } })
+    return request.get(`/sayings/page`, { params: { current, size } })
 }
 
 /**
@@ -25,7 +25,7 @@ export const getSayingPageApi = (current, size) => {
  * @returns {Promise}
  */
 export const deleteSayingApi = (sayingId) => {
-    return request.delete(`/saying/delete/${sayingId}`)
+    return request.delete(`/sayings/${sayingId}`)
 }
 
 /**
@@ -33,5 +33,5 @@ export const deleteSayingApi = (sayingId) => {
  * @returns {Promise}
  */
 export const exportSayingCsvApi = () => {
-    return request.get('/saying/exportCsv')
+    return request.get('/sayings/export')
 }

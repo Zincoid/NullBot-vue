@@ -6,7 +6,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getItemListApi = () => {
-    return request.get('/item/list');
+    return request.get('/items');
 }
 
 /**
@@ -16,7 +16,7 @@ export const getItemListApi = () => {
  * @returns {Promise}
  */
 export const getItemPageApi = (current, size) => {
-    return request.get(`/item/page`, { params: { current, size } });
+    return request.get(`/items/page`, { params: { current, size } });
 }
 
 /**
@@ -25,7 +25,7 @@ export const getItemPageApi = (current, size) => {
  * @returns {Promise}
  */
 export const updateItemApi = (itemForm) => {
-    return request.put('/item/update', itemForm);
+    return request.put(`/items/${itemForm.id}`, itemForm);
 }
 
 /**
@@ -34,7 +34,7 @@ export const updateItemApi = (itemForm) => {
  * @returns {Promise}
  */
 export const addItemApi = (itemForm) => {
-    return request.post('/item/add', itemForm);
+    return request.post('/items', itemForm);
 }
 
 /**
@@ -43,7 +43,7 @@ export const addItemApi = (itemForm) => {
  * @returns {Promise}
  */
 export const deleteItemApi = (itemId) => {
-    return request.delete(`/item/delete/${itemId}`);
+    return request.delete(`/items/${itemId}`);
 }
 
 /**
@@ -51,5 +51,5 @@ export const deleteItemApi = (itemId) => {
  * @returns {Promise}
  */
 export const exportItemCsvApi = () => {
-    return request.get('/item/exportCsv');
+    return request.get('/items/export');
 }

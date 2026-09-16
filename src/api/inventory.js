@@ -7,7 +7,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getInventoryListApi = (userId) => {
-    return request.get('/inventory/list', { params: { userId } });
+    return request.get('/inventories', { params: { userId } });
 }
 
 /**
@@ -16,7 +16,7 @@ export const getInventoryListApi = (userId) => {
  * @returns {Promise}
  */
 export const deleteInventoryApi = (inventoryId) => {
-    return request.delete(`/inventory/delete/${inventoryId}`);
+    return request.delete(`/inventories/${inventoryId}`);
 }
 
 /**
@@ -25,7 +25,7 @@ export const deleteInventoryApi = (inventoryId) => {
  * @returns {Promise}
  */
 export const updateInventoryApi = (inventoryForm) => {
-    return request.put('/inventory/update', inventoryForm);
+    return request.put(`/inventories/${inventoryForm.id}`, inventoryForm);
 }
 
 /**
@@ -35,7 +35,7 @@ export const updateInventoryApi = (inventoryForm) => {
  * @returns {Promise}
  */
 export const addInventoryApi = (userId, itemId) => {
-    return request.post('/inventory/add', null, { params: { userId, itemId } });
+    return request.post('/inventories', null, { params: { userId, itemId } });
 }
 
 /**
@@ -43,5 +43,5 @@ export const addInventoryApi = (userId, itemId) => {
  * @returns {Promise}
  */
 export const exportInventoryCsvApi = () => {
-    return request.get('/inventory/exportCsv');
+    return request.get('/inventories/export');
 }

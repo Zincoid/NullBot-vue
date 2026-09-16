@@ -233,7 +233,7 @@
     <!-- 用户导入对话框 -->
     <el-dialog v-model="userImportVisible" title="导入 - 用户 CSV 文件" width="500px">
       <el-upload class="upload-import-user" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/user/importCsv')" :on-success="refreshUser" :on-error="(error, file, fileList) => {
+        :action="uploadAction('/users/import')" :on-success="refreshUser" :on-error="(error, file, fileList) => {
           refreshUser()
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>
@@ -245,7 +245,7 @@
     <!-- 库存导入对话框 -->
     <el-dialog v-model="inventoryImportVisible" title="导入 - 库存 CSV 文件" width="500px">
       <el-upload class="upload-import-inventory" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/inventory/importCsv')" :on-error="(error, file, fileList) => {
+        :action="uploadAction('/inventories/import')" :on-error="(error, file, fileList) => {
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>

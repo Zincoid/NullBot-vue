@@ -6,7 +6,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const loginApi = (loginForm) => {
-    return request.post('/login', loginForm);
+    return request.post('/auth/login', loginForm);
 }
 
 /**
@@ -14,7 +14,7 @@ export const loginApi = (loginForm) => {
  * @returns {Promise}
  */
 export const guestApi = () => {
-    return request.post('/guest');
+    return request.post('/auth/guest');
 }
 
 /**
@@ -23,7 +23,7 @@ export const guestApi = () => {
  * @returns {Promise}
  */
 export const registApi = (registForm) => {
-    return request.post('/regist', registForm);
+    return request.post('/auth/regist', registForm);
 }
 
 /**
@@ -31,7 +31,7 @@ export const registApi = (registForm) => {
  * @returns {Promise}
  */
 export const deleteApi = () => {
-    return request.delete('/delete');
+    return request.delete('/auth/me');
 }
 
 /**
@@ -40,7 +40,7 @@ export const deleteApi = () => {
  * @returns {Promise}
  */
 export const updateApi = (adminEditForm) => {
-    return request.post('/update', adminEditForm);
+    return request.put('/auth/me', adminEditForm);
 }
 
 /**
@@ -48,7 +48,7 @@ export const updateApi = (adminEditForm) => {
  * @returns {Promise}
  */
 export const getInfoApi = () => {
-    return request.get('/info');
+    return request.get('/auth/me');
 }
 
 /**
@@ -57,7 +57,7 @@ export const getInfoApi = () => {
  * @returns {Promise}
  */
 export const changePwdApi = (passwordChangeForm) => {
-    return request.post('/password', passwordChangeForm);
+    return request.put('/auth/me/password', passwordChangeForm);
 }
 
 /**
@@ -77,7 +77,7 @@ export const getSystemFuncApi = () => {
 export const setSystemFuncApi = (func, enabled) => {
     const params = { function: func }
     if (enabled !== null && enabled !== undefined) params.enabled = enabled
-    return request.put('/system/func/set', null, { params })
+    return request.put('/system/func', null, { params })
 }
 
 /**
@@ -94,7 +94,7 @@ export const getSystemModelApi = () => {
  * @returns {Promise}
  */
 export const setSystemModelApi = (provider) => {
-    return request.put('/system/model/set', null, { params: { provider } })
+    return request.put('/system/model', null, { params: { provider } })
 }
 
 /**
@@ -103,5 +103,5 @@ export const setSystemModelApi = (provider) => {
  * @returns {Promise}
  */
 export const invokeApi = (command) => {
-    return request.get('/system/invoke', { params: { command } });
+    return request.post('/system/invoke', null, { params: { command } });
 }

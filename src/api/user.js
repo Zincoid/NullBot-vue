@@ -6,7 +6,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getUserListApi = () => {
-    return request.get('/user/list')
+    return request.get('/users')
 }
 
 /**
@@ -16,7 +16,7 @@ export const getUserListApi = () => {
  * @returns {Promise}
  */
 export const getUserPageApi = (current, size) => {
-    return request.get(`/user/page`, { params: { current, size } })
+    return request.get(`/users/page`, { params: { current, size } })
 }
 
 /**
@@ -25,7 +25,7 @@ export const getUserPageApi = (current, size) => {
  * @returns {Promise}
  */
 export const deleteUserApi = (userId) => {
-    return request.delete(`/user/delete/${userId}`)
+    return request.delete(`/users/${userId}`)
 }
 
 /**
@@ -34,7 +34,7 @@ export const deleteUserApi = (userId) => {
  * @returns {Promise}
  */
 export const updateUserApi = (userForm) => {
-    return request.put('/user/update', userForm)
+    return request.put(`/users/${userForm.id}`, userForm)
 }
 
 /**
@@ -42,5 +42,5 @@ export const updateUserApi = (userForm) => {
  * @returns {Promise}
  */
 export const exportUserCsvApi = () => {
-    return request.get('/user/exportCsv')
+    return request.get('/users/export')
 }

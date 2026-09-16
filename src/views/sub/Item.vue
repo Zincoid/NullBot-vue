@@ -238,7 +238,7 @@
     <!-- 物品导入对话框 -->
     <el-dialog v-model="itemImportVisible" title="导入 - 物品 CSV 文件" width="500px">
       <el-upload class="upload-import-item" drag :before-upload="isCsv" :headers="uploadHeaders"
-        :action="uploadAction('/item/importCsv')" :on-success="refreshItem" :on-error="() => {
+        :action="uploadAction('/items/import')" :on-success="refreshItem" :on-error="() => {
           refreshItem()
           ElMessage.warning('CSV 文件存在数据结构或约束问题 - 可用数据已导入')
         }" multiple>

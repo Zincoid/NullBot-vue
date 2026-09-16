@@ -6,7 +6,7 @@ import request from '@/utils/request';
  * @returns {Promise}
  */
 export const getGroupListApi = () => {
-    return request.get('/group/list')
+    return request.get('/groups')
 }
 
 /**
@@ -16,7 +16,7 @@ export const getGroupListApi = () => {
  * @returns {Promise}
  */
 export const getGroupPageApi = (current, size) => {
-    return request.get(`/group/page`, { params: { current, size } })
+    return request.get(`/groups/page`, { params: { current, size } })
 }
 
 /**
@@ -25,7 +25,7 @@ export const getGroupPageApi = (current, size) => {
  * @returns {Promise}
  */
 export const deleteGroupApi = (groupId) => {
-    return request.delete(`/group/delete/${groupId}`)
+    return request.delete(`/groups/${groupId}`)
 }
 
 /**
@@ -34,7 +34,7 @@ export const deleteGroupApi = (groupId) => {
  * @returns {Promise}
  */
 export const updateGroupApi = (groupForm) => {
-    return request.put('/group/update', groupForm)
+    return request.put(`/groups/${groupForm.id}`, groupForm)
 }
 
 /**
@@ -42,7 +42,7 @@ export const updateGroupApi = (groupForm) => {
  * @returns {Promise}
  */
 export const exportGroupCsvApi = () => {
-    return request.get('/group/exportCsv')
+    return request.get('/groups/export')
 }
 
 /**
@@ -51,7 +51,7 @@ export const exportGroupCsvApi = () => {
  * @returns {Promise}
  */
 export const getGroupSettingApi = (groupId) => {
-    return request.get(`/setting/${groupId}`)
+    return request.get(`/settings/${groupId}`)
 }
 
 /**
@@ -60,7 +60,7 @@ export const getGroupSettingApi = (groupId) => {
  * @returns {Promise}
  */
 export const updateGroupSettingApi = (groupFuncForm) => {
-    return request.put('/setting/set', groupFuncForm)
+    return request.put(`/settings/${groupFuncForm.groupId}`, groupFuncForm)
 }
 
 /**
@@ -68,5 +68,5 @@ export const updateGroupSettingApi = (groupFuncForm) => {
  * @returns {Promise}
  */
 export const exportGroupSettingCsvApi = () => {
-    return request.get('/setting/exportCsv')
+    return request.get('/settings/export')
 }
