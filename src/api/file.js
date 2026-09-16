@@ -66,7 +66,7 @@ export const createDirApi = (directory, name) => {
  * @returns {Promise}
  */
 export const renameFileApi = (id, filename) => {
-    return request.put(`/files/${id}/name`, { filename })
+    return request.put(`/files/${id}/name`, null, { params: { filename } })
 }
 
 /**
@@ -76,7 +76,7 @@ export const renameFileApi = (id, filename) => {
  * @returns {Promise}
  */
 export const moveFileApi = (id, directory) => {
-    return request.put(`/files/${id}/directory`, { directory })
+    return request.put(`/files/${id}/directory`, null, { params: { directory } })
 }
 
 /**
@@ -86,7 +86,7 @@ export const moveFileApi = (id, directory) => {
  * @returns {Promise}
  */
 export const setVisibleApi = (id, flag) => {
-    return request.put(`/files/${id}/visible`, { flag })
+    return request.put(`/files/${id}/visible`, null, { params: { flag } })
 }
 
 /**
