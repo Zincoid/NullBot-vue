@@ -57,7 +57,7 @@ export const getInfoApi = () => {
  * @returns {Promise}
  */
 export const changePwdApi = (passwordChangeForm) => {
-    return request.post('/changePwd', passwordChangeForm);
+    return request.post('/password', passwordChangeForm);
 }
 
 /**
